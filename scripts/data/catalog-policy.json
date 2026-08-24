@@ -1,0 +1,26 @@
+{
+  "excludedCharacters": [
+    {
+      "baseId": "3029",
+      "reason": "Discarded CN beta character (Schneider), not playable Future Sight content"
+    }
+  ],
+  "excludedPsychubes": [
+    {
+      "id": "1000",
+      "reason": "Gluttony is an upgrade material, not a display psychube"
+    },
+    {
+      "id": "1001",
+      "reason": "Greed is an upgrade material, not a display psychube"
+    }
+  ],
+  "characterCapabilities": [
+    {
+      "baseId": "3149",
+      "psychubeSlots": 2,
+      "exclusivePsychubeIds": ["1571", "1572"],
+      "reason": "The Twins automatically equips the paired psychube"
+    }
+  ]
+}

@@ -1,0 +1,1313 @@
+{
+  "schemaVersion": 1,
+  "rows": [
+    {
+      "baseId": "3003",
+      "names": {
+        "zh-CN": "槲寄生",
+        "zh-TW": "槲寄生",
+        "en-US": "Druvis III",
+        "ja-JP": "ドルーヴィスIII",
+        "ko-KR": "드루비스"
+      }
+    },
+    {
+      "baseId": "3004",
+      "names": {
+        "zh-CN": "红弩箭",
+        "zh-TW": "紅弩箭",
+        "en-US": "Lilya",
+        "ja-JP": "リーリャ",
+        "ko-KR": "릴리아"
+      }
+    },
+    {
+      "baseId": "3005",
+      "names": {
+        "zh-CN": "尼克·波顿",
+        "zh-TW": "尼克·波頓",
+        "en-US": "Nick Bottom",
+        "ja-JP": "ニック・ボトム",
+        "ko-KR": "닉 보텀"
+      }
+    },
+    {
+      "baseId": "3006",
+      "names": {
+        "zh-CN": "小春雀儿",
+        "zh-TW": "小春雀兒",
+        "en-US": "Eagle",
+        "ja-JP": "リトルイーグル",
+        "ko-KR": "이글"
+      }
+    },
+    {
+      "baseId": "3007",
+      "names": {
+        "zh-CN": "未锈铠",
+        "zh-TW": "未鏽鎧",
+        "en-US": "A Knight",
+        "ja-JP": "ナイト",
+        "ko-KR": "A 나이트"
+      }
+    },
+    {
+      "baseId": "3009",
+      "names": {
+        "zh-CN": "苏芙比",
+        "zh-TW": "蘇芙比",
+        "en-US": "Sotheby",
+        "ja-JP": "サザビー",
+        "ko-KR": "소더비"
+      }
+    },
+    {
+      "baseId": "3010",
+      "names": {
+        "zh-CN": "X",
+        "zh-TW": "X",
+        "en-US": "X",
+        "ja-JP": "X",
+        "ko-KR": "X"
+      }
+    },
+    {
+      "baseId": "3011",
+      "names": {
+        "zh-CN": "玛丽莲",
+        "zh-TW": "瑪麗蓮",
+        "en-US": "Sweetheart",
+        "ja-JP": "スイートハート",
+        "ko-KR": "마릴린"
+      }
+    },
+    {
+      "baseId": "3012",
+      "names": {
+        "zh-CN": "弄臣",
+        "zh-TW": "弄臣",
+        "en-US": "The Fool",
+        "ja-JP": "ジェスター",
+        "ko-KR": "광대"
+      }
+    },
+    {
+      "baseId": "3013",
+      "names": {
+        "zh-CN": "冬",
+        "zh-TW": "冬",
+        "en-US": "Зима",
+        "ja-JP": "ズィマー",
+        "ko-KR": "겨울"
+      }
+    },
+    {
+      "baseId": "3014",
+      "names": {
+        "zh-CN": "芭妮芭妮",
+        "zh-TW": "芭妮芭妮",
+        "en-US": "Bunny Bunny",
+        "ja-JP": "バニーバニー",
+        "ko-KR": "바니바니"
+      }
+    },
+    {
+      "baseId": "3015",
+      "names": {
+        "zh-CN": "狼群",
+        "zh-TW": "狼群",
+        "en-US": "Pavia",
+        "ja-JP": "パヴィア",
+        "ko-KR": "파비아"
+      }
+    },
+    {
+      "baseId": "3016",
+      "names": {
+        "zh-CN": "婴儿蓝",
+        "zh-TW": "嬰兒藍",
+        "en-US": "Baby Blue",
+        "ja-JP": "ベビーブルー",
+        "ko-KR": "베이비 블루"
+      }
+    },
+    {
+      "baseId": "3017",
+      "names": {
+        "zh-CN": "夏利",
+        "zh-TW": "夏利",
+        "en-US": "Charlie",
+        "ja-JP": "チャーリー",
+        "ko-KR": "찰리"
+      }
+    },
+    {
+      "baseId": "3018",
+      "names": {
+        "zh-CN": "雾行者",
+        "zh-TW": "霧行者",
+        "en-US": "Oliver Fog",
+        "ja-JP": "オリバー・フォッグ",
+        "ko-KR": "올리버 포그"
+      }
+    },
+    {
+      "baseId": "3020",
+      "names": {
+        "zh-CN": "柏林以东",
+        "zh-TW": "柏林以東",
+        "en-US": "Bkornblume",
+        "ja-JP": "コーンブルメ",
+        "ko-KR": "콘블룸"
+      }
+    },
+    {
+      "baseId": "3022",
+      "names": {
+        "zh-CN": "帕米埃",
+        "zh-TW": "帕米埃",
+        "en-US": "Dikke",
+        "ja-JP": "パミエ",
+        "ko-KR": "디케"
+      }
+    },
+    {
+      "baseId": "3023",
+      "names": {
+        "zh-CN": "十四行诗",
+        "zh-TW": "十四行詩",
+        "en-US": "Sonetto",
+        "ja-JP": "ソネット",
+        "ko-KR": "소네트"
+      }
+    },
+    {
+      "baseId": "3024",
+      "names": {
+        "zh-CN": "气球派对",
+        "zh-TW": "氣球派對",
+        "en-US": "Balloon Party",
+        "ja-JP": "バルーンパーティー",
+        "ko-KR": "벌룬 파티"
+      }
+    },
+    {
+      "baseId": "3025",
+      "names": {
+        "zh-CN": "星锑",
+        "zh-TW": "星銻",
+        "en-US": "Regulus",
+        "ja-JP": "レグルス",
+        "ko-KR": "레굴루스"
+      }
+    },
+    {
+      "baseId": "3026",
+      "names": {
+        "zh-CN": "红斗篷",
+        "zh-TW": "紅斗篷",
+        "en-US": "Mondlicht",
+        "ja-JP": "モントリヒト",
+        "ko-KR": "빨간 망토"
+      }
+    },
+    {
+      "baseId": "3027",
+      "names": {
+        "zh-CN": "无线电小姐",
+        "zh-TW": "無線電小姐",
+        "en-US": "Ms. Radio",
+        "ja-JP": "ミス・ラジオ",
+        "ko-KR": "미스 라디오"
+      }
+    },
+    {
+      "baseId": "3028",
+      "names": {
+        "zh-CN": "APPLe",
+        "zh-TW": "APPLe",
+        "en-US": "APPLe",
+        "ja-JP": "APPLe",
+        "ko-KR": "APPLe"
+      }
+    },
+    {
+      "baseId": "3030",
+      "names": {
+        "zh-CN": "拉拉泉",
+        "zh-TW": "拉拉泉",
+        "en-US": "La Source",
+        "ja-JP": "ララ・ファウンテン",
+        "ko-KR": "라 수르스"
+      }
+    },
+    {
+      "baseId": "3031",
+      "names": {
+        "zh-CN": "铅玻璃",
+        "zh-TW": "鉛玻璃",
+        "en-US": "Cristallo",
+        "ja-JP": "クリスタッロ",
+        "ko-KR": "크리스탈로"
+      }
+    },
+    {
+      "baseId": "3032",
+      "names": {
+        "zh-CN": "百夫长",
+        "zh-TW": "百夫長",
+        "en-US": "Centurion",
+        "ja-JP": "ケントゥリオン",
+        "ko-KR": "센츄리온"
+      }
+    },
+    {
+      "baseId": "3033",
+      "names": {
+        "zh-CN": "TTT",
+        "zh-TW": "TTT",
+        "en-US": "TTT",
+        "ja-JP": "TTT",
+        "ko-KR": "T.T.T."
+      }
+    },
+    {
+      "baseId": "3034",
+      "names": {
+        "zh-CN": "星之眼",
+        "zh-TW": "星之眼",
+        "en-US": "aliEn T",
+        "ja-JP": "ギベオンズアイ",
+        "ko-KR": "에일리언 T"
+      }
+    },
+    {
+      "baseId": "3035",
+      "names": {
+        "zh-CN": "莉拉妮",
+        "zh-TW": "莉拉妮",
+        "en-US": "Leilani",
+        "ja-JP": "レイラニ",
+        "ko-KR": "레일라니"
+      }
+    },
+    {
+      "baseId": "3036",
+      "names": {
+        "zh-CN": "约翰·提托",
+        "zh-TW": "約翰·提托",
+        "en-US": "John Titor",
+        "ja-JP": "ジョン・タイター",
+        "ko-KR": "존 티토"
+      }
+    },
+    {
+      "baseId": "3037",
+      "names": {
+        "zh-CN": "讣告人",
+        "zh-TW": "訃告人",
+        "en-US": "Necrologist",
+        "ja-JP": "ネクロ・ロギスト",
+        "ko-KR": "네크롤로지스트"
+      }
+    },
+    {
+      "baseId": "3038",
+      "names": {
+        "zh-CN": "五色月",
+        "zh-TW": "五色月",
+        "en-US": "Satsuki",
+        "ja-JP": "五色月",
+        "ko-KR": "사츠키"
+      }
+    },
+    {
+      "baseId": "3039",
+      "names": {
+        "zh-CN": "泥鯭的士",
+        "zh-TW": "泥鯭的士",
+        "en-US": "An-an Lee",
+        "ja-JP": "リー・アンアン",
+        "ko-KR": "안안 리"
+      }
+    },
+    {
+      "baseId": "3040",
+      "names": {
+        "zh-CN": "丽莎&路易斯",
+        "zh-TW": "麗莎&路易斯",
+        "en-US": "Twins Sleep",
+        "ja-JP": "リサ＆ルイス",
+        "ko-KR": "리사&루이스"
+      }
+    },
+    {
+      "baseId": "3041",
+      "names": {
+        "zh-CN": "玛蒂尔达",
+        "zh-TW": "瑪蒂爾達",
+        "en-US": "Matilda",
+        "ja-JP": "マチルダ",
+        "ko-KR": "마틸다"
+      }
+    },
+    {
+      "baseId": "3042",
+      "names": {
+        "zh-CN": "爱宠",
+        "zh-TW": "愛寵",
+        "en-US": "Rabies",
+        "ja-JP": "レイビーズ",
+        "ko-KR": "레이비스"
+      }
+    },
+    {
+      "baseId": "3043",
+      "names": {
+        "zh-CN": "坦南特",
+        "zh-TW": "坦南特",
+        "en-US": "Tennant",
+        "ja-JP": "テナント",
+        "ko-KR": "테넌트"
+      }
+    },
+    {
+      "baseId": "3044",
+      "names": {
+        "zh-CN": "莫桑女士",
+        "zh-TW": "莫桑女士",
+        "en-US": "Ms. Moissan",
+        "ja-JP": "ミス・モアッサン",
+        "ko-KR": "무아상"
+      }
+    },
+    {
+      "baseId": "3045",
+      "names": {
+        "zh-CN": "贝蒂",
+        "zh-TW": "貝蒂",
+        "en-US": "Bette",
+        "ja-JP": "ベティ",
+        "ko-KR": "베티"
+      }
+    },
+    {
+      "baseId": "3046",
+      "names": {
+        "zh-CN": "吵闹鬼",
+        "zh-TW": "吵鬧鬼",
+        "en-US": "Poltergeist",
+        "ja-JP": "ポルターガイスト",
+        "ko-KR": "폴터 가이스트"
+      }
+    },
+    {
+      "baseId": "3047",
+      "names": {
+        "zh-CN": "兔毛手袋",
+        "zh-TW": "兔毛手袋",
+        "en-US": "Medicine Pocket",
+        "ja-JP": "メディスンポケット",
+        "ko-KR": "메디슨 포켓"
+      }
+    },
+    {
+      "baseId": "3048",
+      "names": {
+        "zh-CN": "远旅",
+        "zh-TW": "遠旅",
+        "en-US": "Voyager",
+        "ja-JP": "ボイジャー",
+        "ko-KR": "보이저"
+      }
+    },
+    {
+      "baseId": "3049",
+      "names": {
+        "zh-CN": "喀嚓喀嚓",
+        "zh-TW": "喀嚓喀嚓",
+        "en-US": "Click",
+        "ja-JP": "カシャパシャ",
+        "ko-KR": "클릭"
+      }
+    },
+    {
+      "baseId": "3050",
+      "names": {
+        "zh-CN": "哒哒达利",
+        "zh-TW": "噠噠達利",
+        "en-US": "Darley Clatter",
+        "ja-JP": "ダーレータッタ",
+        "ko-KR": "다그닥 달리"
+      }
+    },
+    {
+      "baseId": "3051",
+      "names": {
+        "zh-CN": "温妮弗雷德",
+        "zh-TW": "溫妮弗雷德",
+        "en-US": "Eternity",
+        "ja-JP": "エターニティ",
+        "ko-KR": "이터니티"
+      }
+    },
+    {
+      "baseId": "3052",
+      "names": {
+        "zh-CN": "新巴别塔",
+        "zh-TW": "新巴別塔",
+        "en-US": "Ms. NewBabel",
+        "ja-JP": "ニューバベル",
+        "ko-KR": "뉴바벨"
+      }
+    },
+    {
+      "baseId": "3053",
+      "names": {
+        "zh-CN": "牙仙",
+        "zh-TW": "牙仙",
+        "en-US": "Tooth Fairy",
+        "ja-JP": "トゥースフェアリー",
+        "ko-KR": "투스 페어리"
+      }
+    },
+    {
+      "baseId": "3054",
+      "names": {
+        "zh-CN": "洋葱头",
+        "zh-TW": "洋蔥頭",
+        "en-US": "ONiON",
+        "ja-JP": "オニオン",
+        "ko-KR": "어니언"
+      }
+    },
+    {
+      "baseId": "3055",
+      "names": {
+        "zh-CN": "斯普特尼克",
+        "zh-TW": "斯普特尼克",
+        "en-US": "Sputnik",
+        "ja-JP": "スプートニク",
+        "ko-KR": "스푸트니크"
+      }
+    },
+    {
+      "baseId": "3056",
+      "names": {
+        "zh-CN": "洁西卡",
+        "zh-TW": "潔西卡",
+        "en-US": "Jessica",
+        "ja-JP": "ジェシカ",
+        "ko-KR": "제시카"
+      }
+    },
+    {
+      "baseId": "3057",
+      "names": {
+        "zh-CN": "小梅斯梅尔",
+        "zh-TW": "小梅斯梅爾",
+        "en-US": "Mesmer Jr.",
+        "ja-JP": "メスメル・Jr.",
+        "ko-KR": "메스머 주니어"
+      }
+    },
+    {
+      "baseId": "3058",
+      "names": {
+        "zh-CN": "埃里克",
+        "zh-TW": "埃里克",
+        "en-US": "Erick",
+        "ja-JP": "エリック",
+        "ko-KR": "에릭"
+      }
+    },
+    {
+      "baseId": "3059",
+      "names": {
+        "zh-CN": "门",
+        "zh-TW": "門",
+        "en-US": "Door",
+        "ja-JP": "ドア",
+        "ko-KR": "문"
+      }
+    },
+    {
+      "baseId": "3060",
+      "names": {
+        "zh-CN": "金蜜儿",
+        "zh-TW": "金蜜兒",
+        "en-US": "Blonney",
+        "ja-JP": "ジェイミー",
+        "ko-KR": "블로니"
+      }
+    },
+    {
+      "baseId": "3061",
+      "names": {
+        "zh-CN": "恐怖通",
+        "zh-TW": "恐怖通",
+        "en-US": "Horropedia",
+        "ja-JP": "ホラーペディア",
+        "ko-KR": "호러피디아"
+      }
+    },
+    {
+      "baseId": "3062",
+      "names": {
+        "zh-CN": "梅兰妮",
+        "zh-TW": "梅蘭妮",
+        "en-US": "Melania",
+        "ja-JP": "メラニア",
+        "ko-KR": "멜라니아"
+      }
+    },
+    {
+      "baseId": "3063",
+      "names": {
+        "zh-CN": "皮克勒斯",
+        "zh-TW": "皮克勒斯",
+        "en-US": "Pickles",
+        "ja-JP": "ピクルス",
+        "ko-KR": "피클즈"
+      }
+    },
+    {
+      "baseId": "3064",
+      "names": {
+        "zh-CN": "挖掘艺术",
+        "zh-TW": "挖掘藝術",
+        "en-US": "Diggers",
+        "ja-JP": "ディガー",
+        "ko-KR": "디거스"
+      }
+    },
+    {
+      "baseId": "3065",
+      "names": {
+        "zh-CN": "马库斯",
+        "zh-TW": "馬庫斯",
+        "en-US": "Marcus",
+        "ja-JP": "マーカス",
+        "ko-KR": "마커스"
+      }
+    },
+    {
+      "baseId": "3066",
+      "names": {
+        "zh-CN": "37",
+        "zh-TW": "37",
+        "en-US": "37",
+        "ja-JP": "37",
+        "ko-KR": "37"
+      }
+    },
+    {
+      "baseId": "3070",
+      "names": {
+        "zh-CN": "伽菈波那",
+        "zh-TW": "伽菈波那",
+        "en-US": "Kaalaa Baunaa",
+        "ja-JP": "カーラ・ボナー",
+        "ko-KR": "갈라보나"
+      }
+    },
+    {
+      "baseId": "3071",
+      "names": {
+        "zh-CN": "坎吉拉",
+        "zh-TW": "坎吉拉",
+        "en-US": "Kanjira",
+        "ja-JP": "カンジーラ",
+        "ko-KR": "칸지라"
+      }
+    },
+    {
+      "baseId": "3072",
+      "names": {
+        "zh-CN": "鬃毛沙砾",
+        "zh-TW": "鬃毛沙礫",
+        "en-US": "Shamane",
+        "ja-JP": "シャーマィン",
+        "ko-KR": "갈기모래"
+      }
+    },
+    {
+      "baseId": "3073",
+      "names": {
+        "zh-CN": "可燃点",
+        "zh-TW": "可燃點",
+        "en-US": "Spathodea",
+        "ja-JP": "カエンボク",
+        "ko-KR": "스파토데아"
+      }
+    },
+    {
+      "baseId": "3074",
+      "names": {
+        "zh-CN": "爱兹拉",
+        "zh-TW": "愛茲拉",
+        "en-US": "Ezra Theodore",
+        "ja-JP": "エズラ",
+        "ko-KR": "에즈라"
+      }
+    },
+    {
+      "baseId": "3075",
+      "names": {
+        "zh-CN": "沙丝绒",
+        "zh-TW": "沙絲絨",
+        "en-US": "Desert Flannel",
+        "ja-JP": "サンド・フランネル",
+        "ko-KR": "데저트 플란넬"
+      }
+    },
+    {
+      "baseId": "3076",
+      "names": {
+        "zh-CN": "和平乌鲁",
+        "zh-TW": "和平烏魯",
+        "en-US": "Ulu",
+        "ja-JP": "ウル",
+        "ko-KR": "울루"
+      }
+    },
+    {
+      "baseId": "3077",
+      "names": {
+        "zh-CN": "北方哨歌",
+        "zh-TW": "北方哨歌",
+        "en-US": "Windsong",
+        "ja-JP": "スヴィスティ",
+        "ko-KR": "윈드송"
+      }
+    },
+    {
+      "baseId": "3078",
+      "names": {
+        "zh-CN": "阿夫西维",
+        "zh-TW": "阿夫西維",
+        "en-US": "Avgust",
+        "ja-JP": "アヴグスト",
+        "ko-KR": "아브구스트"
+      }
+    },
+    {
+      "baseId": "3079",
+      "names": {
+        "zh-CN": "6",
+        "zh-TW": "6",
+        "en-US": "6",
+        "ja-JP": "6",
+        "ko-KR": "6"
+      }
+    },
+    {
+      "baseId": "3080",
+      "names": {
+        "zh-CN": "卡卡尼亚",
+        "zh-TW": "卡卡尼亞",
+        "en-US": "Kakania",
+        "ja-JP": "カカニア",
+        "ko-KR": "카카니아"
+      }
+    },
+    {
+      "baseId": "3081",
+      "names": {
+        "zh-CN": "伊索尔德",
+        "zh-TW": "伊索爾德",
+        "en-US": "Isolde",
+        "ja-JP": "イゾルデ",
+        "ko-KR": "이졸데"
+      }
+    },
+    {
+      "baseId": "3082",
+      "names": {
+        "zh-CN": "小叶尼塞",
+        "zh-TW": "小葉尼塞",
+        "en-US": "Yenisei",
+        "ja-JP": "エニセイ",
+        "ko-KR": "예니세이"
+      }
+    },
+    {
+      "baseId": "3083",
+      "names": {
+        "zh-CN": "曲娘",
+        "zh-TW": "曲娘",
+        "en-US": "Jiu Niangzi",
+        "ja-JP": "曲娘",
+        "ko-KR": "곡랑"
+      }
+    },
+    {
+      "baseId": "3084",
+      "names": {
+        "zh-CN": "葛天",
+        "zh-TW": "葛天",
+        "en-US": "Getian",
+        "ja-JP": "葛天",
+        "ko-KR": "갈천"
+      }
+    },
+    {
+      "baseId": "3086",
+      "names": {
+        "zh-CN": "露西",
+        "zh-TW": "露西",
+        "en-US": "Lucy",
+        "ja-JP": "ルーシー",
+        "ko-KR": "루시"
+      }
+    },
+    {
+      "baseId": "3087",
+      "names": {
+        "zh-CN": "维拉",
+        "zh-TW": "維拉",
+        "en-US": "Vila",
+        "ja-JP": "ヴィラ",
+        "ko-KR": "빌라"
+      }
+    },
+    {
+      "baseId": "3088",
+      "names": {
+        "zh-CN": "塞梅尔维斯",
+        "zh-TW": "塞梅爾維斯",
+        "en-US": "Semmelweis",
+        "ja-JP": "センメルワイス",
+        "ko-KR": "제멜바이스"
+      }
+    },
+    {
+      "baseId": "3091",
+      "names": {
+        "zh-CN": "罗蕾莱",
+        "zh-TW": "羅蕾萊",
+        "en-US": "Lorelei",
+        "ja-JP": "ローレライ",
+        "ko-KR": "로렐라이"
+      }
+    },
+    {
+      "baseId": "3092",
+      "names": {
+        "zh-CN": "伊戈尔",
+        "zh-TW": "伊戈爾",
+        "en-US": "Igor",
+        "ja-JP": "イゴール",
+        "ko-KR": "이고르"
+      }
+    },
+    {
+      "baseId": "3094",
+      "names": {
+        "zh-CN": "J",
+        "zh-TW": "J",
+        "en-US": "J",
+        "ja-JP": "J",
+        "ko-KR": "J"
+      }
+    },
+    {
+      "baseId": "3095",
+      "names": {
+        "zh-CN": "环状水星",
+        "zh-TW": "環狀水星",
+        "en-US": "Mercuria",
+        "ja-JP": "マーキュリア",
+        "ko-KR": "머큐리아"
+      }
+    },
+    {
+      "baseId": "3096",
+      "names": {
+        "zh-CN": "先驱者",
+        "zh-TW": "先驅者",
+        "en-US": "Pioneer",
+        "ja-JP": "パイオニア",
+        "ko-KR": "파이오니어"
+      }
+    },
+    {
+      "baseId": "3097",
+      "names": {
+        "zh-CN": "阿尔古斯",
+        "zh-TW": "阿爾古斯",
+        "en-US": "Argus",
+        "ja-JP": "アルゴス",
+        "ko-KR": "아르고스"
+      }
+    },
+    {
+      "baseId": "3098",
+      "names": {
+        "zh-CN": "蓝手帕",
+        "zh-TW": "藍手帕",
+        "en-US": "Tuesday",
+        "ja-JP": "チューズデー",
+        "ko-KR": "튜즈데이"
+      }
+    },
+    {
+      "baseId": "3099",
+      "names": {
+        "zh-CN": "数羊羔",
+        "zh-TW": "數羊羔",
+        "en-US": "Barbara",
+        "ja-JP": "メェプル",
+        "ko-KR": "바바라"
+      }
+    },
+    {
+      "baseId": "3100",
+      "names": {
+        "zh-CN": "天使娜娜",
+        "zh-TW": "天使娜娜",
+        "en-US": "Anjo Nala",
+        "ja-JP": "アンジョナナ",
+        "ko-KR": "안조 날라"
+      }
+    },
+    {
+      "baseId": "3101",
+      "names": {
+        "zh-CN": "白朗姆",
+        "zh-TW": "白朗姆",
+        "en-US": "White Rum",
+        "ja-JP": "ホワイトラム",
+        "ko-KR": "화이트 럼"
+      }
+    },
+    {
+      "baseId": "3102",
+      "names": {
+        "zh-CN": "洛佩拉",
+        "zh-TW": "洛佩拉",
+        "en-US": "Lopera",
+        "ja-JP": "ロペラ",
+        "ko-KR": "로페라"
+      }
+    },
+    {
+      "baseId": "3103",
+      "names": {
+        "zh-CN": "邓肯先生",
+        "zh-TW": "鄧肯先生",
+        "en-US": "Mr. Duncan",
+        "ja-JP": "ダンカン",
+        "ko-KR": "던컨"
+      }
+    },
+    {
+      "baseId": "3104",
+      "names": {
+        "zh-CN": "笃笃骨",
+        "zh-TW": "篤篤骨",
+        "en-US": "Willow",
+        "ja-JP": "ヴィロー",
+        "ko-KR": "윌로우"
+      }
+    },
+    {
+      "baseId": "3105",
+      "names": {
+        "zh-CN": "纸信圈儿",
+        "zh-TW": "紙信圈兒",
+        "en-US": "Flutterpage",
+        "ja-JP": "パタパタペーパー",
+        "ko-KR": "플러터 페이지"
+      }
+    },
+    {
+      "baseId": "3106",
+      "names": {
+        "zh-CN": "宽檐帽",
+        "zh-TW": "寬簷帽",
+        "en-US": "Brimley",
+        "ja-JP": "つば広ハット",
+        "ko-KR": "슬라우치 햇"
+      }
+    },
+    {
+      "baseId": "3107",
+      "names": {
+        "zh-CN": "乌尔里希",
+        "zh-TW": "烏爾裡希",
+        "en-US": "Ulrich",
+        "ja-JP": "ウルリッヒ"
+      }
+    },
+    {
+      "baseId": "3108",
+      "names": {
+        "zh-CN": "芭卡洛儿",
+        "zh-TW": "芭卡洛兒",
+        "en-US": "Barcarola",
+        "ja-JP": "バルカローラ",
+        "ko-KR": "바르카롤라"
+      }
+    },
+    {
+      "baseId": "3109",
+      "names": {
+        "zh-CN": "图图石子",
+        "zh-TW": "圖圖石子",
+        "en-US": "Fatutu",
+        "ja-JP": "トゥトゥイ",
+        "ko-KR": "파투투"
+      }
+    },
+    {
+      "baseId": "3110",
+      "names": {
+        "zh-CN": "梁月",
+        "zh-TW": "梁月",
+        "en-US": "Liang Yue",
+        "ja-JP": "梁月",
+        "ko-KR": "양월"
+      }
+    },
+    {
+      "baseId": "3111",
+      "names": {
+        "zh-CN": "菲林士多",
+        "zh-TW": "菲林士多",
+        "en-US": "Noire",
+        "ja-JP": "ノワール",
+        "ko-KR": "느와르"
+      }
+    },
+    {
+      "baseId": "3112",
+      "names": {
+        "zh-CN": "空脑袋",
+        "zh-TW": "空腦袋",
+        "en-US": "Loggerhead",
+        "ja-JP": "ロガーヘッド",
+        "ko-KR": "로거헤드"
+      }
+    },
+    {
+      "baseId": "3113",
+      "names": {
+        "zh-CN": "阿莱夫",
+        "zh-TW": "阿萊夫",
+        "en-US": "Aleph",
+        "ja-JP": "エル・アレフ",
+        "ko-KR": "알레프"
+      }
+    },
+    {
+      "baseId": "3114",
+      "names": {
+        "zh-CN": "虚构集",
+        "zh-TW": "虛構集",
+        "en-US": "Recoleta",
+        "ja-JP": "レコレータ",
+        "ko-KR": "레콜레타"
+      }
+    },
+    {
+      "baseId": "3115",
+      "names": {
+        "zh-CN": "嚼嚼松果",
+        "zh-TW": "嚼嚼松果",
+        "en-US": "Buddy Fairchild",
+        "ja-JP": "もぐナッツ",
+        "ko-KR": "버디 페어차일드"
+      }
+    },
+    {
+      "baseId": "3116",
+      "names": {
+        "zh-CN": "冷周六",
+        "zh-TW": "冷週六",
+        "en-US": "Hissabeth",
+        "ja-JP": "サーベス",
+        "ko-KR": "Hissabeth"
+      }
+    },
+    {
+      "baseId": "3117",
+      "names": {
+        "zh-CN": "库珀花环",
+        "zh-TW": "庫珀花環",
+        "en-US": "Kiperina",
+        "ja-JP": "カイパリーナ",
+        "ko-KR": "Kiperina"
+      }
+    },
+    {
+      "baseId": "3118",
+      "names": {
+        "zh-CN": "命名日",
+        "zh-TW": "命名日",
+        "en-US": "Name Day",
+        "ja-JP": "ネイムデー",
+        "ko-KR": "Name Day"
+      }
+    },
+    {
+      "baseId": "3120",
+      "names": {
+        "zh-CN": "诺谛卡",
+        "zh-TW": "諾諦卡",
+        "en-US": "Nautika",
+        "ja-JP": "ノーティカ",
+        "ko-KR": "노티카"
+      }
+    },
+    {
+      "baseId": "3121",
+      "names": {
+        "zh-CN": "莫莉德尔",
+        "zh-TW": "莫莉德爾",
+        "en-US": "Moldir",
+        "ja-JP": "モルダー",
+        "ko-KR": "몰디르"
+      }
+    },
+    {
+      "baseId": "3122",
+      "names": {
+        "zh-CN": "阿利克西欧斯",
+        "zh-TW": "阿利克西歐斯",
+        "en-US": "Alexios",
+        "ja-JP": "アレクシオス"
+      }
+    },
+    {
+      "baseId": "3123",
+      "names": {
+        "zh-CN": "艾吉奥·奥迪托雷",
+        "zh-TW": "艾吉奧·奧迪託雷",
+        "en-US": "Ezio Auditore",
+        "ja-JP": "エツィオ"
+      }
+    },
+    {
+      "baseId": "3124",
+      "names": {
+        "zh-CN": "卡珊德拉",
+        "zh-TW": "卡珊德拉",
+        "en-US": "Kassandra",
+        "ja-JP": "カサンドラ"
+      }
+    },
+    {
+      "baseId": "3125",
+      "names": {
+        "zh-CN": "野树莓",
+        "zh-TW": "野樹莓",
+        "en-US": "Rubuska",
+        "ja-JP": "ルブシカ"
+      }
+    },
+    {
+      "baseId": "3126",
+      "names": {
+        "zh-CN": "玛丽安娜",
+        "zh-TW": "瑪麗安娜",
+        "en-US": "Sentinel",
+        "ja-JP": "センティネル",
+        "ko-KR": "센티널"
+      }
+    },
+    {
+      "baseId": "3127",
+      "names": {
+        "zh-CN": "玛尔纱",
+        "zh-TW": "瑪爾紗",
+        "en-US": "Marsha",
+        "ja-JP": "マルシャ",
+        "ko-KR": "마샤"
+      }
+    },
+    {
+      "baseId": "3128",
+      "names": {
+        "zh-CN": "卡戎",
+        "zh-TW": "卡戎",
+        "en-US": "Charon",
+        "ja-JP": "カローン",
+        "ko-KR": "카론"
+      }
+    },
+    {
+      "baseId": "3132",
+      "names": {
+        "zh-CN": "告死鸟",
+        "zh-TW": "告死鳥",
+        "en-US": "Corvus",
+        "ja-JP": "コルヴス",
+        "ko-KR": "코르부스"
+      }
+    },
+    {
+      "baseId": "3134",
+      "names": {
+        "zh-CN": "贝丽尔",
+        "zh-TW": "貝麗爾",
+        "en-US": "Beryl",
+        "ja-JP": "ベリル",
+        "ko-KR": "베릴"
+      }
+    },
+    {
+      "baseId": "3135",
+      "names": {
+        "zh-CN": "灰调蓝",
+        "zh-TW": "灰調藍",
+        "en-US": "Brume",
+        "ja-JP": "グレイッシュブルー",
+        "ko-KR": "브룸"
+      }
+    },
+    {
+      "baseId": "3136",
+      "names": {
+        "zh-CN": "《湖边的女人》",
+        "zh-TW": "《湖邊的女人》",
+        "en-US": "Lady by the Lake"
+      }
+    },
+    {
+      "baseId": "3137",
+      "names": {
+        "zh-CN": "程和光",
+        "zh-TW": "程和光",
+        "en-US": "Cheng Heguang",
+        "ja-JP": "程和光"
+      }
+    },
+    {
+      "baseId": "3138",
+      "names": {
+        "zh-CN": "芦草结",
+        "zh-TW": "蘆草結",
+        "en-US": "Reed",
+        "ja-JP": "リードノット"
+      }
+    },
+    {
+      "baseId": "3139",
+      "names": {
+        "zh-CN": "洛伦兹蝴蝶",
+        "zh-TW": "洛倫茲蝴蝶",
+        "en-US": "Lorentz Butterfly",
+        "ja-JP": "ローレンツバタフライ",
+        "ko-KR": "로렌츠 버터플라이"
+      }
+    },
+    {
+      "baseId": "3140",
+      "names": {
+        "zh-CN": "奠基石",
+        "zh-TW": "奠基石",
+        "en-US": "Cornerstone"
+      }
+    },
+    {
+      "baseId": "3141",
+      "names": {
+        "zh-CN": "鹭鸶剪",
+        "zh-TW": "鷺鷥剪",
+        "en-US": "Paper Heron",
+        "ja-JP": "鷺切"
+      }
+    },
+    {
+      "baseId": "3142",
+      "names": {
+        "zh-CN": "拉莫纳",
+        "zh-TW": "拉莫納",
+        "en-US": "Ramona",
+        "ja-JP": "ラモナ",
+        "ko-KR": "라모나"
+      }
+    },
+    {
+      "baseId": "3143",
+      "names": {
+        "zh-CN": "哑谜",
+        "zh-TW": "啞謎",
+        "en-US": "Enigma",
+        "ja-JP": "エニグマ"
+      }
+    },
+    {
+      "baseId": "3144",
+      "names": {
+        "zh-CN": "珐琅眼",
+        "zh-TW": "琺琅眼",
+        "en-US": "Coppélia",
+        "ko-KR": "코펠리아"
+      }
+    },
+    {
+      "baseId": "3145",
+      "names": {
+        "zh-CN": "回声谣",
+        "zh-TW": "回聲謠",
+        "en-US": "Everecho"
+      }
+    },
+    {
+      "baseId": "3146",
+      "names": {
+        "zh-CN": "小瑞安侬",
+        "zh-TW": "小瑞安儂",
+        "en-US": "Rhiannon",
+        "ja-JP": "リアンノン",
+        "ko-KR": "리아논"
+      }
+    },
+    {
+      "baseId": "3147",
+      "names": {
+        "zh-CN": "无名者",
+        "zh-TW": "無名者",
+        "en-US": "Ms. Stranger",
+        "ko-KR": "미스 스트레인저"
+      }
+    },
+    {
+      "baseId": "3149",
+      "names": {
+        "zh-CN": "双生舞伶",
+        "zh-TW": "雙生舞伶",
+        "en-US": "The Twins",
+        "ja-JP": "双子",
+        "ko-KR": "쌍둥이"
+      }
+    },
+    {
+      "baseId": "3151",
+      "names": {
+        "zh-CN": "诺拉",
+        "zh-TW": "諾拉",
+        "en-US": "NORA",
+        "ja-JP": "ノラ"
+      }
+    },
+    {
+      "baseId": "3154",
+      "names": {
+        "zh-CN": "银装小春雀儿",
+        "zh-TW": "銀裝小春雀兒",
+        "en-US": "Silverwing Eagle"
+      }
+    },
+    {
+      "baseId": "3156",
+      "names": {
+        "zh-CN": "赫多涅",
+        "zh-TW": "赫多涅",
+        "en-US": "Hedone"
+      }
+    }
+  ]
+}

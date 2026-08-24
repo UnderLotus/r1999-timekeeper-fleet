@@ -1,0 +1,306 @@
+import { useEffect, useRef, useState } from "react";
+import { Search } from "lucide-react";
+import type { LangCode } from "../i18n/ui";
+import { getUiText } from "../i18n/ui";
+import type { DefaultSkinMode, FilterMode } from "../store/boxStore";
+import type { CharacterBuild } from "../types/profile";
+import { InsightGlyph } from "./InsightGlyph";
+import { Btn, SegButtons, Stepper } from "../utils/design";
+
+type AddDefaults = Omit<CharacterBuild, "activeVariant">;
+
+export function PoolControls({
+  lang,
+  tab,
+  search,
+  filterMode,
+  rarityFilter,
+  addDefaults,
+  defaultSkinMode,
+  onTab,
+  onSearch,
+  onFilter,
+  onRarity,
+  onDefaults,
+  onDefaultSkinMode,
+}: {
+  lang: LangCode;
+  tab: "characters" | "psychubes";
+  search: string;
+  filterMode: FilterMode;
+  rarityFilter: number[];
+  addDefaults: AddDefaults;
+  defaultSkinMode: DefaultSkinMode;
+  onTab: (tab: "characters" | "psychubes") => void;
+  onSearch: (value: string) => void;
+  onFilter: (value: FilterMode) => void;
+  onRarity: (value: number[]) => void;
+  onDefaults: (value: Partial<AddDefaults>) => void;
+  onDefaultSkinMode: (value: DefaultSkinMode) => void;
+}): React.JSX.Element {
+  const t = (key: string, params?: Record<string, string | number>) =>
+    getUiText(lang, key, params);
+  const [defaultsOpen, setDefaultsOpen] = useState(false);
+  const [draft, setDraft] = useState<AddDefaults>(addDefaults);
+  const [draftSkinMode, setDraftSkinMode] =
+    useState<DefaultSkinMode>(defaultSkinMode);
+  const defaultsRef = useRef<HTMLDivElement>(null);
+  const beginDefaults = () => {
+    setDraft(addDefaults);
+    setDraftSkinMode(defaultSkinMode);
+    setDefaultsOpen(true);
+  };
+  const cancelDefaults = () => setDefaultsOpen(false);
+  const completeDefaults = () => {
+    onDefaults(draft);
+    onDefaultSkinMode(draftSkinMode);
+    setDefaultsOpen(false);
+  };
+  useEffect(() => {
+    if (!defaultsOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!defaultsRef.current?.contains(event.target as Node))
+        cancelDefaults();
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [defaultsOpen]);
+  return (
+    <div className="pool-controls">
+      <div className="ds-seg" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "characters"}
+          className={`ds-seg__item ${tab === "characters" ? "is-selected" : ""}`}
+          onClick={() => onTab("characters")}
+        >
+          {t("tabCharacters")}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "psychubes"}
+          className={`ds-seg__item ${tab === "psychubes" ? "is-selected" : ""}`}
+          onClick={() => onTab("psychubes")}
+        >
+          {t("tabPsychubes")}
+        </button>
+      </div>
+      <label className="pool-search">
+        <Search size={14} />
+        <input
+          type="search"
+          value={search}
+          onChange={(e) => onSearch(e.target.value)}
+          placeholder={t("searchPlaceholder")}
+          aria-label={t("searchLabel")}
+        />
+      </label>
+      <div className="ds-seg" role="group">
+        {(["all", "owned", "unowned"] as FilterMode[]).map((mode) => (
+          <button
+            key={mode}
+            type="button"
+            className={`ds-seg__item ${filterMode === mode ? "is-selected" : ""}`}
+            aria-pressed={filterMode === mode}
+            onClick={() => onFilter(mode)}
+          >
+            {t(
+              mode === "all"
+                ? "filterAll"
+                : mode === "owned"
+                  ? "filterOwned"
+                  : "filterUnowned",
+            )}
+          </button>
+        ))}
+      </div>
+      <div className="rarity-filter" role="group" aria-label={t("rarity")}>
+        {(tab === "psychubes" ? [3, 4, 5, 6] : [2, 3, 4, 5, 6]).map(
+          (rarity) => (
+            <button
+              key={rarity}
+              type="button"
+              aria-pressed={rarityFilter.includes(rarity)}
+              data-active={rarityFilter.includes(rarity)}
+              onClick={() =>
+                onRarity(
+                  rarityFilter.includes(rarity)
+                    ? rarityFilter.filter((x) => x !== rarity)
+                    : [...rarityFilter, rarity],
+                )
+              }
+            >
+              ★{rarity}
+            </button>
+          ),
+        )}
+      </div>
+      <div className="add-defaults" ref={defaultsRef}>
+        <button
+          type="button"
+          className="add-defaults__toggle"
+          aria-expanded={defaultsOpen}
+          onClick={() => (defaultsOpen ? cancelDefaults() : beginDefaults())}
+        >
+          {t("addDefaults")}
+        </button>
+        {defaultsOpen && (
+          <div className="add-defaults__panel">
+            <div className="editor-modules add-defaults__modules">
+              <section className="editor-section">
+                <header className="editor-section__head">
+                  <span>{t("level")}</span>
+                  <output>Lv.{draft.level} / 60</output>
+                </header>
+                <div className="editor-section__controls">
+                  <Stepper
+                    label={t("level")}
+                    value={draft.level}
+                    min={1}
+                    max={60}
+                    onChange={(level) =>
+                      setDraft((value) => ({ ...value, level }))
+                    }
+                    decreaseLabel={t("decreaseValue", { name: t("level") })}
+                    increaseLabel={t("increaseValue", { name: t("level") })}
+                  />
+                  <SegButtons
+                    options={[1, 20, 30, 40, 50, 60].map((value) => ({
+                      key: String(value),
+                      label: value === 60 ? t("max") : String(value),
+                    }))}
+                    selected={String(draft.level)}
+                    onSelect={(value) =>
+                      setDraft((current) => ({
+                        ...current,
+                        level: Number(value),
+                      }))
+                    }
+                  />
+                </div>
+              </section>
+              <section className="editor-section editor-section--insight">
+                <header className="editor-section__head">
+                  <span>{t("insight")}</span>
+                  <output
+                    className="editor-section__current"
+                    aria-label={`${t("insight")} ${draft.insight}`}
+                  >
+                    <InsightGlyph insight={draft.insight} />
+                  </output>
+                </header>
+                <div className="editor-section__controls">
+                  <SegButtons
+                    options={[0, 1, 2, 3].map((value) => ({
+                      key: String(value),
+                      label: <InsightGlyph insight={value} />,
+                      ariaLabel: `${t("insight")} ${value}`,
+                    }))}
+                    className="insight-selector"
+                    selected={String(draft.insight)}
+                    onSelect={(value) =>
+                      setDraft((current) => ({
+                        ...current,
+                        insight: Number(value) as 0 | 1 | 2 | 3,
+                      }))
+                    }
+                  />
+                </div>
+              </section>
+              <section className="editor-section">
+                <header className="editor-section__head">
+                  <span>{t("resonance")}</span>
+                  <output>{draft.resonance}</output>
+                </header>
+                <div className="editor-section__controls">
+                  <Stepper
+                    label={t("resonance")}
+                    value={draft.resonance}
+                    min={0}
+                    max={15}
+                    onChange={(resonance) =>
+                      setDraft((value) => ({ ...value, resonance }))
+                    }
+                    decreaseLabel={t("decreaseValue", { name: t("resonance") })}
+                    increaseLabel={t("increaseValue", { name: t("resonance") })}
+                  />
+                  <SegButtons
+                    options={[1, 10, 15].map((value) => ({
+                      key: String(value),
+                      label: String(value),
+                    }))}
+                    selected={
+                      [1, 10, 15].includes(draft.resonance)
+                        ? String(draft.resonance)
+                        : undefined
+                    }
+                    onSelect={(value) =>
+                      setDraft((current) => ({
+                        ...current,
+                        resonance: Number(value),
+                      }))
+                    }
+                  />
+                </div>
+              </section>
+              <section className="editor-section">
+                <header className="editor-section__head">
+                  <span>{t("portray")}</span>
+                </header>
+                <div className="editor-section__controls">
+                  <SegButtons
+                    options={[0, 1, 2, 3, 4, 5].map((value) => ({
+                      key: String(value),
+                      label: String(value),
+                    }))}
+                    selected={String(draft.portray)}
+                    onSelect={(value) =>
+                      setDraft((current) => ({
+                        ...current,
+                        portray: Number(value),
+                      }))
+                    }
+                  />
+                </div>
+              </section>
+              <section className="editor-section add-defaults__skin-mode">
+                <header className="editor-section__head">
+                  <span>{t("defaultSkin")}</span>
+                  <output>
+                    {t(
+                      draftSkinMode === "initial"
+                        ? "skinDefault"
+                        : "skinInsight",
+                    )}
+                  </output>
+                </header>
+                <div className="editor-section__controls">
+                  <SegButtons
+                    options={[
+                      { key: "initial", label: t("skinDefault") },
+                      { key: "insight", label: t("skinInsight") },
+                    ]}
+                    selected={draftSkinMode}
+                    onSelect={(value) =>
+                      setDraftSkinMode(value as DefaultSkinMode)
+                    }
+                  />
+                </div>
+              </section>
+            </div>
+            <div className="editor-actions add-defaults__actions">
+              <Btn variant="neutral" onClick={cancelDefaults}>
+                {t("cancel")}
+              </Btn>
+              <Btn variant="primary" onClick={completeDefaults}>
+                {t("done")}
+              </Btn>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

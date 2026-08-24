@@ -1,0 +1,205 @@
+.team-slot {
+  position: relative;
+  min-width: 0;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  border: 1px solid var(--border-light);
+  background: var(--surface-muted);
+}
+.team-slot--target {
+  border-color: var(--accent-teal);
+  box-shadow: inset 0 0 0 2px var(--accent-teal);
+}
+.team-slot__character {
+  min-width: 0;
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.team-slot__avatar {
+  position: relative;
+  width: 58px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--border-primary);
+  background: var(--surface-main);
+}
+.team-slot__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.team-slot__pos {
+  position: absolute;
+  top: 2px;
+  z-index: 3;
+  padding: 0 3px;
+  background: rgba(238, 232, 218, 0.82);
+  color: var(--ink-muted);
+  font-size: 8px;
+  font-weight: 700;
+}
+.team-slot__pos {
+  left: 2px;
+}
+.team-slot__portray {
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  z-index: 2;
+  transform: translateX(-50%);
+  gap: 2px;
+}
+.team-slot__portray .portray-badge__segment {
+  width: 7px;
+  height: 2px;
+}
+.team-slot__summary {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.team-slot__name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink-primary);
+  font-family: var(--font-display);
+  font-size: 11px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.team-slot__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-secondary);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.team-slot__meta .insight-glyph {
+  width: 27px;
+  height: 18px;
+  color: var(--accent-gold);
+}
+.team-slot__empty-label,
+.team-slot__spoiler {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink-muted);
+  font-size: 9px;
+}
+.team-slot__spoiler {
+  font-family: var(--font-display);
+  font-size: 24px;
+  background: linear-gradient(135deg, var(--surface-muted), #cbc1b0);
+}
+.team-slot__psychubes {
+  min-height: 37px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 5px;
+  padding-top: 5px;
+  padding-right: 54px;
+  border-top: 1px solid var(--border-light);
+}
+.team-slot__psy {
+  width: 44px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.team-slot__psy img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.team-slot__psy--empty {
+  border: 1px dashed var(--border-light);
+  color: var(--ink-muted);
+  background: transparent;
+  font-size: 13px;
+}
+.team-slot__psy--hidden {
+  color: var(--ink-inverse);
+  background: rgba(30, 24, 18, 0.78);
+  font-size: 13px;
+}
+.team-slot__clear-slot {
+  top: 3px;
+  right: 3px;
+  opacity: 0;
+}
+.team-slot:hover .team-slot__clear-slot,
+.team-slot__clear-slot:focus-visible {
+  opacity: 1;
+}
+.team-slot__swap {
+  position: absolute;
+  right: 5px;
+  bottom: 7px;
+  z-index: 4;
+  display: flex;
+}
+.team-slot__swap button {
+  width: 24px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: rgba(238, 232, 218, 0.9);
+  color: var(--ink-secondary);
+  cursor: pointer;
+}
+.team-slot__swap button:hover {
+  background: var(--surface-main);
+}
+@media (pointer: coarse), (hover: none) {
+  .team-slot__clear-slot {
+    opacity: 0.76;
+  }
+  .team-slot__swap button {
+    width: 28px;
+    height: 36px;
+  }
+}
+@media (max-width: 640px) {
+  .team-panel__slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .team-slot {
+    min-height: 110px;
+  }
+  .team-slot__character {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+  .team-slot__avatar {
+    width: 56px;
+  }
+  .team-slot__psychubes {
+    padding-right: 58px;
+  }
+}

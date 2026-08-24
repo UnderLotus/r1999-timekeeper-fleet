@@ -1,0 +1,58 @@
+{
+  "characters": [
+    {
+      "baseId": 3147,
+      "isReleased": false,
+      "note": "GL preload; Ms. Stranger is the second-half banner and is not live yet"
+    }
+  ],
+  "skins": [
+    {
+      "variantId": "313903",
+      "isReleased": false,
+      "note": "GL 3.8 preload; garment is not live yet"
+    },
+    {
+      "variantId": "309203",
+      "isReleased": false,
+      "note": "GL 3.8 preload; garment is not live yet"
+    },
+    {
+      "variantId": "311604",
+      "isReleased": false,
+      "note": "GL 3.8 preload; garment is not live yet"
+    },
+    {
+      "variantId": "302306",
+      "isReleased": false,
+      "note": "CN artbook-exclusive garment; unavailable on Global"
+    },
+    {
+      "variantId": "304504",
+      "isReleased": false,
+      "note": "GL 3.8 preload; garment is not live yet"
+    }
+  ],
+  "psychubes": [
+    {
+      "id": "1574",
+      "isReleased": false,
+      "note": "光影的栖所 is not released on Global yet"
+    },
+    {
+      "id": "1573",
+      "isReleased": false,
+      "note": "光之外的梦 is not released on Global yet"
+    },
+    {
+      "id": "1449",
+      "isReleased": false,
+      "note": "暂别旧夜 is not released on Global yet"
+    },
+    {
+      "id": "1569",
+      "isReleased": false,
+      "note": "蜕至我为我 is not released on Global yet"
+    }
+  ]
+}

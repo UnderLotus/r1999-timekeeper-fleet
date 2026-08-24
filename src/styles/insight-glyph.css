@@ -1,0 +1,27 @@
+.insight-glyph {
+  display: inline-grid;
+  width: 32px;
+  height: 27px;
+  place-items: center;
+  vertical-align: middle;
+}
+.insight-glyph img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%);
+}
+.insight-glyph--level-1 img,
+.insight-glyph--level-2 img {
+  transform: translateY(-9%);
+}
+.insight-glyph--zero {
+  opacity: 0;
+}
+.insight-glyph--ink img {
+  filter: none;
+}
+.export-card__stats .insight-glyph img {
+  filter: none;
+}

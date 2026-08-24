@@ -1,0 +1,303 @@
+/* ============================================================
+   統一設計規範 — 元件 primitives（docs/DESIGN.md §3）
+   所有 UI 一律透過這些 class 組合；禁止散落自訂樣式
+   ============================================================ */
+
+/* ---------- 按鈕 ---------- */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-control);
+  background: var(--surface-main);
+  color: var(--ink-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  user-select: none;
+}
+.ds-btn:hover:not(:disabled) {
+  background: var(--surface-muted);
+}
+.ds-btn:focus-visible {
+  outline: 2px solid var(--accent-teal);
+  outline-offset: 1px;
+}
+.ds-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ds-btn--md {
+  height: var(--control-h);
+  padding: 0 16px;
+}
+.ds-btn--sm {
+  height: var(--control-h-sm);
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.ds-btn--primary {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: var(--ink-inverse);
+}
+.ds-btn--primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+.ds-btn--danger {
+  background: transparent;
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.ds-btn--danger:hover:not(:disabled) {
+  background: var(--danger);
+  color: var(--ink-inverse);
+}
+.ds-btn--teal {
+  background: var(--accent-teal);
+  border-color: var(--accent-teal);
+  color: var(--ink-inverse);
+}
+.ds-btn--teal:hover:not(:disabled) {
+  background: var(--accent-teal-hover);
+}
+.ds-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-secondary);
+}
+.ds-btn--ghost:hover:not(:disabled) {
+  background: var(--surface-muted);
+  color: var(--ink-primary);
+}
+
+/* ---------- 表單欄位（設備面板節奏） ---------- */
+.ds-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  background: var(--surface-main);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-control);
+}
+.ds-field__label {
+  flex: 0 0 auto;
+  min-width: 52px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  letter-spacing: 0.06em;
+}
+.ds-field__value {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  justify-content: flex-end;
+  min-width: 0;
+}
+.ds-field--gold {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+}
+.ds-field--teal {
+  border-color: var(--accent-teal);
+}
+.ds-field--danger {
+  border-color: var(--danger);
+}
+
+/* ---------- 步進器 ---------- */
+.ds-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.ds-stepper__label {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.ds-stepper__btn {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-control);
+  background: var(--surface-main);
+  color: var(--ink-primary);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  transition: background var(--transition-fast);
+}
+.ds-stepper__btn:hover:not(:disabled) {
+  background: var(--surface-muted);
+}
+.ds-stepper__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ds-stepper__value {
+  min-width: 36px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* ---------- 分段快捷 ---------- */
+.ds-seg {
+  display: inline-flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.ds-seg__item {
+  height: var(--control-h-sm);
+  padding: 0 10px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-control);
+  background: var(--surface-main);
+  color: var(--ink-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.ds-seg__item:hover:not(:disabled) {
+  background: var(--surface-muted);
+}
+.ds-seg__item.is-selected {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: var(--ink-inverse);
+}
+.ds-seg__item:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---------- 浮層（popover / bottom sheet 共用） ---------- */
+.ds-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-5);
+}
+.ds-overlay__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 24, 18, 0.4);
+}
+.ds-overlay__panel {
+  position: relative;
+  z-index: 1;
+  width: min(520px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  background: var(--surface-main);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-pop);
+}
+.ds-overlay__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  background: var(--surface-main);
+  z-index: 1;
+}
+.ds-overlay__title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+}
+.ds-overlay__close {
+  width: var(--touch-target);
+  height: var(--touch-target);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: var(--ink-secondary);
+  cursor: pointer;
+}
+.ds-overlay__close:hover {
+  color: var(--ink-primary);
+}
+.ds-overlay__body {
+  padding: var(--space-4);
+}
+
+/* ---------- 領域數值 ---------- */
+.resonance-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.resonance-stat svg {
+  flex: 0 0 auto;
+}
+
+/* ---------- 徽章 ---------- */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.ds-badge--gold {
+  background: var(--accent-gold);
+  color: var(--ink-inverse);
+}
+.ds-badge--teal {
+  background: var(--accent-teal);
+  color: var(--ink-inverse);
+}
+.ds-badge--danger {
+  background: var(--danger);
+  color: var(--ink-inverse);
+}
+.ds-badge--neutral {
+  background: var(--surface-muted);
+  color: var(--ink-secondary);
+}
+
+@media (pointer: coarse) {
+  .ds-stepper__btn {
+    width: 44px;
+    height: 44px;
+  }
+  .ds-seg__item {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

@@ -1,0 +1,85 @@
+/* ============================================================
+   Design Tokens — 統一設計規範基底（docs/DESIGN.md §2）
+   沿用 r1999-roster 英倫紙墨系統，擴充遊戲式設備面板節奏
+   ============================================================ */
+:root {
+  /* 色彩：紙張與墨水 */
+  --page-bg: #d8d0c0;
+  --surface-main: #eee8da;
+  --surface-muted: #e4ddcf;
+  --surface-dark: #292521;
+
+  --ink-primary: #292621;
+  --ink-secondary: #625c52;
+  --ink-muted: #8a8275;
+  --ink-inverse: #f4efe5;
+
+  /* 邊框 */
+  --border-primary: #62584c;
+  --border-light: rgba(66, 58, 49, 0.24);
+  --border-dark: #292521;
+
+  /* 強調：暗紅（主操作）＋舊金（持有）＋青藍（分享）＋破壞紅 */
+  --accent-primary: #7c302e;
+  --accent-hover: #642321;
+  --accent-gold: #a8894e;
+  --accent-gold-soft: rgba(168, 137, 78, 0.16);
+  --accent-teal: #3e6b6e;
+  --accent-teal-hover: #2f5457;
+  --danger: #9e3b2f;
+  --danger-hover: #7f2c22;
+
+  /* 持有狀態 */
+  --owned-opacity: 1;
+  --unowned-opacity: 0.38;
+
+  /* 圓角（克制：紙本檔案感） */
+  --radius-card: 2px;
+  --radius-control: 3px;
+
+  /* 陰影 */
+  --shadow-card:
+    0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 1px 3px rgba(30, 24, 18, 0.18);
+  --shadow-page:
+    0 0 0 3px rgba(238, 232, 218, 0.75), 0 0 0 4px var(--border-light);
+  --shadow-pop: 0 2px 14px rgba(30, 24, 18, 0.28);
+
+  /* 字體 */
+  --font-display: "Noto Serif TC", "Songti TC", serif;
+  --font-ui: "Noto Sans TC", system-ui, sans-serif;
+
+  /* 紙張質感 */
+  --paper-noise-opacity: 0.06;
+  --paper-noise-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* 過渡 */
+  --transition-fast: 110ms ease;
+  --transition-medium: 160ms ease;
+
+  /* 尺寸刻度 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --control-h: 38px;
+  --control-h-sm: 32px;
+  --touch-target: 44px;
+  --content-max: 1480px;
+}
+
+html[lang="zh-CN"] {
+  --font-display: "Noto Serif SC", "Songti SC", serif;
+  --font-ui: "Noto Sans SC", system-ui, sans-serif;
+}
+
+html[lang="ja-JP"] {
+  --font-display: "Noto Serif JP", "Hiragino Mincho ProN", serif;
+  --font-ui: "Noto Sans JP", "Hiragino Sans", sans-serif;
+}
+
+html[lang="ko-KR"] {
+  --font-display: "Noto Serif KR", "Apple SD Gothic Neo", serif;
+  --font-ui: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}

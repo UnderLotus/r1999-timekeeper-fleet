@@ -1,0 +1,298 @@
+.editor-modules {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.editor-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-control);
+  background: var(--surface-main);
+}
+.editor-section--insight {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+}
+.editor-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--ink-secondary);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+}
+.editor-section__head output {
+  color: var(--ink-muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.editor-section__current {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.editor-section__current .insight-glyph {
+  width: 26px;
+  height: 20px;
+}
+.editor-section__controls {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+}
+.editor-section__controls > .ds-seg:only-child,
+.editor-section__controls > .portray-badge:only-child {
+  grid-column: 1 / -1;
+}
+.editor-section__controls .ds-stepper__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+.editor-section__controls .ds-seg {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+}
+.editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--space-1);
+}
+.character-editor-panel {
+  width: min(510px, calc(100vw - 16px));
+}
+.skin-picker-panel {
+  width: min(360px, calc(100vw - 16px));
+}
+.skin-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 7px;
+  max-height: 350px;
+  overflow: auto;
+}
+.skin-picker__item {
+  min-width: 0;
+  padding: 3px;
+  border: 1px solid var(--border-light);
+  background: var(--surface-muted);
+  cursor: pointer;
+}
+.skin-picker__item.is-selected {
+  border-color: var(--accent-gold);
+  box-shadow: inset 0 0 0 2px var(--accent-gold-soft);
+}
+.skin-picker__item img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.skin-picker__item-label {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-top: 3px;
+  color: var(--ink-secondary);
+  font-size: 9px;
+}
+.confirm-dialog {
+  width: min(430px, calc(100vw - 24px));
+  padding: 0;
+  border: 1px solid var(--border-primary);
+  border-radius: 2px;
+  background: var(--surface-main);
+  color: var(--ink-primary);
+  box-shadow: var(--shadow-pop);
+}
+.confirm-dialog::backdrop {
+  background: rgba(30, 24, 18, 0.48);
+}
+.confirm-dialog__title {
+  display: block;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border-light);
+  font-family: var(--font-display);
+  font-size: 15px;
+}
+.confirm-dialog__message {
+  padding: 16px;
+  color: var(--ink-secondary);
+  font-size: 13px;
+}
+.confirm-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-light);
+}
+.confirm-dialog > .export-mode-picker,
+.confirm-dialog > .import-enable-future {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+.share-dialog__url {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-light);
+  background: var(--surface-muted);
+  color: var(--ink-primary);
+  font-family: var(--font-ui);
+  font-size: 11px;
+}
+.share-dialog__url:focus {
+  border-color: var(--accent-teal);
+}
+.ds-overlay--anchored {
+  padding: 0;
+}
+.ds-overlay--anchored .ds-overlay__panel {
+  position: fixed;
+}
+.ds-overlay__backdrop {
+  border: 0;
+  padding: 0;
+  cursor: default;
+}
+.ds-overlay__panel {
+  margin-top: 7vh;
+}
+@media (pointer: coarse) {
+  .editor-modules .portray-badge__segment {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    box-shadow: none;
+  }
+  .editor-modules .portray-badge__segment::after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 20px;
+    height: 4px;
+    border-radius: 1px;
+    background: rgba(92, 81, 66, 0.35);
+  }
+  .editor-modules .portray-badge__segment.is-lit::after {
+    background: var(--accent-gold);
+    box-shadow: 0 0 5px rgba(182, 128, 61, 0.55);
+  }
+}
+
+@media (max-width: 640px) {
+  .ds-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .ds-overlay__panel,
+  .ds-overlay--anchored .ds-overlay__panel {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100%;
+    max-height: 88vh;
+    margin: 0;
+    border-bottom: 0;
+  }
+  .ds-overlay__body {
+    padding: 12px;
+  }
+  .editor-section {
+    padding: var(--space-3);
+  }
+  .editor-section__controls {
+    grid-template-columns: 1fr;
+  }
+  .editor-section__controls .ds-stepper {
+    justify-content: center;
+  }
+  .confirm-dialog {
+    margin: auto auto 0;
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.responsive-popover {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+}
+.responsive-popover__backdrop {
+  display: none;
+}
+.responsive-popover__panel {
+  position: fixed;
+  pointer-events: auto;
+  width: min(360px, calc(100vw - 16px));
+  max-height: min(420px, calc(100vh - 16px));
+  overflow: auto;
+  background: var(--surface-main);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-pop);
+}
+.responsive-popover__head {
+  display: none;
+}
+.responsive-popover__body {
+  padding: 8px;
+}
+@media (max-width: 640px) {
+  .responsive-popover {
+    display: flex;
+    align-items: flex-end;
+    pointer-events: auto;
+  }
+  .responsive-popover__backdrop {
+    display: block;
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgba(30, 24, 18, 0.4);
+  }
+  .responsive-popover__panel {
+    position: relative;
+    width: 100%;
+    max-height: 88vh;
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+  }
+  .responsive-popover__head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--surface-main);
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+  .responsive-popover__head button {
+    width: var(--touch-target);
+    height: var(--touch-target);
+    border: 0;
+    background: transparent;
+    color: var(--ink-secondary);
+    font-size: 18px;
+  }
+  .responsive-popover__body {
+    padding: 12px;
+  }
+}

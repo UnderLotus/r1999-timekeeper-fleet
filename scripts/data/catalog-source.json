@@ -1,0 +1,6051 @@
+{
+  "schemaVersion": 3,
+  "sourceHashes": {
+    "cn/ArcanistMap.json": "c757b84efed7231b385b63f287184e0d03870928d07ecaf4682696b431a6163b",
+    "cn/character.json": "9098f5778c664b4d6bce7ba1acc74dc4a618c8e838282885018de7599f63f706",
+    "cn/equip.json": "ce82ac8d75d79bd20e660c87117930faaafb4107615becea0d44de4d181b1ca5",
+    "cn/skin.json": "b3df8370e4c6d316ca03933d21783dbd7609fa009b5002580e1025f2a48c4ceb",
+    "name-fallbacks.json": "81afd51aa830556c9ef3dbb225e2e23416de943f14310814579fcfb1e8661586",
+    "localized-name-overrides.json": "06fc52fc089303784795827b656400b7db0e9ca362f0b5dc241d0ab2e137dc6f",
+    "catalog-policy.json": "e190e384dee6a38ea8a0b5fbb09c797b1a3061cb5ae84fcbf58710f7f03fb740",
+    "gl/character.json": "6d58170a285488165f2f0884d7f6b58e1801df5bb60a5ca11bf8de2b4caa318d",
+    "gl/equip.json": "684db6fc0b7f25acff075198344ccbb01a86d2f9afa957869e06600c72a6bf8f",
+    "gl/skin.json": "0520eaf83efb97b385749b883be5d9f59f0f0fbbcd41265d23092535f6df5d69",
+    "gl/language_zh.json": "8b44d6cd5802e3db7140aa519437f359297fba8c6fbb819c2bbd14b4e0c962af",
+    "gl/language_tw.json": "599f5ae38063f7c6eade12109f525f731cc0f76a34b2e71b3803d7a7e10dd88a",
+    "gl/language_jp.json": "c2a7a1f5f21a493e08bd406d5f5d0ed80049238228ac9b861772fb75cc3ed7ab",
+    "gl/language_kr.json": "4cbc9e3412a579a4b9a2a0b0b88cd7f76e7e4d6e7c09fe24474e208dce7309ce",
+    "gl/language_en.json": "36c739cdaccab071badd0d906dd5afbf19c66aa6fc533ab792c4a5b991aa9a28"
+  },
+  "characters": [
+    {
+      "id": "3003",
+      "baseId": "3003",
+      "names": {
+        "zh-CN": "槲寄生",
+        "zh-TW": "槲寄生",
+        "en-US": "Druvis III",
+        "ja-JP": "ドルーヴィスⅢ",
+        "ko-KR": "드루비스"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "300301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "300301",
+          "type": "default"
+        },
+        {
+          "id": "300302",
+          "type": "insight",
+          "name": "熟识橡树之人",
+          "nameEn": "The Druid"
+        },
+        {
+          "id": "300305",
+          "type": "skin",
+          "name": "闹蛾儿",
+          "nameEn": "Lady With Nao'E",
+          "glPresent": true
+        },
+        {
+          "id": "300306",
+          "type": "skin",
+          "name": "荆棘环绕处",
+          "nameEn": "Shrouded in Thorns",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3004",
+      "baseId": "3004",
+      "names": {
+        "zh-CN": "红弩箭",
+        "zh-TW": "紅弩箭",
+        "en-US": "Lilya",
+        "ja-JP": "リーリャ",
+        "ko-KR": "릴리아"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "300401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "300401",
+          "type": "default"
+        },
+        {
+          "id": "300402",
+          "type": "insight",
+          "name": "巴伦支海女巫",
+          "nameEn": "The Barents Witch"
+        },
+        {
+          "id": "300403",
+          "type": "skin",
+          "name": "几何技艺",
+          "nameEn": "The Art of Destreza",
+          "glPresent": true
+        },
+        {
+          "id": "300404",
+          "type": "skin",
+          "name": "永不迟到的公正",
+          "nameEn": "Justice Cannot Be Delayed",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3005",
+      "baseId": "3005",
+      "names": {
+        "zh-CN": "尼克·波顿",
+        "zh-TW": "尼克·波頓",
+        "en-US": "Nick Bottom",
+        "ja-JP": "ニック・ボトム",
+        "ko-KR": "닉 보텀"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "300501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "300501",
+          "type": "default"
+        },
+        {
+          "id": "300502",
+          "type": "insight",
+          "name": "仲夏夜之梦",
+          "nameEn": "A Midsummer Night's Dream"
+        },
+        {
+          "id": "300503",
+          "type": "skin",
+          "name": "“波顿的梦”",
+          "nameEn": "\"Bottom's Dream\"",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3006",
+      "baseId": "3006",
+      "names": {
+        "zh-CN": "小春雀儿",
+        "zh-TW": "小春雀兒",
+        "en-US": "Eagle",
+        "ja-JP": "リトルイーグル",
+        "ko-KR": "이글"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "300601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "300601",
+          "type": "default"
+        },
+        {
+          "id": "300602",
+          "type": "insight",
+          "name": "另一条路",
+          "nameEn": "The Other Path"
+        },
+        {
+          "id": "300603",
+          "type": "skin",
+          "name": "第六感",
+          "nameEn": "Redrum",
+          "glPresent": true
+        },
+        {
+          "id": "300604",
+          "type": "skin",
+          "name": "周末探险小队",
+          "nameEn": "Weekend Excursion",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3007",
+      "baseId": "3007",
+      "names": {
+        "zh-CN": "未锈铠",
+        "zh-TW": "未鏽鎧",
+        "en-US": "A Knight",
+        "ja-JP": "ナイト",
+        "ko-KR": "A 나이트"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "300701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "300701",
+          "type": "default"
+        },
+        {
+          "id": "300702",
+          "type": "insight",
+          "name": "加百列圣勋",
+          "nameEn": "Order of St. Gabriel"
+        },
+        {
+          "id": "300703",
+          "type": "skin",
+          "name": "策马行山河",
+          "nameEn": "Galloping Across the Times",
+          "glPresent": true
+        },
+        {
+          "id": "300731",
+          "type": "skin",
+          "name": "魂灵长青",
+          "nameEn": "The Evergreen Soul",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3009",
+      "baseId": "3009",
+      "names": {
+        "zh-CN": "苏芙比",
+        "zh-TW": "蘇芙比",
+        "en-US": "Sotheby",
+        "ja-JP": "サザビー",
+        "ko-KR": "소더비"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "300901",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "300901",
+          "type": "default"
+        },
+        {
+          "id": "300902",
+          "type": "insight",
+          "name": "另一侧的世界",
+          "nameEn": "World on the Other Side"
+        },
+        {
+          "id": "300903",
+          "type": "skin",
+          "name": "帷幔深处",
+          "nameEn": "Suspiriorum",
+          "glPresent": true
+        },
+        {
+          "id": "300904",
+          "type": "skin",
+          "name": "红线缘",
+          "nameEn": "The Red Thread of Fate",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3010",
+      "baseId": "3010",
+      "names": {
+        "zh-CN": "X",
+        "zh-TW": "X",
+        "en-US": "X",
+        "ja-JP": "X",
+        "ko-KR": "X"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "301001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "301001",
+          "type": "default"
+        },
+        {
+          "id": "301002",
+          "type": "insight",
+          "name": "“无用”的天才",
+          "nameEn": "Genius of Useless Inventions"
+        },
+        {
+          "id": "301003",
+          "type": "skin",
+          "name": "沉默的呼吸",
+          "nameEn": "Silent Breath",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3011",
+      "baseId": "3011",
+      "names": {
+        "zh-CN": "玛丽莲",
+        "zh-TW": "瑪麗蓮",
+        "en-US": "Sweetheart",
+        "ja-JP": "スイートハート",
+        "ko-KR": "마릴린"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "301101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "301101",
+          "type": "default"
+        },
+        {
+          "id": "301102",
+          "type": "insight",
+          "name": "甜蜜的晚安",
+          "nameEn": "Sweet Nighty Night"
+        },
+        {
+          "id": "301103",
+          "type": "skin",
+          "name": "维纳斯的传道",
+          "nameEn": "The Preaching of Venus",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3012",
+      "baseId": "3012",
+      "names": {
+        "zh-CN": "弄臣",
+        "zh-TW": "弄臣",
+        "en-US": "The Fool",
+        "ja-JP": "ジェスター",
+        "ko-KR": "광대"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "301201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "301201",
+          "type": "default"
+        },
+        {
+          "id": "301202",
+          "type": "insight",
+          "name": "影子巧挑班",
+          "nameEn": "The Shadow Play Master"
+        }
+      ]
+    },
+    {
+      "id": "3013",
+      "baseId": "3013",
+      "names": {
+        "zh-CN": "冬",
+        "zh-TW": "冬",
+        "en-US": "Зима",
+        "ja-JP": "ズィマー",
+        "ko-KR": "겨울"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "301301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "301301",
+          "type": "default"
+        },
+        {
+          "id": "301302",
+          "type": "insight",
+          "name": "无人问津",
+          "nameEn": "The Loner"
+        },
+        {
+          "id": "301303",
+          "type": "skin",
+          "name": "山中一日",
+          "nameEn": "A Day in the Mountain",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3014",
+      "baseId": "3014",
+      "names": {
+        "zh-CN": "芭妮芭妮",
+        "zh-TW": "芭妮芭妮",
+        "en-US": "Bunny Bunny",
+        "ja-JP": "バニーバニー",
+        "ko-KR": "바니바니"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "301401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "301401",
+          "type": "default"
+        },
+        {
+          "id": "301402",
+          "type": "insight",
+          "name": "最优兔女郎",
+          "nameEn": "Bunny Girl of the Year"
+        },
+        {
+          "id": "301403",
+          "type": "skin",
+          "name": "侍者的一天",
+          "nameEn": "Service Fit for Royalty",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3015",
+      "baseId": "3015",
+      "names": {
+        "zh-CN": "狼群",
+        "zh-TW": "狼群",
+        "en-US": "Pavia",
+        "ja-JP": "パヴィア",
+        "ko-KR": "파비아"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "301501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "301501",
+          "type": "default"
+        },
+        {
+          "id": "301502",
+          "type": "insight",
+          "name": "我亲爱的好朋友们",
+          "nameEn": "My Dear Good friends"
+        },
+        {
+          "id": "301503",
+          "type": "skin",
+          "name": "狼之跃",
+          "nameEn": "The Wolf's Leap",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3016",
+      "baseId": "3016",
+      "names": {
+        "zh-CN": "婴儿蓝",
+        "zh-TW": "嬰兒藍",
+        "en-US": "Baby Blue",
+        "ja-JP": "ベビーブルー",
+        "ko-KR": "베이비 블루"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "301601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "301601",
+          "type": "default"
+        },
+        {
+          "id": "301602",
+          "type": "insight",
+          "name": "新“红皇后”",
+          "nameEn": "The New \"Red Queen\""
+        },
+        {
+          "id": "301603",
+          "type": "skin",
+          "name": "于麻雀山上",
+          "nameEn": "On the Sparrow Hills ",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3017",
+      "baseId": "3017",
+      "names": {
+        "zh-CN": "夏利",
+        "zh-TW": "夏利",
+        "en-US": "Charlie",
+        "ja-JP": "チャーリー",
+        "ko-KR": "찰리"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "301701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "301701",
+          "type": "default"
+        },
+        {
+          "id": "301702",
+          "type": "insight",
+          "name": "幻影中的国王",
+          "nameEn": "The Tyrant in Illusion"
+        },
+        {
+          "id": "301703",
+          "type": "skin",
+          "name": "镜中幕间",
+          "nameEn": "Through Mirrors and Curtains",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3018",
+      "baseId": "3018",
+      "names": {
+        "zh-CN": "雾行者",
+        "zh-TW": "霧行者",
+        "en-US": "Oliver Fog",
+        "ja-JP": "オリバー・フォッグ",
+        "ko-KR": "올리버 포그"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "301801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "301801",
+          "type": "default"
+        },
+        {
+          "id": "301802",
+          "type": "insight",
+          "name": "钟声响起",
+          "nameEn": "When the Bell Rings"
+        },
+        {
+          "id": "301803",
+          "type": "skin",
+          "name": "在俱乐部见",
+          "nameEn": "See You at the Workers' Club",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3020",
+      "baseId": "3020",
+      "names": {
+        "zh-CN": "柏林以东",
+        "zh-TW": "柏林以東",
+        "en-US": "Bkornblume",
+        "ja-JP": "コーンブルメ",
+        "ko-KR": "콘블룸"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "302001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "302001",
+          "type": "default"
+        },
+        {
+          "id": "302002",
+          "type": "insight",
+          "name": "不合时宜者",
+          "nameEn": "The Misfit"
+        },
+        {
+          "id": "302003",
+          "type": "skin",
+          "name": "铅红的真相",
+          "nameEn": "Truth of the Dark Red",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3022",
+      "baseId": "3022",
+      "names": {
+        "zh-CN": "帕米埃",
+        "zh-TW": "帕米埃",
+        "en-US": "Dikke",
+        "ja-JP": "パミエ",
+        "ko-KR": "디케"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "302201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "302201",
+          "type": "default"
+        },
+        {
+          "id": "302202",
+          "type": "insight",
+          "name": "汉谟拉比之剑",
+          "nameEn": "Sword of Hammurabi"
+        },
+        {
+          "id": "302203",
+          "type": "skin",
+          "name": "枪尖向上",
+          "nameEn": "The Pointy End Up",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3023",
+      "baseId": "3023",
+      "names": {
+        "zh-CN": "十四行诗",
+        "zh-TW": "十四行詩",
+        "en-US": "Sonetto",
+        "ja-JP": "ソネット",
+        "ko-KR": "소네트"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "302301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "302301",
+          "type": "default"
+        },
+        {
+          "id": "302303",
+          "type": "skin",
+          "name": "巡礼颂",
+          "nameEn": "Parade Anthem",
+          "glPresent": true
+        },
+        {
+          "id": "302304",
+          "type": "skin",
+          "name": "重叠的词句",
+          "nameEn": "Emotion in Tranquility",
+          "glPresent": true
+        },
+        {
+          "id": "302306",
+          "type": "skin",
+          "name": "诗的礼赞",
+          "nameEn": "In Praise of Poetry",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3024",
+      "baseId": "3024",
+      "names": {
+        "zh-CN": "气球派对",
+        "zh-TW": "氣球派對",
+        "en-US": "Balloon Party",
+        "ja-JP": "バルーンパーティー",
+        "ko-KR": "벌룬 파티"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "302401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "302401",
+          "type": "default"
+        },
+        {
+          "id": "302402",
+          "type": "insight",
+          "name": "不请自来的客人",
+          "nameEn": "An Uninvited Guest"
+        },
+        {
+          "id": "302403",
+          "type": "skin",
+          "name": "银翅谣",
+          "nameEn": "The Folk Song of Silver Butterfly",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3025",
+      "baseId": "3025",
+      "names": {
+        "zh-CN": "星锑",
+        "zh-TW": "星銻",
+        "en-US": "Regulus",
+        "ja-JP": "レグルス",
+        "ko-KR": "레굴루스"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "302501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "302501",
+          "type": "default"
+        },
+        {
+          "id": "302502",
+          "type": "insight",
+          "name": "灼热闪耀之星",
+          "nameEn": "A Flaring Star"
+        },
+        {
+          "id": "302503",
+          "type": "skin",
+          "name": "狂热分子",
+          "nameEn": "The Fierce Fan",
+          "glPresent": true
+        },
+        {
+          "id": "302504",
+          "type": "skin",
+          "name": "启航！向明日",
+          "nameEn": "Take Off! To the Future",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3026",
+      "baseId": "3026",
+      "names": {
+        "zh-CN": "红斗篷",
+        "zh-TW": "紅斗篷",
+        "en-US": "Mondlicht",
+        "ja-JP": "モントリヒト",
+        "ko-KR": "빨간 망토"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "302601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "302601",
+          "type": "default"
+        },
+        {
+          "id": "302602",
+          "type": "insight",
+          "name": "黑猎枪",
+          "nameEn": "Black Rifle"
+        },
+        {
+          "id": "302603",
+          "type": "skin",
+          "name": "银枪管",
+          "nameEn": "Silver Schirm",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3027",
+      "baseId": "3027",
+      "names": {
+        "zh-CN": "无线电小姐",
+        "zh-TW": "無線電小姐",
+        "en-US": "Ms. Radio",
+        "ja-JP": "ミス・ラジオ",
+        "ko-KR": "미스 라디오"
+      },
+      "rarity": 1,
+      "maxInsight": 2,
+      "defaultVariant": "302701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "302701",
+          "type": "default"
+        },
+        {
+          "id": "302702",
+          "type": "insight",
+          "name": "战地生命线",
+          "nameEn": "Lifeline of the Battlefield"
+        }
+      ]
+    },
+    {
+      "id": "3028",
+      "baseId": "3028",
+      "names": {
+        "zh-CN": "APPLe",
+        "zh-TW": "Apple",
+        "en-US": "APPLe",
+        "ja-JP": "APPLe",
+        "ko-KR": "APPLe"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "302801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "302801",
+          "type": "default"
+        },
+        {
+          "id": "302802",
+          "type": "insight",
+          "name": "博学而多汁",
+          "nameEn": "Erudite and Juicy"
+        },
+        {
+          "id": "302803",
+          "type": "skin",
+          "name": "胡士托的回声",
+          "nameEn": "Echoing to Woodstock",
+          "glPresent": true
+        },
+        {
+          "id": "302804",
+          "type": "skin",
+          "name": "智慧尽头",
+          "nameEn": "The Fruit of Wisdom",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3030",
+      "baseId": "3030",
+      "names": {
+        "zh-CN": "拉拉泉",
+        "zh-TW": "拉拉泉",
+        "en-US": "La Source",
+        "ja-JP": "ララ・ファウンテン",
+        "ko-KR": "라 수르스"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "303001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "303001",
+          "type": "default"
+        },
+        {
+          "id": "303002",
+          "type": "insight",
+          "name": "二律背反",
+          "nameEn": "Antinomies"
+        }
+      ]
+    },
+    {
+      "id": "3031",
+      "baseId": "3031",
+      "names": {
+        "zh-CN": "铅玻璃",
+        "zh-TW": "鉛玻璃",
+        "en-US": "Cristallo",
+        "ja-JP": "クリスタッロ",
+        "ko-KR": "크리스탈로"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "303101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "303101",
+          "type": "default"
+        },
+        {
+          "id": "303102",
+          "type": "insight",
+          "name": "赠与勇敢者的花束",
+          "nameEn": "Bouquet for the Bold"
+        },
+        {
+          "id": "303103",
+          "type": "skin",
+          "name": "玻璃窗前的梦",
+          "nameEn": "A Dream in Stained Glass",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3032",
+      "baseId": "3032",
+      "names": {
+        "zh-CN": "百夫长",
+        "zh-TW": "百夫長",
+        "en-US": "Centurion",
+        "ja-JP": "ケントゥリオン",
+        "ko-KR": "센츄리온"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "303201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "303201",
+          "type": "default"
+        },
+        {
+          "id": "303202",
+          "type": "insight",
+          "name": "伟大秀场",
+          "nameEn": "The Great Show"
+        },
+        {
+          "id": "303203",
+          "type": "skin",
+          "name": "环球之星",
+          "nameEn": "The Universal Star",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3033",
+      "baseId": "3033",
+      "names": {
+        "zh-CN": "TTT",
+        "zh-TW": "TTT",
+        "en-US": "TTT",
+        "ja-JP": "TTT",
+        "ko-KR": "TTT"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "303301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "303301",
+          "type": "default"
+        },
+        {
+          "id": "303302",
+          "type": "insight",
+          "name": "新时代镜中人",
+          "nameEn": "The Girl in the Frame"
+        },
+        {
+          "id": "303303",
+          "type": "skin",
+          "name": "周六特别秀",
+          "nameEn": "Saturday Special",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3034",
+      "baseId": "3034",
+      "names": {
+        "zh-CN": "星之眼",
+        "zh-TW": "星之眼",
+        "en-US": "aliEn T",
+        "ja-JP": "ギベオンズアイ",
+        "ko-KR": "에일리언 T"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "303401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "303401",
+          "type": "default"
+        }
+      ]
+    },
+    {
+      "id": "3035",
+      "baseId": "3035",
+      "names": {
+        "zh-CN": "莉拉妮",
+        "zh-TW": "莉拉妮",
+        "en-US": "Leilani",
+        "ja-JP": "レイラニ",
+        "ko-KR": "레일라니"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "303501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "303501",
+          "type": "default"
+        },
+        {
+          "id": "303502",
+          "type": "insight",
+          "name": "远峰的巡游",
+          "nameEn": "The Adventure on The Mountains"
+        }
+      ]
+    },
+    {
+      "id": "3036",
+      "baseId": "3036",
+      "names": {
+        "zh-CN": "约翰·提托",
+        "zh-TW": "約翰·提托",
+        "en-US": "John Titor",
+        "ja-JP": "ジョン・タイター",
+        "ko-KR": "존 티토"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "303601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "303601",
+          "type": "default"
+        },
+        {
+          "id": "303602",
+          "type": "insight",
+          "name": "疾步向前",
+          "nameEn": "Race to the Finish Line"
+        }
+      ]
+    },
+    {
+      "id": "3037",
+      "baseId": "3037",
+      "names": {
+        "zh-CN": "讣告人",
+        "zh-TW": "訃告人",
+        "en-US": "Necrologist",
+        "ja-JP": "ネクロ・ロギスト",
+        "ko-KR": "네크롤로지스트"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "303701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "303701",
+          "type": "default"
+        },
+        {
+          "id": "303702",
+          "type": "insight",
+          "name": "最后的诉说",
+          "nameEn": "Last Words"
+        },
+        {
+          "id": "303703",
+          "type": "skin",
+          "name": "永不返航",
+          "nameEn": "A Voyage with No Return",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3038",
+      "baseId": "3038",
+      "names": {
+        "zh-CN": "五色月",
+        "zh-TW": "五色月",
+        "en-US": "Satsuki",
+        "ja-JP": "五色月",
+        "ko-KR": "사츠키"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "303801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "303801",
+          "type": "default"
+        },
+        {
+          "id": "303802",
+          "type": "insight",
+          "name": "苇中花",
+          "nameEn": "Reed Bloom"
+        },
+        {
+          "id": "303803",
+          "type": "skin",
+          "name": "银玫瑰",
+          "nameEn": "Silver Rose",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3039",
+      "baseId": "3039",
+      "names": {
+        "zh-CN": "泥鯭的士",
+        "zh-TW": "泥鯭的士",
+        "en-US": "An-an Lee",
+        "ja-JP": "リー・アンアン",
+        "ko-KR": "안안 리"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "303901",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "303901",
+          "type": "default"
+        },
+        {
+          "id": "303902",
+          "type": "insight",
+          "name": "HK鬼见愁",
+          "nameEn": "Ghost Predator of HK"
+        },
+        {
+          "id": "303903",
+          "type": "skin",
+          "name": "松云之间",
+          "nameEn": "Between Clouds and Pine Trees",
+          "glPresent": true
+        },
+        {
+          "id": "303904",
+          "type": "skin",
+          "name": "共生花",
+          "nameEn": "Symbiotic Lee-ly",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3040",
+      "baseId": "3040",
+      "names": {
+        "zh-CN": "丽莎&路易斯",
+        "zh-TW": "麗莎&路易斯",
+        "en-US": "Twins Sleep",
+        "ja-JP": "リサ＆ルイス",
+        "ko-KR": "리사&루이스"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "304001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "304001",
+          "type": "default"
+        },
+        {
+          "id": "304002",
+          "type": "insight",
+          "name": "升变华尔兹",
+          "nameEn": "The Pawn's Promotional Waltz"
+        }
+      ]
+    },
+    {
+      "id": "3041",
+      "baseId": "3041",
+      "names": {
+        "zh-CN": "玛蒂尔达",
+        "zh-TW": "瑪蒂爾達",
+        "en-US": "Matilda",
+        "ja-JP": "マチルダ",
+        "ko-KR": "마틸다"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "304101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "304101",
+          "type": "default"
+        },
+        {
+          "id": "304102",
+          "type": "insight",
+          "name": "首席淑女",
+          "nameEn": "Élève Hyperdouée"
+        },
+        {
+          "id": "304103",
+          "type": "skin",
+          "name": "天才假日",
+          "nameEn": "The Genius's Holiday",
+          "glPresent": true
+        },
+        {
+          "id": "304104",
+          "type": "skin",
+          "name": "尝鲜调查员",
+          "nameEn": "The Great Taste Investigator",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3042",
+      "baseId": "3042",
+      "names": {
+        "zh-CN": "爱宠",
+        "zh-TW": "愛寵",
+        "en-US": "Rabies",
+        "ja-JP": "レイビーズ",
+        "ko-KR": "레이비스"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "304201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "304201",
+          "type": "default"
+        },
+        {
+          "id": "304202",
+          "type": "insight",
+          "name": "麦田守望者",
+          "nameEn": "Catcher in the Rye"
+        },
+        {
+          "id": "304203",
+          "type": "skin",
+          "name": "深空环游记",
+          "nameEn": "Space Traveler",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3043",
+      "baseId": "3043",
+      "names": {
+        "zh-CN": "坦南特",
+        "zh-TW": "坦南特",
+        "en-US": "Tennant",
+        "ja-JP": "テナント",
+        "ko-KR": "테넌트"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "304301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "304301",
+          "type": "default"
+        },
+        {
+          "id": "304302",
+          "type": "insight",
+          "name": "库里南绅士",
+          "nameEn": "Gent Cullinan"
+        },
+        {
+          "id": "304303",
+          "type": "skin",
+          "name": "德里漫步",
+          "nameEn": "Roaming in Delhi",
+          "glPresent": true
+        },
+        {
+          "id": "304304",
+          "type": "skin",
+          "name": "鉴赏家之战",
+          "nameEn": "Dueling Connoisseurs",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3044",
+      "baseId": "3044",
+      "names": {
+        "zh-CN": "莫桑女士",
+        "zh-TW": "莫桑女士",
+        "en-US": "Ms. Moissan",
+        "ja-JP": "ミス・モアッサン",
+        "ko-KR": "무아상"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "304401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "304401",
+          "type": "default"
+        },
+        {
+          "id": "304402",
+          "type": "insight",
+          "name": "另一种答案",
+          "nameEn": "Another Answer"
+        },
+        {
+          "id": "304403",
+          "type": "skin",
+          "name": "教堂之外",
+          "nameEn": "Outside the Church",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3045",
+      "baseId": "3045",
+      "names": {
+        "zh-CN": "贝蒂",
+        "zh-TW": "貝蒂",
+        "en-US": "Bette",
+        "ja-JP": "ベティ",
+        "ko-KR": "베티"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "304501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "304501",
+          "type": "default"
+        },
+        {
+          "id": "304504",
+          "type": "skin",
+          "name": "人生填色格",
+          "nameEn": "A Life in Frames",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3046",
+      "baseId": "3046",
+      "names": {
+        "zh-CN": "吵闹鬼",
+        "zh-TW": "吵鬧鬼",
+        "en-US": "Poltergeist",
+        "ja-JP": "ポルターガイスト",
+        "ko-KR": "폴터가이스트"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "304601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "304601",
+          "type": "default"
+        },
+        {
+          "id": "304602",
+          "type": "insight",
+          "name": "羞怯的夏日",
+          "nameEn": "Summertime Shyness"
+        },
+        {
+          "id": "304603",
+          "type": "skin",
+          "name": "另一个夏日",
+          "nameEn": "Under a Different Sea",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3047",
+      "baseId": "3047",
+      "names": {
+        "zh-CN": "兔毛手袋",
+        "zh-TW": "兔毛手袋",
+        "en-US": "Medicine Pocket",
+        "ja-JP": "メディスンポケット",
+        "ko-KR": "메디슨 포켓"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "304701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "304701",
+          "type": "default"
+        },
+        {
+          "id": "304702",
+          "type": "insight",
+          "name": "内有恶犬",
+          "nameEn": "Beware of Dog"
+        },
+        {
+          "id": "304703",
+          "type": "skin",
+          "name": "宇宙写真者",
+          "nameEn": "The Cosmos Photographer ",
+          "glPresent": true
+        },
+        {
+          "id": "304704",
+          "type": "skin",
+          "name": "永生苦短",
+          "nameEn": "Forever Is Too Short",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3048",
+      "baseId": "3048",
+      "names": {
+        "zh-CN": "远旅",
+        "zh-TW": "遠旅",
+        "en-US": "Voyager",
+        "ja-JP": "ボイジャー",
+        "ko-KR": "보이저"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "304801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "304801",
+          "type": "default"
+        },
+        {
+          "id": "304802",
+          "type": "insight",
+          "name": "少言的信",
+          "nameEn": "A Wordless Letter"
+        },
+        {
+          "id": "304803",
+          "type": "skin",
+          "name": "再一次上路",
+          "nameEn": "New Journey",
+          "glPresent": true
+        },
+        {
+          "id": "304804",
+          "type": "skin",
+          "name": "群星齐唱时",
+          "nameEn": "Choir of the Stars",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3049",
+      "baseId": "3049",
+      "names": {
+        "zh-CN": "喀嚓喀嚓",
+        "zh-TW": "喀嚓喀嚓",
+        "en-US": "Click",
+        "ja-JP": "カシャパシャ",
+        "ko-KR": "클릭"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "304901",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "304901",
+          "type": "default"
+        },
+        {
+          "id": "304902",
+          "type": "insight",
+          "name": "绝妙的角度",
+          "nameEn": "The Best Angle"
+        }
+      ]
+    },
+    {
+      "id": "3050",
+      "baseId": "3050",
+      "names": {
+        "zh-CN": "哒哒达利",
+        "zh-TW": "噠噠達利",
+        "en-US": "Darley Clatter",
+        "ja-JP": "ダーレータッタ",
+        "ko-KR": "다그닥 달리"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "305001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "305001",
+          "type": "default"
+        },
+        {
+          "id": "305002",
+          "type": "insight",
+          "name": "盛装舞步",
+          "nameEn": "Elegant Dance Steps"
+        }
+      ]
+    },
+    {
+      "id": "3051",
+      "baseId": "3051",
+      "names": {
+        "zh-CN": "温妮弗雷德",
+        "zh-TW": "溫妮弗雷德",
+        "en-US": "Eternity",
+        "ja-JP": "エターニティ",
+        "ko-KR": "이터니티"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "305101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "305101",
+          "type": "default"
+        },
+        {
+          "id": "305102",
+          "type": "insight",
+          "name": "永夜的淑女",
+          "nameEn": "Lady of the Evernight"
+        },
+        {
+          "id": "305103",
+          "type": "skin",
+          "name": "极地远望",
+          "nameEn": "A Visit to the Arctic",
+          "glPresent": true
+        },
+        {
+          "id": "305104",
+          "type": "skin",
+          "name": "以黄金哺育",
+          "nameEn": "The Golden Nurturer",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3052",
+      "baseId": "3052",
+      "names": {
+        "zh-CN": "新巴别塔",
+        "zh-TW": "新巴別塔",
+        "en-US": "Ms. NewBabel",
+        "ja-JP": "ニューバベル",
+        "ko-KR": "뉴바벨"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "305201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "305201",
+          "type": "default"
+        },
+        {
+          "id": "305202",
+          "type": "insight",
+          "name": "时代的缔造者",
+          "nameEn": "Creator of the New Era"
+        },
+        {
+          "id": "305203",
+          "type": "skin",
+          "name": "以善意加码",
+          "nameEn": "Raise the Bid",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3053",
+      "baseId": "3053",
+      "names": {
+        "zh-CN": "牙仙",
+        "zh-TW": "牙仙",
+        "en-US": "Tooth Fairy",
+        "ja-JP": "トゥースフェアリー",
+        "ko-KR": "투스 페어리"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "305301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "305301",
+          "type": "default"
+        },
+        {
+          "id": "305302",
+          "type": "insight",
+          "name": "“甜美的梦”",
+          "nameEn": "Sweet Dream"
+        },
+        {
+          "id": "305303",
+          "type": "skin",
+          "name": "贝果核",
+          "nameEn": "Bagel",
+          "glPresent": true
+        },
+        {
+          "id": "305304",
+          "type": "skin",
+          "name": "妖精蹈足于晨",
+          "nameEn": "Fairies Dancing at Dawn",
+          "glPresent": true
+        },
+        {
+          "id": "305305",
+          "type": "skin",
+          "name": "彩衣曲",
+          "nameEn": "The Woven Legend",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3054",
+      "baseId": "3054",
+      "names": {
+        "zh-CN": "洋葱头",
+        "zh-TW": "洋蔥頭",
+        "en-US": "ONiON",
+        "ja-JP": "オニオン",
+        "ko-KR": "어니언"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "305401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "305401",
+          "type": "default"
+        },
+        {
+          "id": "305403",
+          "type": "skin",
+          "name": "体育快讯",
+          "nameEn": "Front Page Exclusive",
+          "glPresent": false
+        }
+      ]
+    },
+    {
+      "id": "3055",
+      "baseId": "3055",
+      "names": {
+        "zh-CN": "斯普特尼克",
+        "zh-TW": "斯普特尼克",
+        "en-US": "Sputnik",
+        "ja-JP": "スプートニク",
+        "ko-KR": "스푸트니크"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "305501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "305501",
+          "type": "default"
+        },
+        {
+          "id": "305502",
+          "type": "insight",
+          "name": "吱，吱吱？！",
+          "nameEn": "Eek, Eek!"
+        }
+      ]
+    },
+    {
+      "id": "3056",
+      "baseId": "3056",
+      "names": {
+        "zh-CN": "洁西卡",
+        "zh-TW": "潔西卡",
+        "en-US": "Jessica",
+        "ja-JP": "ジェシカ",
+        "ko-KR": "제시카"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "305601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "305601",
+          "type": "default"
+        },
+        {
+          "id": "305602",
+          "type": "insight",
+          "name": "捉迷藏",
+          "nameEn": "Hide and Seek"
+        },
+        {
+          "id": "305603",
+          "type": "skin",
+          "name": "午后曳航",
+          "nameEn": "Voyage from your Bed",
+          "glPresent": true
+        },
+        {
+          "id": "305604",
+          "type": "skin",
+          "name": "乐园之声",
+          "nameEn": "The Sound of Paradise",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3057",
+      "baseId": "3057",
+      "names": {
+        "zh-CN": "小梅斯梅尔",
+        "zh-TW": "小梅斯梅爾",
+        "en-US": "Mesmer Jr.",
+        "ja-JP": "メスメル・Jr.",
+        "ko-KR": "메스머 주니어"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "305701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "305701",
+          "type": "default"
+        },
+        {
+          "id": "305702",
+          "type": "insight",
+          "name": "工具理性主义者",
+          "nameEn": "The Instrumentalist & Rationalist"
+        },
+        {
+          "id": "305703",
+          "type": "skin",
+          "name": "休假日",
+          "nameEn": "A Day to Rest",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3058",
+      "baseId": "3058",
+      "names": {
+        "zh-CN": "埃里克",
+        "zh-TW": "埃里克",
+        "en-US": "Erick",
+        "ja-JP": "エリック",
+        "ko-KR": "에릭"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "305801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "305801",
+          "type": "default"
+        },
+        {
+          "id": "305802",
+          "type": "insight",
+          "name": "孩子王",
+          "nameEn": "The Great Jarl Erick"
+        },
+        {
+          "id": "305803",
+          "type": "skin",
+          "name": "誓言与加值",
+          "nameEn": "Oaths and Bonuses",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3059",
+      "baseId": "3059",
+      "names": {
+        "zh-CN": "门",
+        "zh-TW": "門",
+        "en-US": "Door",
+        "ja-JP": "ドア",
+        "ko-KR": "문"
+      },
+      "rarity": 1,
+      "maxInsight": 2,
+      "defaultVariant": "305901",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "305901",
+          "type": "default"
+        }
+      ]
+    },
+    {
+      "id": "3060",
+      "baseId": "3060",
+      "names": {
+        "zh-CN": "金蜜儿",
+        "zh-TW": "金蜜兒",
+        "en-US": "Blonney",
+        "ja-JP": "ジェイミー",
+        "ko-KR": "블로니"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "306001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "306001",
+          "type": "default"
+        },
+        {
+          "id": "306002",
+          "type": "insight",
+          "name": "粉-粉-粉色女郎",
+          "nameEn": "P-P-Pink Lady"
+        },
+        {
+          "id": "306003",
+          "type": "skin",
+          "name": "铅黄色磨坊",
+          "nameEn": "The Giallo Grind",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3061",
+      "baseId": "3061",
+      "names": {
+        "zh-CN": "恐怖通",
+        "zh-TW": "恐怖通",
+        "en-US": "Horropedia",
+        "ja-JP": "ホラーペディア",
+        "ko-KR": "호러피디아"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "306101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "306101",
+          "type": "default"
+        },
+        {
+          "id": "306102",
+          "type": "insight",
+          "name": "惊叫主义",
+          "nameEn": "Scarysm"
+        },
+        {
+          "id": "306103",
+          "type": "skin",
+          "name": "疯道人",
+          "nameEn": "A Daoist's Madness",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3062",
+      "baseId": "3062",
+      "names": {
+        "zh-CN": "梅兰妮",
+        "zh-TW": "梅蘭妮",
+        "en-US": "Melania",
+        "ja-JP": "メラニア",
+        "ko-KR": "멜라니아"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "306201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "306201",
+          "type": "default"
+        },
+        {
+          "id": "306202",
+          "type": "insight",
+          "name": "拉米雷斯风格",
+          "nameEn": "The Ramirez Style"
+        },
+        {
+          "id": "306203",
+          "type": "skin",
+          "name": "夜晚如此祥和",
+          "nameEn": "A Peaceful Night",
+          "glPresent": true
+        },
+        {
+          "id": "306204",
+          "type": "skin",
+          "name": "红与白",
+          "nameEn": "Red and White",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3063",
+      "baseId": "3063",
+      "names": {
+        "zh-CN": "皮克勒斯",
+        "zh-TW": "皮克勒斯",
+        "en-US": "Pickles",
+        "ja-JP": "ピクルス",
+        "ko-KR": "피클즈"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "306301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "306301",
+          "type": "default"
+        },
+        {
+          "id": "306302",
+          "type": "insight",
+          "name": "靛色毛茸茸",
+          "nameEn": "An Indigo Fluff"
+        },
+        {
+          "id": "306303",
+          "type": "skin",
+          "name": "狗狗与海",
+          "nameEn": "The Young Dog and The Sea",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3064",
+      "baseId": "3064",
+      "names": {
+        "zh-CN": "挖掘艺术",
+        "zh-TW": "挖掘藝術",
+        "en-US": "Diggers",
+        "ja-JP": "ディガー",
+        "ko-KR": "디거스"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "306401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "306401",
+          "type": "default"
+        },
+        {
+          "id": "306402",
+          "type": "insight",
+          "name": "艺术挖掘者",
+          "nameEn": "The Digger of Art"
+        },
+        {
+          "id": "306403",
+          "type": "skin",
+          "name": "第三种假设",
+          "nameEn": "Another Assumption",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3070",
+      "baseId": "3070",
+      "names": {
+        "zh-CN": "伽菈波那",
+        "zh-TW": "伽菈波那",
+        "en-US": "Kaalaa Baunaa",
+        "ja-JP": "カーラ・ボナー",
+        "ko-KR": "갈라보나"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "307001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "307001",
+          "type": "default"
+        },
+        {
+          "id": "307002",
+          "type": "insight",
+          "name": "仰望者",
+          "nameEn": "The Star Reader"
+        },
+        {
+          "id": "307003",
+          "type": "skin",
+          "name": "勾手，起跳，悬停",
+          "nameEn": "Swing, Rise, Suspend",
+          "glPresent": true
+        },
+        {
+          "id": "307004",
+          "type": "skin",
+          "name": "太阳何时瞑目",
+          "nameEn": "Till the Sun Falls",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3071",
+      "baseId": "3071",
+      "names": {
+        "zh-CN": "坎吉拉",
+        "zh-TW": "坎吉拉",
+        "en-US": "Kanjira",
+        "ja-JP": "カンジーラ",
+        "ko-KR": "칸지라"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "307101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "307101",
+          "type": "default"
+        },
+        {
+          "id": "307102",
+          "type": "insight",
+          "name": "小铃鼓",
+          "nameEn": "Tambourine"
+        },
+        {
+          "id": "307103",
+          "type": "skin",
+          "name": "午夜来客",
+          "nameEn": "The Night Visitor",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3072",
+      "baseId": "3072",
+      "names": {
+        "zh-CN": "鬃毛沙砾",
+        "zh-TW": "鬃毛沙礫",
+        "en-US": "Shamane",
+        "ja-JP": "シャーマィン",
+        "ko-KR": "갈기 모래"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "307201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "307201",
+          "type": "default"
+        },
+        {
+          "id": "307202",
+          "type": "insight",
+          "name": "山麓以南",
+          "nameEn": "South of the Mountain"
+        },
+        {
+          "id": "307203",
+          "type": "skin",
+          "name": "玛瑙斯印迹",
+          "nameEn": "Beneath the Jungle Canopy",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3066",
+      "baseId": "3066",
+      "names": {
+        "zh-CN": "37",
+        "zh-TW": "37",
+        "en-US": "37",
+        "ja-JP": "37",
+        "ko-KR": "37"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "306601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "306601",
+          "type": "default"
+        },
+        {
+          "id": "306602",
+          "type": "insight",
+          "name": "一位质数",
+          "nameEn": "A Prime Number"
+        },
+        {
+          "id": "306603",
+          "type": "skin",
+          "name": "快乐的捕鸟人",
+          "nameEn": "Happy Bird Catcher",
+          "glPresent": true
+        },
+        {
+          "id": "306604",
+          "type": "skin",
+          "name": "泉眼深处",
+          "nameEn": "Down in the Grotto",
+          "glPresent": true
+        },
+        {
+          "id": "306605",
+          "type": "skin",
+          "name": "完美的流体",
+          "nameEn": "A Gift of Nourishment",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3079",
+      "baseId": "3079",
+      "names": {
+        "zh-CN": "6",
+        "zh-TW": "6",
+        "en-US": "6",
+        "ja-JP": "6",
+        "ko-KR": "6"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "307901",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "307901",
+          "type": "default"
+        },
+        {
+          "id": "307902",
+          "type": "insight",
+          "name": "完备者",
+          "nameEn": "The Perfect Number"
+        },
+        {
+          "id": "307903",
+          "type": "skin",
+          "name": "何时何地",
+          "nameEn": "Time and Location",
+          "glPresent": true
+        },
+        {
+          "id": "307904",
+          "type": "skin",
+          "name": "于火中得见",
+          "nameEn": "By the Razed Polis",
+          "glPresent": true
+        },
+        {
+          "id": "307905",
+          "type": "skin",
+          "name": "孤独赞美诗",
+          "nameEn": "A Hymn to Seclusion",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3073",
+      "baseId": "3073",
+      "names": {
+        "zh-CN": "可燃点",
+        "zh-TW": "可燃點",
+        "en-US": "Spathodea",
+        "ja-JP": "カエンボク",
+        "ko-KR": "스파토데아"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "307301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "307301",
+          "type": "default"
+        },
+        {
+          "id": "307302",
+          "type": "insight",
+          "name": "雀儿、火焰、花",
+          "nameEn": "Sparrow, Hummingbird, Flower"
+        },
+        {
+          "id": "307303",
+          "type": "skin",
+          "name": "胜利冲刺",
+          "nameEn": "Onwards, To Victory!",
+          "glPresent": true
+        },
+        {
+          "id": "307304",
+          "type": "skin",
+          "name": "火芙蕖",
+          "nameEn": "Fire Lotus",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3074",
+      "baseId": "3074",
+      "names": {
+        "zh-CN": "爱兹拉",
+        "zh-TW": "愛茲拉",
+        "en-US": "Ezra",
+        "ja-JP": "エズラ",
+        "ko-KR": "에즈라"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "307401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "307401",
+          "type": "default"
+        },
+        {
+          "id": "307402",
+          "type": "insight",
+          "name": "菌伞的启示",
+          "nameEn": "Enlightened by Mushrooms"
+        },
+        {
+          "id": "307403",
+          "type": "skin",
+          "name": "噫～嗬！",
+          "nameEn": "Yee-Haw!",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3075",
+      "baseId": "3075",
+      "names": {
+        "zh-CN": "沙丝绒",
+        "zh-TW": "沙絲絨",
+        "en-US": "Desert Flannel",
+        "ja-JP": "サンド・フランネル",
+        "ko-KR": "데저트 플란넬"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "307501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "307501",
+          "type": "default"
+        },
+        {
+          "id": "307502",
+          "type": "insight",
+          "name": "红沙特卖",
+          "nameEn": "Red Desert Special Offer"
+        },
+        {
+          "id": "307503",
+          "type": "skin",
+          "name": "野性的倾洒",
+          "nameEn": "Call of the Wild",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3076",
+      "baseId": "3076",
+      "names": {
+        "zh-CN": "和平乌鲁",
+        "zh-TW": "和平烏魯",
+        "en-US": "Ulu",
+        "ja-JP": "ウル",
+        "ko-KR": "울루"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "307601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "307601",
+          "type": "default"
+        },
+        {
+          "id": "307602",
+          "type": "insight",
+          "name": "星火梦见之物",
+          "nameEn": "Flammy's Dream"
+        }
+      ]
+    },
+    {
+      "id": "3082",
+      "baseId": "3082",
+      "names": {
+        "zh-CN": "小叶尼塞",
+        "zh-TW": "小葉尼塞",
+        "en-US": "Yenisei",
+        "ja-JP": "エニセイ",
+        "ko-KR": "예니세이"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "308201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "308201",
+          "type": "default"
+        },
+        {
+          "id": "308202",
+          "type": "insight",
+          "name": "在同一条河中",
+          "nameEn": "In the Same River"
+        },
+        {
+          "id": "308203",
+          "type": "skin",
+          "name": "蓝河湾",
+          "nameEn": "Around the Riverbend",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3083",
+      "baseId": "3083",
+      "names": {
+        "zh-CN": "曲娘",
+        "zh-TW": "曲娘",
+        "en-US": "Jiu Niangzi",
+        "ja-JP": "曲娘",
+        "ko-KR": "곡랑"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "308301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "308301",
+          "type": "default"
+        },
+        {
+          "id": "308302",
+          "type": "insight",
+          "name": "天光照衣",
+          "nameEn": "Let There Be Way Out"
+        },
+        {
+          "id": "308303",
+          "type": "skin",
+          "name": "壁上桃源",
+          "nameEn": "Blossom Spring Fairy",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3084",
+      "baseId": "3084",
+      "names": {
+        "zh-CN": "葛天",
+        "zh-TW": "葛天",
+        "en-US": "Getian",
+        "ja-JP": "葛天",
+        "ko-KR": "갈천"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "308401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "308401",
+          "type": "default"
+        },
+        {
+          "id": "308402",
+          "type": "insight",
+          "name": "清风吹我襟",
+          "nameEn": "The Breeze of Ease"
+        },
+        {
+          "id": "308404",
+          "type": "skin",
+          "name": "入埃及记",
+          "nameEn": "Herald of Horus",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3065",
+      "baseId": "3065",
+      "names": {
+        "zh-CN": "马库斯",
+        "zh-TW": "馬庫斯",
+        "en-US": "Marcus",
+        "ja-JP": "マーカス",
+        "ko-KR": "마커스"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "306501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "306501",
+          "type": "default"
+        },
+        {
+          "id": "306502",
+          "type": "insight",
+          "name": "风儿吹回那日",
+          "nameEn": "A Returning Wind"
+        },
+        {
+          "id": "306503",
+          "type": "skin",
+          "name": "白沙与风",
+          "nameEn": "On the White Sand",
+          "glPresent": true
+        },
+        {
+          "id": "306504",
+          "type": "skin",
+          "name": "致冥府的门扉",
+          "nameEn": "To the Gates of the Underworld",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3081",
+      "baseId": "3081",
+      "names": {
+        "zh-CN": "伊索尔德",
+        "zh-TW": "伊索爾德",
+        "en-US": "Isolde",
+        "ja-JP": "イゾルデ",
+        "ko-KR": "이졸데"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "308101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "308101",
+          "type": "default"
+        },
+        {
+          "id": "308102",
+          "type": "insight",
+          "name": "多重唱",
+          "nameEn": "Polyphony"
+        },
+        {
+          "id": "308103",
+          "type": "skin",
+          "name": "爵士春秋",
+          "nameEn": "And All That Jazz",
+          "glPresent": true
+        },
+        {
+          "id": "308104",
+          "type": "skin",
+          "name": "若向死振翅",
+          "nameEn": "The Last Fluttering Beat",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3077",
+      "baseId": "3077",
+      "names": {
+        "zh-CN": "北方哨歌",
+        "zh-TW": "北方哨歌",
+        "en-US": "Windsong",
+        "ja-JP": "スヴィスティ",
+        "ko-KR": "윈드송"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "307701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "307701",
+          "type": "default"
+        },
+        {
+          "id": "307702",
+          "type": "insight",
+          "name": "于此丈量",
+          "nameEn": "Measuring the World"
+        },
+        {
+          "id": "307703",
+          "type": "skin",
+          "name": "凿玉记",
+          "nameEn": "Records from the Jade Hunt",
+          "glPresent": true
+        },
+        {
+          "id": "307704",
+          "type": "skin",
+          "name": "魇与夜",
+          "nameEn": "The Nightmare's Trespasser",
+          "glPresent": true
+        },
+        {
+          "id": "307705",
+          "type": "skin",
+          "name": "银色等高线",
+          "nameEn": "Silver Isoheight",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3078",
+      "baseId": "3078",
+      "names": {
+        "zh-CN": "阿夫西维",
+        "zh-TW": "阿夫西維",
+        "en-US": "Avgust",
+        "ja-JP": "アヴグスト",
+        "ko-KR": "아브구스트"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "307801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "307801",
+          "type": "default"
+        },
+        {
+          "id": "307802",
+          "type": "insight",
+          "name": "广场的小小天地",
+          "nameEn": "His Own Corner on the Square"
+        }
+      ]
+    },
+    {
+      "id": "3087",
+      "baseId": "3087",
+      "names": {
+        "zh-CN": "维拉",
+        "zh-TW": "維拉",
+        "en-US": "Vila",
+        "ja-JP": "ヴィラ",
+        "ko-KR": "빌라"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "308701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "308701",
+          "type": "default"
+        },
+        {
+          "id": "308702",
+          "type": "insight",
+          "name": "向理想，向生活",
+          "nameEn": "Towards the Ideal Life"
+        },
+        {
+          "id": "308703",
+          "type": "skin",
+          "name": "远眺色彩",
+          "nameEn": "By the Painted City",
+          "glPresent": true
+        },
+        {
+          "id": "308704",
+          "type": "skin",
+          "name": "酒色之海的女儿",
+          "nameEn": "Daughter of the Wine-Dark Sea",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3086",
+      "baseId": "3086",
+      "names": {
+        "zh-CN": "露西",
+        "zh-TW": "露西",
+        "en-US": "Lucy",
+        "ja-JP": "ルーシー",
+        "ko-KR": "루시"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "308601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "308601",
+          "type": "default"
+        },
+        {
+          "id": "308602",
+          "type": "insight",
+          "name": "一个机器人的诞生",
+          "nameEn": "A Robot Is Born"
+        },
+        {
+          "id": "308603",
+          "type": "skin",
+          "name": "生如行棋",
+          "nameEn": "The Queen's Game",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3088",
+      "baseId": "3088",
+      "names": {
+        "zh-CN": "塞梅尔维斯",
+        "zh-TW": "塞梅爾維斯",
+        "en-US": "Semmelweis",
+        "ja-JP": "センメルワイス",
+        "ko-KR": "제멜바이스"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "308801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "308801",
+          "type": "default"
+        },
+        {
+          "id": "308802",
+          "type": "insight",
+          "name": "镜",
+          "nameEn": "The Mirror"
+        },
+        {
+          "id": "308803",
+          "type": "skin",
+          "name": "叩门礼仪",
+          "nameEn": "A Knock on the Door",
+          "glPresent": true
+        },
+        {
+          "id": "308804",
+          "type": "skin",
+          "name": "心之盈亏",
+          "nameEn": "The Wax and Wane of the Heart",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3080",
+      "baseId": "3080",
+      "names": {
+        "zh-CN": "卡卡尼亚",
+        "zh-TW": "卡卡尼亞",
+        "en-US": "Kakania",
+        "ja-JP": "カカニア",
+        "ko-KR": "카카니아"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "308001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "308001",
+          "type": "default"
+        },
+        {
+          "id": "308002",
+          "type": "insight",
+          "name": "映像之映像",
+          "nameEn": "Reflections within Reflections"
+        },
+        {
+          "id": "308003",
+          "type": "skin",
+          "name": "心曲沙龙",
+          "nameEn": "Seminars on Serenity",
+          "glPresent": true
+        },
+        {
+          "id": "308004",
+          "type": "skin",
+          "name": "时代病陪护",
+          "nameEn": "Guardian of the Broken",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3091",
+      "baseId": "3091",
+      "names": {
+        "zh-CN": "罗蕾莱",
+        "zh-TW": "羅蕾萊",
+        "en-US": "Lorelei",
+        "ja-JP": "ローレライ",
+        "ko-KR": "로렐라이"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "309101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "309101",
+          "type": "default"
+        },
+        {
+          "id": "309102",
+          "type": "insight",
+          "name": "应祝祷之时",
+          "nameEn": "Time to Pray"
+        }
+      ]
+    },
+    {
+      "id": "3094",
+      "baseId": "3094",
+      "names": {
+        "zh-CN": "J",
+        "zh-TW": "J",
+        "en-US": "J",
+        "ja-JP": "J",
+        "ko-KR": "J"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "309401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "309401",
+          "type": "default"
+        },
+        {
+          "id": "309402",
+          "type": "insight",
+          "name": "极速前线",
+          "nameEn": "Top Speed Rider"
+        },
+        {
+          "id": "309403",
+          "type": "skin",
+          "name": "野嗥",
+          "nameEn": "The Lone Wolf's Howl",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3095",
+      "baseId": "3095",
+      "names": {
+        "zh-CN": "环状水星",
+        "zh-TW": "環狀水星",
+        "en-US": "Mercuria",
+        "ja-JP": "マーキュリア",
+        "ko-KR": "머큐리아"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "309501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "309501",
+          "type": "default"
+        },
+        {
+          "id": "309502",
+          "type": "insight",
+          "name": "宇宙屏息时",
+          "nameEn": "The Universe Holds Its Breath"
+        },
+        {
+          "id": "309503",
+          "type": "skin",
+          "name": "午夜曼波",
+          "nameEn": "Midnight Mistmancer",
+          "glPresent": true
+        },
+        {
+          "id": "309504",
+          "type": "skin",
+          "name": "惊魂夜颂歌",
+          "nameEn": "The Nightmare's Carol",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3096",
+      "baseId": "3096",
+      "names": {
+        "zh-CN": "先驱者",
+        "zh-TW": "先驅者",
+        "en-US": "Pioneer",
+        "ja-JP": "パイオニア",
+        "ko-KR": "파이오니어"
+      },
+      "rarity": 2,
+      "maxInsight": 2,
+      "defaultVariant": "309601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "309601",
+          "type": "default"
+        },
+        {
+          "id": "309602",
+          "type": "insight",
+          "name": "肌肤矫饰物",
+          "nameEn": "Idol Fascinations"
+        }
+      ]
+    },
+    {
+      "id": "3097",
+      "baseId": "3097",
+      "names": {
+        "zh-CN": "阿尔古斯",
+        "zh-TW": "阿爾古斯",
+        "en-US": "Argus",
+        "ja-JP": "アルゴス",
+        "ko-KR": "아르고스"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "309701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "309701",
+          "type": "default"
+        },
+        {
+          "id": "309702",
+          "type": "insight",
+          "name": "百眼燃烧",
+          "nameEn": "All Seeing Light"
+        },
+        {
+          "id": "309703",
+          "type": "skin",
+          "name": "星间追猎秀",
+          "nameEn": "Starbound Bounty Hunter",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3098",
+      "baseId": "3098",
+      "names": {
+        "zh-CN": "蓝手帕",
+        "zh-TW": "藍手帕",
+        "en-US": "Tuesday",
+        "ja-JP": "チューズデー",
+        "ko-KR": "튜즈데이"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "309801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "309801",
+          "type": "default"
+        },
+        {
+          "id": "309802",
+          "type": "insight",
+          "name": "恐惧女主人",
+          "nameEn": "Miss Horror"
+        },
+        {
+          "id": "309803",
+          "type": "skin",
+          "name": "玉瓶宝鉴",
+          "nameEn": "Story of the Jade Vase",
+          "glPresent": true
+        },
+        {
+          "id": "309804",
+          "type": "skin",
+          "name": "冷襁褓",
+          "nameEn": "Cold Cradle",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3099",
+      "baseId": "3099",
+      "names": {
+        "zh-CN": "数羊羔",
+        "zh-TW": "數羊羔",
+        "en-US": "Barbara",
+        "ja-JP": "メェプル",
+        "ko-KR": "바바라"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "309901",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "309901",
+          "type": "default"
+        },
+        {
+          "id": "309902",
+          "type": "insight",
+          "name": "梦中青草地",
+          "nameEn": "A Meadow in Her Dreams"
+        }
+      ]
+    },
+    {
+      "id": "3100",
+      "baseId": "3100",
+      "names": {
+        "zh-CN": "天使娜娜",
+        "zh-TW": "天使娜娜",
+        "en-US": "Anjo Nala",
+        "ja-JP": "アンジョナナ",
+        "ko-KR": "안조 날라"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "310001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "310001",
+          "type": "default"
+        },
+        {
+          "id": "310002",
+          "type": "insight",
+          "name": "无忧年代",
+          "nameEn": "Carefree Days"
+        },
+        {
+          "id": "310003",
+          "type": "skin",
+          "name": "恶之果",
+          "nameEn": "Forbidden Fruit",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3101",
+      "baseId": "3101",
+      "names": {
+        "zh-CN": "白朗姆",
+        "zh-TW": "白朗姆",
+        "en-US": "White Rum",
+        "ja-JP": "ホワイトラム",
+        "ko-KR": "화이트 럼"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "310101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "310101",
+          "type": "default"
+        },
+        {
+          "id": "310102",
+          "type": "insight",
+          "name": "瓶中小世界",
+          "nameEn": "Big World in a Small Bottle"
+        },
+        {
+          "id": "310103",
+          "type": "skin",
+          "name": "寰宇行舟",
+          "nameEn": "Sailing Around the World",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3102",
+      "baseId": "3102",
+      "names": {
+        "zh-CN": "洛佩拉",
+        "zh-TW": "洛佩拉",
+        "en-US": "Lopera",
+        "ja-JP": "ロペラ",
+        "ko-KR": "로페라"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "310201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "310201",
+          "type": "default"
+        },
+        {
+          "id": "310202",
+          "type": "insight",
+          "name": "落日归途",
+          "nameEn": "The Wayward Soul Returns"
+        },
+        {
+          "id": "310203",
+          "type": "skin",
+          "name": "与风暴同行",
+          "nameEn": "Friend of the Splintercat",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3103",
+      "baseId": "3103",
+      "names": {
+        "zh-CN": "邓肯先生",
+        "zh-TW": "鄧肯先生",
+        "en-US": "Mr. Duncan",
+        "ja-JP": "ダンカン",
+        "ko-KR": "던컨"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "310301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "310301",
+          "type": "default"
+        },
+        {
+          "id": "310302",
+          "type": "insight",
+          "name": "巷尾发明家",
+          "nameEn": "The Favela Inventor"
+        }
+      ]
+    },
+    {
+      "id": "3104",
+      "baseId": "3104",
+      "names": {
+        "zh-CN": "笃笃骨",
+        "zh-TW": "篤篤骨",
+        "en-US": "Willow",
+        "ja-JP": "ヴィロー",
+        "ko-KR": "윌로우"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "310401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "310401",
+          "type": "default"
+        },
+        {
+          "id": "310402",
+          "type": "insight",
+          "name": "旷然独舞",
+          "nameEn": "Lone Dancer"
+        },
+        {
+          "id": "310403",
+          "type": "skin",
+          "name": "第二枚预兆",
+          "nameEn": "The Last Portent",
+          "glPresent": true
+        },
+        {
+          "id": "310404",
+          "type": "skin",
+          "name": "裁春衫",
+          "nameEn": "Reborn and Restored",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3105",
+      "baseId": "3105",
+      "names": {
+        "zh-CN": "纸信圈儿",
+        "zh-TW": "紙信圈兒",
+        "en-US": "Flutterpage",
+        "ja-JP": "パタパタペーパー",
+        "ko-KR": "플러터 페이지"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "310501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "310501",
+          "type": "default"
+        },
+        {
+          "id": "310502",
+          "type": "insight",
+          "name": "啁啾来访日",
+          "nameEn": "Chirpy Morning Ringer"
+        },
+        {
+          "id": "310503",
+          "type": "skin",
+          "name": "明日的春风",
+          "nameEn": "Gently Comes the Thawing Breeze",
+          "glPresent": true
+        },
+        {
+          "id": "310504",
+          "type": "skin",
+          "name": "原子时报晓",
+          "nameEn": "Atomic Alarm",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3106",
+      "baseId": "3106",
+      "names": {
+        "zh-CN": "宽檐帽",
+        "zh-TW": "寬簷帽",
+        "en-US": "Brimley",
+        "ja-JP": "つば広ハット",
+        "ko-KR": "슬라우치 햇"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "310601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "310601",
+          "type": "default"
+        },
+        {
+          "id": "310602",
+          "type": "insight",
+          "name": "午后密密缝",
+          "nameEn": "Sunset Sartor"
+        },
+        {
+          "id": "310604",
+          "type": "skin",
+          "name": "思维驾驶者",
+          "nameEn": "THOUGHT Ranger",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3108",
+      "baseId": "3108",
+      "names": {
+        "zh-CN": "芭卡洛儿",
+        "zh-TW": "芭卡洛兒",
+        "en-US": "Barcarola",
+        "ja-JP": "バルカローラ",
+        "ko-KR": "바르카롤라"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "310801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "310801",
+          "type": "default"
+        },
+        {
+          "id": "310802",
+          "type": "insight",
+          "name": "海风领奏",
+          "nameEn": "As the Sea Breeze Leads"
+        },
+        {
+          "id": "310803",
+          "type": "skin",
+          "name": "飞越行星带",
+          "nameEn": "Asteroid Allegro",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3109",
+      "baseId": "3109",
+      "names": {
+        "zh-CN": "图图石子",
+        "zh-TW": "圖圖石子",
+        "en-US": "Fatutu",
+        "ja-JP": "トゥトゥイ",
+        "ko-KR": "파투투"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "310901",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "310901",
+          "type": "default"
+        },
+        {
+          "id": "310902",
+          "type": "insight",
+          "name": "消逝的涟漪",
+          "nameEn": "Fading Ripples"
+        },
+        {
+          "id": "310903",
+          "type": "skin",
+          "name": "曲线的居所",
+          "nameEn": "Casa of the Curved Lines",
+          "glPresent": true
+        },
+        {
+          "id": "310905",
+          "type": "skin",
+          "name": "故梦罅隙间",
+          "nameEn": "Fragments of An Old Dream",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3110",
+      "baseId": "3110",
+      "names": {
+        "zh-CN": "梁月",
+        "zh-TW": "梁月",
+        "en-US": "Liang Yue",
+        "ja-JP": "梁月",
+        "ko-KR": "양월"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "311001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "311001",
+          "type": "default"
+        },
+        {
+          "id": "311002",
+          "type": "insight",
+          "name": "青瓦之上",
+          "nameEn": "Above the Green Tiles"
+        },
+        {
+          "id": "311003",
+          "type": "skin",
+          "name": "照雪明",
+          "nameEn": "The Moon's Reflection",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3111",
+      "baseId": "3111",
+      "names": {
+        "zh-CN": "菲林士多",
+        "zh-TW": "菲林士多",
+        "en-US": "Noire",
+        "ja-JP": "ノワール",
+        "ko-KR": "누아르"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "311101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "311101",
+          "type": "default"
+        },
+        {
+          "id": "311102",
+          "type": "insight",
+          "name": "红毯嘉宾",
+          "nameEn": "On the Red Carpet"
+        },
+        {
+          "id": "311103",
+          "type": "skin",
+          "name": "算尘寰",
+          "nameEn": "The Trapped Trapmaster",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3112",
+      "baseId": "3112",
+      "names": {
+        "zh-CN": "空脑袋",
+        "zh-TW": "空腦袋",
+        "en-US": "Loggerhead",
+        "ja-JP": "ロガーヘッド",
+        "ko-KR": "로거헤드"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "311201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "311201",
+          "type": "default"
+        },
+        {
+          "id": "311202",
+          "type": "insight",
+          "name": "偷闲日",
+          "nameEn": "A Moment of Leisure"
+        }
+      ]
+    },
+    {
+      "id": "3114",
+      "baseId": "3114",
+      "names": {
+        "zh-CN": "虚构集",
+        "zh-TW": "虛構集",
+        "en-US": "Recoleta",
+        "ja-JP": "レコレータ",
+        "ko-KR": "레콜레타"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "311401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "311401",
+          "type": "default"
+        },
+        {
+          "id": "311402",
+          "type": "insight",
+          "name": "卷首语",
+          "nameEn": "Foreword"
+        },
+        {
+          "id": "311403",
+          "type": "skin",
+          "name": "拉曼却幻想",
+          "nameEn": "The Knight of La Mancha",
+          "glPresent": true
+        },
+        {
+          "id": "311404",
+          "type": "skin",
+          "name": "文字，自始至终",
+          "nameEn": "The Weight of Words",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3113",
+      "baseId": "3113",
+      "names": {
+        "zh-CN": "阿莱夫",
+        "zh-TW": "阿萊夫",
+        "en-US": "Aleph",
+        "ja-JP": "エル・アレフ",
+        "ko-KR": "알레프"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "311301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "311301",
+          "type": "default"
+        },
+        {
+          "id": "311302",
+          "type": "insight",
+          "name": "无限议题",
+          "nameEn": "Infinitude"
+        },
+        {
+          "id": "311303",
+          "type": "skin",
+          "name": "意象的欢宴",
+          "nameEn": "A Feast of Imagery",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3116",
+      "baseId": "3116",
+      "names": {
+        "zh-CN": "冷周六",
+        "zh-TW": "冷週六",
+        "en-US": "Hissabeth",
+        "ja-JP": "サーベス",
+        "ko-KR": "히사베스"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "311601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "311601",
+          "type": "default"
+        },
+        {
+          "id": "311602",
+          "type": "insight",
+          "name": "电子丛林发展史",
+          "nameEn": "Digital Jungle"
+        },
+        {
+          "id": "311603",
+          "type": "skin",
+          "name": "群蛇的春祭",
+          "nameEn": "Serpentine Primavera",
+          "glPresent": true
+        },
+        {
+          "id": "311604",
+          "type": "skin",
+          "name": "巫阳抚彗歌",
+          "nameEn": "Verses to Heaven",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3117",
+      "baseId": "3117",
+      "names": {
+        "zh-CN": "库珀花环",
+        "zh-TW": "庫珀花環",
+        "en-US": "Kiperina",
+        "ja-JP": "カイパリーナ",
+        "ko-KR": "키페리나"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "311701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "311701",
+          "type": "default"
+        },
+        {
+          "id": "311702",
+          "type": "insight",
+          "name": "弹珠匣",
+          "nameEn": "A Box of Marbles"
+        },
+        {
+          "id": "311703",
+          "type": "skin",
+          "name": "宇宙之壳",
+          "nameEn": "The Universe in the Rook's Shell",
+          "glPresent": true
+        },
+        {
+          "id": "311704",
+          "type": "skin",
+          "name": "玻璃乌托邦",
+          "nameEn": "A Utopia in Painted Glass",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3118",
+      "baseId": "3118",
+      "names": {
+        "zh-CN": "命名日",
+        "zh-TW": "命名日",
+        "en-US": "Name Day",
+        "ja-JP": "ネイムデー",
+        "ko-KR": "네임데이"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "311801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "311801",
+          "type": "default"
+        },
+        {
+          "id": "311802",
+          "type": "insight",
+          "name": "趁光线消融前",
+          "nameEn": "Before the Light Fades"
+        },
+        {
+          "id": "311803",
+          "type": "skin",
+          "name": "永恒的沉默",
+          "nameEn": "The Deathless Quiet",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3107",
+      "baseId": "3107",
+      "names": {
+        "zh-CN": "乌尔里希",
+        "zh-TW": "烏爾里希",
+        "en-US": "Ulrich",
+        "ja-JP": "ウルリッヒ",
+        "ko-KR": "울리히"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "310701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "310701",
+          "type": "default"
+        },
+        {
+          "id": "310702",
+          "type": "insight",
+          "name": "缸中宇宙",
+          "nameEn": "Universe in the Tank"
+        },
+        {
+          "id": "310703",
+          "type": "skin",
+          "name": "叩响天宇一角",
+          "nameEn": "A Glimpse of the Cosmos",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3115",
+      "baseId": "3115",
+      "names": {
+        "zh-CN": "嚼嚼松果",
+        "zh-TW": "嚼嚼松果",
+        "en-US": "Buddy Fairchild",
+        "ja-JP": "もぐナッツ",
+        "ko-KR": "버디 페어차일드"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "311501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "311501",
+          "type": "default"
+        },
+        {
+          "id": "311502",
+          "type": "insight",
+          "name": "友情加冕",
+          "nameEn": "A Ceremony Among Friends"
+        }
+      ]
+    },
+    {
+      "id": "3120",
+      "baseId": "3120",
+      "names": {
+        "zh-CN": "诺谛卡",
+        "zh-TW": "諾諦卡",
+        "en-US": "Nautika",
+        "ja-JP": "ノーティカ",
+        "ko-KR": "노티카"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "312001",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "312001",
+          "type": "default"
+        },
+        {
+          "id": "312002",
+          "type": "insight",
+          "name": "“未知”的背面",
+          "nameEn": "Behind the \"Unknown\""
+        },
+        {
+          "id": "312003",
+          "type": "skin",
+          "name": "名以光辉",
+          "nameEn": "From Darkness, Light",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3121",
+      "baseId": "3121",
+      "names": {
+        "zh-CN": "莫莉德尔",
+        "zh-TW": "莫莉德爾",
+        "en-US": "Moldir",
+        "ja-JP": "モルダー",
+        "ko-KR": "몰디르"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "312101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "312101",
+          "type": "default"
+        },
+        {
+          "id": "312102",
+          "type": "insight",
+          "name": "永不遗忘的",
+          "nameEn": "Things Never Forgotten"
+        },
+        {
+          "id": "312103",
+          "type": "skin",
+          "name": "石头城挽歌",
+          "nameEn": "Idyll of the Luberon",
+          "glPresent": true
+        },
+        {
+          "id": "312104",
+          "type": "skin",
+          "name": "玫瑰午睡时",
+          "nameEn": "Repose Amidst the Roses",
+          "glPresent": false
+        }
+      ]
+    },
+    {
+      "id": "3126",
+      "baseId": "3126",
+      "names": {
+        "zh-CN": "玛丽安娜",
+        "zh-TW": "瑪麗安娜",
+        "en-US": "Sentinel",
+        "ja-JP": "センティネル",
+        "ko-KR": "센티널"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "312601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "312601",
+          "type": "default"
+        },
+        {
+          "id": "312602",
+          "type": "insight",
+          "name": "孽的锁链",
+          "nameEn": "The Shackles of Sin"
+        },
+        {
+          "id": "312603",
+          "type": "skin",
+          "name": "镜廊宣言",
+          "nameEn": "By Reflections Witnessed",
+          "glPresent": true
+        },
+        {
+          "id": "312606",
+          "type": "skin",
+          "name": "称量罪与理",
+          "nameEn": "Weighing Sin and Justice",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3128",
+      "baseId": "3128",
+      "names": {
+        "zh-CN": "卡戎",
+        "zh-TW": "卡戎",
+        "en-US": "Charon",
+        "ja-JP": "カローン",
+        "ko-KR": "카론"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "312801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "312801",
+          "type": "default"
+        },
+        {
+          "id": "312802",
+          "type": "insight",
+          "name": "沉默与悲鸣",
+          "nameEn": "Wailing Silence"
+        },
+        {
+          "id": "312803",
+          "type": "skin",
+          "name": "亡者的恩赐",
+          "nameEn": "Gift of the Dead",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3122",
+      "baseId": "3122",
+      "names": {
+        "zh-CN": "阿利克西欧斯",
+        "zh-TW": "亞歷克西歐斯",
+        "en-US": "Alexios",
+        "ja-JP": "アレクシオス",
+        "ko-KR": "알렉시오스"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "312201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "312201",
+          "type": "default"
+        },
+        {
+          "id": "312202",
+          "type": "insight",
+          "name": "第二次征服",
+          "nameEn": "Second Conquest"
+        }
+      ]
+    },
+    {
+      "id": "3123",
+      "baseId": "3123",
+      "names": {
+        "zh-CN": "艾吉奥·奥迪托雷",
+        "zh-TW": "埃齊歐·奧迪托雷",
+        "en-US": "Ezio Auditore",
+        "ja-JP": "エツィオ",
+        "ko-KR": "에지오 아디토레"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "312301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "312301",
+          "type": "default"
+        },
+        {
+          "id": "312302",
+          "type": "insight",
+          "name": "信仰，于此跃下",
+          "nameEn": "Leap of Faith"
+        }
+      ]
+    },
+    {
+      "id": "3124",
+      "baseId": "3124",
+      "names": {
+        "zh-CN": "卡珊德拉",
+        "zh-TW": "卡珊卓",
+        "en-US": "Kassandra",
+        "ja-JP": "カサンドラ",
+        "ko-KR": "카산드라"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "312401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "312401",
+          "type": "default"
+        },
+        {
+          "id": "312402",
+          "type": "insight",
+          "name": "湛蓝而闪耀",
+          "nameEn": "Radiant in Blue"
+        }
+      ]
+    },
+    {
+      "id": "3125",
+      "baseId": "3125",
+      "names": {
+        "zh-CN": "野树莓",
+        "zh-TW": "野樹莓",
+        "en-US": "Rubuska",
+        "ja-JP": "ルブシカ",
+        "ko-KR": "루부스카"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "312501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "312501",
+          "type": "default"
+        },
+        {
+          "id": "312502",
+          "type": "insight",
+          "name": "魔笛手之梦",
+          "nameEn": "The Piper's Dream"
+        },
+        {
+          "id": "312503",
+          "type": "skin",
+          "name": "踏影歌",
+          "nameEn": "Song of the Shadow Dancer",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3132",
+      "baseId": "3132",
+      "names": {
+        "zh-CN": "告死鸟",
+        "zh-TW": "告死鳥",
+        "en-US": "Corvus",
+        "ja-JP": "コルヴス",
+        "ko-KR": "코르부스"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "313201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "313201",
+          "type": "default"
+        },
+        {
+          "id": "313202",
+          "type": "insight",
+          "name": "编织一寸温暖",
+          "nameEn": "The Warmth She Knitted"
+        },
+        {
+          "id": "313203",
+          "type": "skin",
+          "name": "将哀啼也燃尽",
+          "nameEn": "Burning Away Tears",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3134",
+      "baseId": "3134",
+      "names": {
+        "zh-CN": "贝丽尔",
+        "zh-TW": "貝麗爾",
+        "en-US": "Beryl",
+        "ja-JP": "ベリル",
+        "ko-KR": "베릴"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "313401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "313401",
+          "type": "default"
+        },
+        {
+          "id": "313402",
+          "type": "insight",
+          "name": "水上浮光",
+          "nameEn": "The Flowing Stream's Luster"
+        }
+      ]
+    },
+    {
+      "id": "3135",
+      "baseId": "3135",
+      "names": {
+        "zh-CN": "灰调蓝",
+        "zh-TW": "灰調藍",
+        "en-US": "Brume",
+        "ja-JP": "グレイッシュブルー",
+        "ko-KR": "브룸"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "313501",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "313501",
+          "type": "default"
+        },
+        {
+          "id": "313502",
+          "type": "insight",
+          "name": "意外停靠",
+          "nameEn": "A Wayward Intermission"
+        },
+        {
+          "id": "313503",
+          "type": "skin",
+          "name": "海盐急速",
+          "nameEn": "Full Quack Ahead",
+          "glPresent": false
+        }
+      ]
+    },
+    {
+      "id": "3127",
+      "baseId": "3127",
+      "names": {
+        "zh-CN": "玛尔纱",
+        "zh-TW": "瑪爾紗",
+        "en-US": "Marsha",
+        "ja-JP": "マルシャ",
+        "ko-KR": "마샤"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "312701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "312701",
+          "type": "default"
+        },
+        {
+          "id": "312702",
+          "type": "insight",
+          "name": "我曾如此宣誓——",
+          "nameEn": "And This I Swear"
+        },
+        {
+          "id": "312703",
+          "type": "skin",
+          "name": "不熄的怀抱",
+          "nameEn": "The Ever-Burning Embrace",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3092",
+      "baseId": "3092",
+      "names": {
+        "zh-CN": "伊戈尔",
+        "zh-TW": "伊戈爾",
+        "en-US": "Igor",
+        "ja-JP": "イゴール",
+        "ko-KR": "이고르"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "309201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "309201",
+          "type": "default"
+        },
+        {
+          "id": "309202",
+          "type": "insight",
+          "name": "旗帜所指向的",
+          "nameEn": "Where the Banner Points"
+        },
+        {
+          "id": "309203",
+          "type": "skin",
+          "name": "幽冥无归",
+          "nameEn": "Returning Nevermore",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3141",
+      "baseId": "3141",
+      "names": {
+        "zh-CN": "鹭鸶剪",
+        "zh-TW": "鷺鷥剪",
+        "en-US": "Paper Heron",
+        "ja-JP": "鷺切",
+        "ko-KR": "노사전"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "314101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "314101",
+          "type": "default"
+        },
+        {
+          "id": "314102",
+          "type": "insight",
+          "name": "新花故吾",
+          "nameEn": "Downstream of Letting Go"
+        }
+      ]
+    },
+    {
+      "id": "3137",
+      "baseId": "3137",
+      "names": {
+        "zh-CN": "程和光",
+        "zh-TW": "程和光",
+        "en-US": "Cheng Heguang",
+        "ja-JP": "程和光",
+        "ko-KR": "정화광"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "313701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "313701",
+          "type": "default"
+        },
+        {
+          "id": "313702",
+          "type": "insight",
+          "name": "檐外鹭",
+          "nameEn": "Breaking Free from a Burning Cage"
+        }
+      ]
+    },
+    {
+      "id": "3138",
+      "baseId": "3138",
+      "names": {
+        "zh-CN": "芦草结",
+        "zh-TW": "蘆草結",
+        "en-US": "Reed",
+        "ja-JP": "リードノット",
+        "ko-KR": "노초결"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "313801",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "313801",
+          "type": "default"
+        },
+        {
+          "id": "313802",
+          "type": "insight",
+          "name": "不息的沙沙声",
+          "nameEn": "The Everlasting Scribbler"
+        }
+      ]
+    },
+    {
+      "id": "3139",
+      "baseId": "3139",
+      "names": {
+        "zh-CN": "洛伦兹蝴蝶",
+        "zh-TW": "洛倫茲蝴蝶",
+        "en-US": "Lorentz Butterfly",
+        "ja-JP": "ローレンツバタフライ",
+        "ko-KR": "로렌츠 버터플라이"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "313901",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "313901",
+          "type": "default"
+        },
+        {
+          "id": "313902",
+          "type": "insight",
+          "name": "雨、混沌、翅震颤",
+          "nameEn": "Rain, Chaos and Fluttering"
+        },
+        {
+          "id": "313903",
+          "type": "skin",
+          "name": "致命银弦",
+          "nameEn": "Finale in Silver",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3142",
+      "baseId": "3142",
+      "names": {
+        "zh-CN": "拉莫纳",
+        "zh-TW": "拉莫納",
+        "en-US": "Ramona",
+        "ja-JP": "ラモナ",
+        "ko-KR": "라모나"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "314201",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "314201",
+          "type": "default"
+        },
+        {
+          "id": "314202",
+          "type": "insight",
+          "name": "灵与花之间",
+          "nameEn": "Between Spirits and Blossoms"
+        }
+      ]
+    },
+    {
+      "id": "3136",
+      "baseId": "3136",
+      "names": {
+        "zh-CN": "《湖边的女人》",
+        "zh-TW": "《湖邊的女人》",
+        "en-US": "<i>Lady by the Lake</i>",
+        "ja-JP": "『湖畔の女性』",
+        "ko-KR": "<호숫가의 여인>"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "313601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "313601",
+          "type": "default"
+        },
+        {
+          "id": "313602",
+          "type": "insight",
+          "name": "一个春日的记忆",
+          "nameEn": "Memories of Spring"
+        }
+      ]
+    },
+    {
+      "id": "3143",
+      "baseId": "3143",
+      "names": {
+        "zh-CN": "哑谜",
+        "zh-TW": "啞謎",
+        "en-US": "Enigma",
+        "ja-JP": "エニグマ",
+        "ko-KR": "이니그마"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "314301",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "314301",
+          "type": "default"
+        },
+        {
+          "id": "314302",
+          "type": "insight",
+          "name": "填空题",
+          "nameEn": "Cloze Testing"
+        },
+        {
+          "id": "314303",
+          "type": "skin",
+          "name": "泅与问",
+          "nameEn": "To Fathom the Depths",
+          "glPresent": false
+        }
+      ]
+    },
+    {
+      "id": "3146",
+      "baseId": "3146",
+      "names": {
+        "zh-CN": "小瑞安侬",
+        "zh-TW": "小瑞安儂",
+        "en-US": "Rhiannon",
+        "ja-JP": "リアンノン",
+        "ko-KR": "리아논"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "314601",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "314601",
+          "type": "default"
+        },
+        {
+          "id": "314602",
+          "type": "insight",
+          "name": "心灵迁徙",
+          "nameEn": "The Migration of Her Heart"
+        }
+      ]
+    },
+    {
+      "id": "3147",
+      "baseId": "3147",
+      "names": {
+        "zh-CN": "无名者",
+        "zh-TW": "無名者",
+        "en-US": "Ms. Stranger",
+        "ja-JP": "ストレンジャー",
+        "ko-KR": "미스 스트레인저"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "314701",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "314701",
+          "type": "default"
+        },
+        {
+          "id": "314702",
+          "type": "insight",
+          "name": "无尽且唯一的路",
+          "nameEn": "Down a Dark Path"
+        },
+        {
+          "id": "314704",
+          "type": "skin",
+          "name": "沉影探戈",
+          "nameEn": "Waltz of the Depths",
+          "glPresent": false
+        }
+      ]
+    },
+    {
+      "id": "3154",
+      "baseId": "3154",
+      "names": {
+        "zh-CN": "银装小春雀儿",
+        "zh-TW": "銀裝小春雀兒",
+        "en-US": "Silverwing Eagle",
+        "ja-JP": "イーグル",
+        "ko-KR": "은빛 이글"
+      },
+      "rarity": 4,
+      "maxInsight": 3,
+      "defaultVariant": "315401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "315401",
+          "type": "default"
+        },
+        {
+          "id": "315402",
+          "type": "insight",
+          "name": "科学地成为科学家",
+          "nameEn": "Becoming a Scientist, Scientifically"
+        }
+      ]
+    },
+    {
+      "id": "3144",
+      "baseId": "3144",
+      "names": {
+        "zh-CN": "珐琅眼",
+        "zh-TW": "琺瑯眼",
+        "en-US": "Coppélia",
+        "ja-JP": "コッペリア",
+        "ko-KR": "코펠리아"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "314401",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "314401",
+          "type": "default"
+        },
+        {
+          "id": "314402",
+          "type": "insight",
+          "name": "自鸣乐器之歌",
+          "nameEn": "Song of the Self-Playing Instrument"
+        },
+        {
+          "id": "314403",
+          "type": "skin",
+          "name": "醒时声",
+          "nameEn": "Sounds that Wake Her",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3145",
+      "baseId": "3145",
+      "names": {
+        "zh-CN": "回声谣",
+        "zh-TW": "回聲謠",
+        "en-US": "Everecho",
+        "ja-JP": "エバーエコー",
+        "ko-KR": "에버에코"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "314501",
+      "glReleased": false,
+      "skins": [
+        {
+          "id": "314501",
+          "type": "default"
+        },
+        {
+          "id": "314502",
+          "type": "insight",
+          "name": "静谧与光明",
+          "nameEn": "Silence and Light"
+        }
+      ]
+    },
+    {
+      "id": "3140",
+      "baseId": "3140",
+      "names": {
+        "zh-CN": "奠基石",
+        "zh-TW": "奠基石",
+        "en-US": "Cornerstone",
+        "ja-JP": "コーナーストーン",
+        "ko-KR": "코너스톤"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "314001",
+      "glReleased": false,
+      "skins": [
+        {
+          "id": "314001",
+          "type": "default"
+        },
+        {
+          "id": "314002",
+          "type": "insight",
+          "name": "基桩嵌于构想",
+          "nameEn": "Grounded in Imagination"
+        }
+      ]
+    },
+    {
+      "id": "3149",
+      "baseId": "3149",
+      "names": {
+        "zh-CN": "双生舞伶",
+        "zh-TW": "雙生舞伶",
+        "en-US": "The Twins",
+        "ja-JP": "双子",
+        "ko-KR": "쌍둥이"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "314901",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "314901",
+          "type": "default"
+        },
+        {
+          "id": "314902",
+          "type": "insight",
+          "name": "异托邦来客",
+          "nameEn": "Visitors from \"Utopia\""
+        },
+        {
+          "id": "314903",
+          "type": "skin",
+          "name": "可编程挽歌",
+          "nameEn": "Programmed Eulogy",
+          "glPresent": true
+        }
+      ]
+    },
+    {
+      "id": "3151",
+      "baseId": "3151",
+      "names": {
+        "zh-CN": "诺拉",
+        "zh-TW": "諾拉",
+        "en-US": "NORA",
+        "ja-JP": "ノラ",
+        "ko-KR": "노라"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "315101",
+      "glReleased": true,
+      "skins": [
+        {
+          "id": "315101",
+          "type": "default"
+        },
+        {
+          "id": "315102",
+          "type": "insight",
+          "name": "缱绻的心巢",
+          "nameEn": "Nest of Love"
+        }
+      ]
+    },
+    {
+      "id": "3156",
+      "baseId": "3156",
+      "names": {
+        "zh-CN": "赫多涅",
+        "zh-TW": "赫多涅",
+        "en-US": "Hedone",
+        "ja-JP": "Hedone",
+        "ko-KR": "Hedone"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "315601",
+      "glReleased": false,
+      "skins": [
+        {
+          "id": "315601",
+          "type": "default"
+        },
+        {
+          "id": "315602",
+          "type": "insight",
+          "name": "与过往碰杯",
+          "nameEn": "A Cheers to the Past"
+        }
+      ]
+    },
+    {
+      "id": "3157",
+      "baseId": "3157",
+      "names": {
+        "zh-CN": "纳西索斯",
+        "zh-TW": "Narcissus",
+        "en-US": "Narcissus",
+        "ja-JP": "Narcissus",
+        "ko-KR": "Narcissus"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "315701",
+      "glReleased": false,
+      "skins": [
+        {
+          "id": "315701",
+          "type": "default"
+        },
+        {
+          "id": "315702",
+          "type": "insight",
+          "name": "涟漪的裙裾",
+          "nameEn": "Ripples Yet to Bloom"
+        }
+      ]
+    }
+  ],
+  "psychubes": [
+    {
+      "id": "1501",
+      "names": {
+        "zh-CN": "美丽新世界",
+        "zh-TW": "美麗新世界",
+        "en-US": "Brave New World",
+        "ja-JP": "美しい新世界",
+        "ko-KR": "멋진 신세계"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1502",
+      "names": {
+        "zh-CN": "跳房子游戏",
+        "zh-TW": "跳房子遊戲",
+        "en-US": "Hopscotch",
+        "ja-JP": "ホップスコッチ",
+        "ko-KR": "땅따먹기 게임"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1503",
+      "names": {
+        "zh-CN": "第二次生命",
+        "zh-TW": "第二次生命",
+        "en-US": "Her Second Life",
+        "ja-JP": "二度目の人生",
+        "ko-KR": "두 번째 생명"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1504",
+      "names": {
+        "zh-CN": "夜色亵渎者",
+        "zh-TW": "夜色褻瀆者",
+        "en-US": "Blasphemer of Night",
+        "ja-JP": "夜を冒涜する者",
+        "ko-KR": "밤의 모독자"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1507",
+      "names": {
+        "zh-CN": "掌声如雷鸣",
+        "zh-TW": "掌聲如雷鳴",
+        "en-US": "Thunderous Applause",
+        "ja-JP": "万雷の拍手",
+        "ko-KR": "우레와 같은 박수"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1508",
+      "names": {
+        "zh-CN": "好奇心宝贝",
+        "zh-TW": "好奇心寶貝",
+        "en-US": "That Inquisitive Dear",
+        "ja-JP": "好奇心の塊",
+        "ko-KR": "호기심쟁이"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1510",
+      "names": {
+        "zh-CN": "必要的记录",
+        "zh-TW": "必要的記錄",
+        "en-US": "His Bounden Duty",
+        "ja-JP": "必要な記録",
+        "ko-KR": "필요한 기록"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1509",
+      "names": {
+        "zh-CN": "大娱乐至上",
+        "zh-TW": "大娛樂至上",
+        "en-US": "Luxurious Leisure",
+        "ja-JP": "娯楽至上",
+        "ko-KR": "오락 지상주의"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1511",
+      "names": {
+        "zh-CN": "在仙境之外",
+        "zh-TW": "在仙境之外",
+        "en-US": "Beyond Wonderland",
+        "ja-JP": "おとぎの国の外",
+        "ko-KR": "원더랜드 너머"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1401",
+      "names": {
+        "zh-CN": "心驰神往",
+        "zh-TW": "心馳神往",
+        "en-US": "Yearning Desire",
+        "ja-JP": "思いを馳せて",
+        "ko-KR": "마음의 방향"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1402",
+      "names": {
+        "zh-CN": "明日亦然",
+        "zh-TW": "明日亦然",
+        "en-US": "Tomorrow Also",
+        "ja-JP": "明日も同じ",
+        "ko-KR": "똑같은 내일"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1404",
+      "names": {
+        "zh-CN": "无束无拘",
+        "zh-TW": "無束無拘",
+        "en-US": "The Footloose",
+        "ja-JP": "気ままに",
+        "ko-KR": "자유자재"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1405",
+      "names": {
+        "zh-CN": "示我以真",
+        "zh-TW": "示我以真",
+        "en-US": "Decode",
+        "ja-JP": "むき出しの真実",
+        "ko-KR": "진실된 나"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1407",
+      "names": {
+        "zh-CN": "午后小憩",
+        "zh-TW": "午後小憩",
+        "en-US": "An Afternoon Nap",
+        "ja-JP": "午後の休憩",
+        "ko-KR": "오후의 휴식"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1411",
+      "names": {
+        "zh-CN": "远大前程",
+        "zh-TW": "遠大前程",
+        "en-US": "Her Bright Future",
+        "ja-JP": "遥かなる前途",
+        "ko-KR": "원대한 여정"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "4103",
+      "names": {
+        "zh-CN": "自由的心",
+        "zh-TW": "自由的心",
+        "en-US": "A Free Heart",
+        "ja-JP": "自由な心",
+        "ko-KR": "자유의 마음"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "4104",
+      "names": {
+        "zh-CN": "笑语欢声",
+        "zh-TW": "笑語歡聲",
+        "en-US": "Laughter and Laughter",
+        "ja-JP": "楽しげな笑い声",
+        "ko-KR": "웃음소리"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1306",
+      "names": {
+        "zh-CN": "领航",
+        "zh-TW": "領航",
+        "en-US": "Navigating",
+        "ja-JP": "航海",
+        "ko-KR": "항해"
+      },
+      "rarity": 3,
+      "glPresent": true
+    },
+    {
+      "id": "1307",
+      "names": {
+        "zh-CN": "崇奉",
+        "zh-TW": "崇奉",
+        "en-US": "Bow",
+        "ja-JP": "崇奉",
+        "ko-KR": "숭배"
+      },
+      "rarity": 3,
+      "glPresent": true
+    },
+    {
+      "id": "1308",
+      "names": {
+        "zh-CN": "无餍",
+        "zh-TW": "無饜",
+        "en-US": "Covet",
+        "ja-JP": "貪欲",
+        "ko-KR": "갈망"
+      },
+      "rarity": 3,
+      "glPresent": true
+    },
+    {
+      "id": "1309",
+      "names": {
+        "zh-CN": "绿毒",
+        "zh-TW": "綠毒",
+        "en-US": "Venomous",
+        "ja-JP": "緑毒",
+        "ko-KR": "푸른독"
+      },
+      "rarity": 3,
+      "glPresent": true
+    },
+    {
+      "id": "1310",
+      "names": {
+        "zh-CN": "静谧",
+        "zh-TW": "靜謐",
+        "en-US": "Meek",
+        "ja-JP": "静謐",
+        "ko-KR": "고요"
+      },
+      "rarity": 3,
+      "glPresent": true
+    },
+    {
+      "id": "1201",
+      "names": {
+        "zh-CN": "轻藐",
+        "zh-TW": "輕藐",
+        "en-US": "Slighted",
+        "ja-JP": "軽蔑",
+        "ko-KR": "경멸"
+      },
+      "rarity": 2,
+      "glPresent": true
+    },
+    {
+      "id": "1202",
+      "names": {
+        "zh-CN": "蓬勃",
+        "zh-TW": "蓬勃",
+        "en-US": "Flourishing",
+        "ja-JP": "鬱然",
+        "ko-KR": "팽배"
+      },
+      "rarity": 2,
+      "glPresent": true
+    },
+    {
+      "id": "1203",
+      "names": {
+        "zh-CN": "怅然",
+        "zh-TW": "悵然",
+        "en-US": "Loss",
+        "ja-JP": "喪失",
+        "ko-KR": "낙담"
+      },
+      "rarity": 2,
+      "glPresent": true
+    },
+    {
+      "id": "1204",
+      "names": {
+        "zh-CN": "欢声",
+        "zh-TW": "歡聲",
+        "en-US": "Cheering",
+        "ja-JP": "歓声",
+        "ko-KR": "환호"
+      },
+      "rarity": 2,
+      "glPresent": true
+    },
+    {
+      "id": "1205",
+      "names": {
+        "zh-CN": "麻木",
+        "zh-TW": "麻木",
+        "en-US": "Numb",
+        "ja-JP": "無感覚",
+        "ko-KR": "둔감"
+      },
+      "rarity": 2,
+      "glPresent": true
+    },
+    {
+      "id": "1206",
+      "names": {
+        "zh-CN": "蒙昧",
+        "zh-TW": "蒙昧",
+        "en-US": "Fatuous",
+        "ja-JP": "蒙昧",
+        "ko-KR": "몽매"
+      },
+      "rarity": 2,
+      "glPresent": true
+    },
+    {
+      "id": "1512",
+      "names": {
+        "zh-CN": "可度量之心",
+        "zh-TW": "可度量之心",
+        "en-US": "The Carat of a Heart",
+        "ja-JP": "測定可能な心",
+        "ko-KR": "헤아릴 수 있는 마음"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1513",
+      "names": {
+        "zh-CN": "沉默与向往",
+        "zh-TW": "沉默與嚮往",
+        "en-US": "Silent and Adoring",
+        "ja-JP": "沈黙と憧れ",
+        "ko-KR": "침묵과 동경"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1514",
+      "names": {
+        "zh-CN": "请保持平衡",
+        "zh-TW": "請保持平衡",
+        "en-US": "Balance, Please",
+        "ja-JP": "バランスに注意",
+        "ko-KR": "균형 유지"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1413",
+      "names": {
+        "zh-CN": "食足餮满",
+        "zh-TW": "食足餮滿",
+        "en-US": "A Satisfied Eater",
+        "ja-JP": "サティスファイド・イーター",
+        "ko-KR": "풍족한 식탁"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1414",
+      "names": {
+        "zh-CN": "荒唐余生",
+        "zh-TW": "荒唐餘生",
+        "en-US": "Remaining Absurdity",
+        "ja-JP": "アブサーディティ・ライフ",
+        "ko-KR": "황당한 여생"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1515",
+      "names": {
+        "zh-CN": "漫长悄悄话",
+        "zh-TW": "漫長悄悄話",
+        "en-US": "Long Night Talk",
+        "ja-JP": "長い夜話",
+        "ko-KR": "기나긴 속삭임"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1420",
+      "names": {
+        "zh-CN": "步此苦旅",
+        "zh-TW": "步此苦旅",
+        "en-US": "Take the Hard Journey",
+        "ja-JP": "苦しい旅の途中",
+        "ko-KR": "고통의 여정"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1421",
+      "names": {
+        "zh-CN": "勇往直前",
+        "zh-TW": "勇往直前",
+        "en-US": "Let's Set Sail",
+        "ja-JP": "いざ出航",
+        "ko-KR": "용감한 전진"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1521",
+      "names": {
+        "zh-CN": "在四方城外",
+        "zh-TW": "在四方城外",
+        "en-US": "Outside the City",
+        "ja-JP": "四方城の外にて",
+        "ko-KR": "성 밖의 세상"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1522",
+      "names": {
+        "zh-CN": "此刻无新事",
+        "zh-TW": "此刻無新事",
+        "en-US": "Same Old Story",
+        "ja-JP": "目下に新事なし",
+        "ko-KR": "평범한 순간"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1422",
+      "names": {
+        "zh-CN": "茶歇时间",
+        "zh-TW": "茶歇時間",
+        "en-US": "Tea Break",
+        "ja-JP": "ティータイム",
+        "ko-KR": "다과 시간"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1423",
+      "names": {
+        "zh-CN": "崭新一页",
+        "zh-TW": "嶄新一頁",
+        "en-US": "A New Leaf",
+        "ja-JP": "新たなページ",
+        "ko-KR": "새로운 종이"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1523",
+      "names": {
+        "zh-CN": "敲响这窄门",
+        "zh-TW": "敲響這窄門",
+        "en-US": "Knock on the Door",
+        "ja-JP": "狭いドアをノックして",
+        "ko-KR": "좁은 문을 두드려라"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1524",
+      "names": {
+        "zh-CN": "另一个故事",
+        "zh-TW": "另一個故事",
+        "en-US": "Another Story",
+        "ja-JP": "もうひとつの物語",
+        "ko-KR": "또 다른 이야기"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1424",
+      "names": {
+        "zh-CN": "昨日往事",
+        "zh-TW": "昨日往事",
+        "en-US": "His Tail",
+        "ja-JP": "昨日の出来事",
+        "ko-KR": "어제의 옛일"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1425",
+      "names": {
+        "zh-CN": "齿轮之外",
+        "zh-TW": "齒輪之外",
+        "en-US": "Beyond the Gears",
+        "ja-JP": "歯車の外",
+        "ko-KR": "톱니바퀴 너머"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1525",
+      "names": {
+        "zh-CN": "黎明将到来",
+        "zh-TW": "黎明將到來",
+        "en-US": "Dawn Is Coming",
+        "ja-JP": "夜は明ける",
+        "ko-KR": "새벽이 다가온다"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1526",
+      "names": {
+        "zh-CN": "故尝试证明",
+        "zh-TW": "故嘗試證明",
+        "en-US": "For Rehabilitation",
+        "ja-JP": "証明の試み",
+        "ko-KR": "증명 시도"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1426",
+      "names": {
+        "zh-CN": "夜夜亦然",
+        "zh-TW": "夜夜亦然",
+        "en-US": "Night After Night",
+        "ja-JP": "夜な夜な",
+        "ko-KR": "밤이면 밤마다"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1427",
+      "names": {
+        "zh-CN": "无声注视",
+        "zh-TW": "無聲注視",
+        "en-US": "Silent Gaze",
+        "ja-JP": "沈黙の眼差し",
+        "ko-KR": "소리 없는 응시"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1527",
+      "names": {
+        "zh-CN": "行进的步音",
+        "zh-TW": "行進的步音",
+        "en-US": "Steps Forward",
+        "ja-JP": "前進の足音",
+        "ko-KR": "행진의 걸음 소리"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1528",
+      "names": {
+        "zh-CN": "勇敢者赠言",
+        "zh-TW": "勇敢者贈言",
+        "en-US": "The Fighter's Best Wishes",
+        "ja-JP": "勇ましい者の言葉",
+        "ko-KR": "용자의 충고"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1529",
+      "names": {
+        "zh-CN": "渐近的雨声",
+        "zh-TW": "漸近的雨聲",
+        "en-US": "Approaching Rain",
+        "ja-JP": "近づく雨の音",
+        "ko-KR": "가까워지는 빗소리"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1428",
+      "names": {
+        "zh-CN": "形影相随",
+        "zh-TW": "形影相隨",
+        "en-US": "In the Shadow",
+        "ja-JP": "影にて",
+        "ko-KR": "그림자처럼"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1429",
+      "names": {
+        "zh-CN": "踽踽独行",
+        "zh-TW": "踽踽獨行",
+        "en-US": "Going Along Alone",
+        "ja-JP": "ウォーク・アローン",
+        "ko-KR": "고독한 걸음"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1530",
+      "names": {
+        "zh-CN": "来自最深处",
+        "zh-TW": "來自最深處",
+        "en-US": "From the Depths",
+        "ja-JP": "最奥より",
+        "ko-KR": "가장 깊은 곳에서"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1531",
+      "names": {
+        "zh-CN": "不可诉之轻",
+        "zh-TW": "不可訴之輕",
+        "en-US": "The Unbearable Lightness",
+        "ja-JP": "語られざる軽さ",
+        "ko-KR": "말할 수 없는 가벼움"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1532",
+      "names": {
+        "zh-CN": "漫行如泉流",
+        "zh-TW": "漫行如泉流",
+        "en-US": "Starlight Wellspring",
+        "ja-JP": "流れゆく泉のように",
+        "ko-KR": "샘물처럼 천천히"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1430",
+      "names": {
+        "zh-CN": "黯然失色",
+        "zh-TW": "黯然失色",
+        "en-US": "Her Mournful Face",
+        "ja-JP": "デプレッション",
+        "ko-KR": "무색"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1431",
+      "names": {
+        "zh-CN": "自食苦果",
+        "zh-TW": "自食苦果",
+        "en-US": "You Deserve It",
+        "ja-JP": "自業自得",
+        "ko-KR": "직접 맛본 쓴맛"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1533",
+      "names": {
+        "zh-CN": "女佣看见了",
+        "zh-TW": "女傭看見了",
+        "en-US": "And the Maid Says",
+        "ja-JP": "メイドは見た",
+        "ko-KR": "메이드의 목격"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1534",
+      "names": {
+        "zh-CN": "寻入夜深处",
+        "zh-TW": "尋入夜深處",
+        "en-US": "Stray Off the Path",
+        "ja-JP": "夜の奥深くへと",
+        "ko-KR": "밤의 깊은 곳"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1432",
+      "names": {
+        "zh-CN": "绘声绘色",
+        "zh-TW": "繪聲繪色",
+        "en-US": "Spinning Yarns",
+        "ja-JP": "生気に満ちた物語",
+        "ko-KR": "소리와 색"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1433",
+      "names": {
+        "zh-CN": "无人问津",
+        "zh-TW": "無人問津",
+        "en-US": "The Loner",
+        "ja-JP": "知られざる芸術",
+        "ko-KR": "무관심"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1536",
+      "names": {
+        "zh-CN": "非物质真情",
+        "zh-TW": "非物質真情",
+        "en-US": "Transcendent Love",
+        "ja-JP": "愛の本質",
+        "ko-KR": "실체 없는 진실"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1537",
+      "names": {
+        "zh-CN": "第三次信任",
+        "zh-TW": "第三次信任",
+        "en-US": "The Third Commitment",
+        "ja-JP": "三度目の信頼",
+        "ko-KR": "세 번째 신뢰"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1434",
+      "names": {
+        "zh-CN": "落于现象",
+        "zh-TW": "落於現象",
+        "en-US": "Falling for a Sweet Phenomenon",
+        "ja-JP": "現象の中に落ちて",
+        "ko-KR": "현상에 남다"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1435",
+      "names": {
+        "zh-CN": "留置心底",
+        "zh-TW": "留置心底",
+        "en-US": "The Severed and the Rest",
+        "ja-JP": "心に刻み込んだもの",
+        "ko-KR": "마음 속에 남겨진 것"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1535",
+      "names": {
+        "zh-CN": "微渺的愿景",
+        "zh-TW": "微渺的願景",
+        "en-US": "Tiny Wish",
+        "ja-JP": "ささやかな願い",
+        "ko-KR": "미미한 청사진"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1538",
+      "names": {
+        "zh-CN": "无韵律跳步",
+        "zh-TW": "無韻律跳步",
+        "en-US": "Offbeat Strides",
+        "ja-JP": "ノンリズムジャンプ",
+        "ko-KR": "불규칙한 스텝"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1539",
+      "names": {
+        "zh-CN": "秒针栖息地",
+        "zh-TW": "秒針棲息地",
+        "en-US": "On the Hand of Time",
+        "ja-JP": "秒針の住み処",
+        "ko-KR": "초침의 서식지"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1436",
+      "names": {
+        "zh-CN": "迷途以外",
+        "zh-TW": "迷途以外",
+        "en-US": "One with the Flow",
+        "ja-JP": "迷道の外",
+        "ko-KR": "미로의 밖"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1540",
+      "names": {
+        "zh-CN": "离别变奏曲",
+        "zh-TW": "離別變奏曲",
+        "en-US": "Addio Coda",
+        "ja-JP": "別れの変奏曲",
+        "ko-KR": "이별 변주곡"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1541",
+      "names": {
+        "zh-CN": "惶然的贝壳",
+        "zh-TW": "惶然的貝殼",
+        "en-US": "Cracks in the Shell",
+        "ja-JP": "貝殻のひび割れ",
+        "ko-KR": "두려워하는 조개껍데기"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1437",
+      "names": {
+        "zh-CN": "纵情一曲",
+        "zh-TW": "縱情一曲",
+        "en-US": "Belt It Out",
+        "ja-JP": "ベルト・イット・アウト",
+        "ko-KR": "열정의 노래"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1542",
+      "names": {
+        "zh-CN": "收到请回答",
+        "zh-TW": "收到請回答",
+        "en-US": "Ready on Call",
+        "ja-JP": "直ちに応答せよ",
+        "ko-KR": "응답 바람"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1543",
+      "names": {
+        "zh-CN": "造梦的预演",
+        "zh-TW": "造夢的預演",
+        "en-US": "Rehearsal of Dreams",
+        "ja-JP": "夢づくりのリハーサル",
+        "ko-KR": "꿈의 리허설"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1438",
+      "names": {
+        "zh-CN": "惊魂拍档",
+        "zh-TW": "驚魂拍檔",
+        "en-US": "Your Friendly Exorcist",
+        "ja-JP": "除霊パートナー",
+        "ko-KR": "친절한 퇴마사"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1544",
+      "names": {
+        "zh-CN": "最后的投掷",
+        "zh-TW": "最後的投擲",
+        "en-US": "The Final Roll",
+        "ja-JP": "最後のダイス",
+        "ko-KR": "마지막 던지기"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1545",
+      "names": {
+        "zh-CN": "脑室即囚室",
+        "zh-TW": "腦室即囚室",
+        "en-US": "Mental Cage",
+        "ja-JP": "脳の牢獄",
+        "ko-KR": "뇌실은 감옥이다"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1439",
+      "names": {
+        "zh-CN": "镜头注脚",
+        "zh-TW": "鏡頭註腳",
+        "en-US": "Off the Scene",
+        "ja-JP": "舞台裏の注釈",
+        "ko-KR": "장면 메모"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1546",
+      "names": {
+        "zh-CN": "双焦点问答",
+        "zh-TW": "雙焦點問答",
+        "en-US": "Never-Ending Q&A",
+        "ja-JP": "終わらないQ&A",
+        "ko-KR": "네버엔딩 Q&A"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1547",
+      "names": {
+        "zh-CN": "春日轻步至",
+        "zh-TW": "春日輕步至",
+        "en-US": "Aurora After Winter",
+        "ja-JP": "春の足取り",
+        "ko-KR": "살포시 다가오는 봄날"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1440",
+      "names": {
+        "zh-CN": "新旧歌谣",
+        "zh-TW": "新舊歌謠",
+        "en-US": "Melodies Old and New",
+        "ja-JP": "懐かしい歌、新しいメロディー",
+        "ko-KR": "올드앤뉴 멜로디"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1548",
+      "names": {
+        "zh-CN": "心音墓志铭",
+        "zh-TW": "心音墓誌銘",
+        "en-US": "Embrace the Past",
+        "ja-JP": "心の墓碑銘",
+        "ko-KR": "마음의 묘비명"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1549",
+      "names": {
+        "zh-CN": "家庭指导员",
+        "zh-TW": "家庭指導員",
+        "en-US": "Family Mentor",
+        "ja-JP": "家族の導き手",
+        "ko-KR": "가정 지도사"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1550",
+      "names": {
+        "zh-CN": "思维一激灵",
+        "zh-TW": "思維一激靈",
+        "en-US": "A Tingle of a Thought",
+        "ja-JP": "ふとしたきらめき",
+        "ko-KR": "떠오른 생각"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1441",
+      "names": {
+        "zh-CN": "路边尘埃",
+        "zh-TW": "路邊塵埃",
+        "en-US": "Dust on the Roadside",
+        "ja-JP": "道端のほこり",
+        "ko-KR": "길가의 먼지"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1553",
+      "names": {
+        "zh-CN": "归乡哀悼词",
+        "zh-TW": "歸鄉哀悼詞",
+        "en-US": "Homecoming Lament",
+        "ja-JP": "帰郷の追悼",
+        "ko-KR": "귀향의 애도사"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1554",
+      "names": {
+        "zh-CN": "向种子呢喃",
+        "zh-TW": "向種子呢喃",
+        "en-US": "Buds Yet to Bloom",
+        "ja-JP": "種に囁きかけ",
+        "ko-KR": "씨앗을 향한 속삭임"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1442",
+      "names": {
+        "zh-CN": "偷天换日",
+        "zh-TW": "偷天換日",
+        "en-US": "Substitutes and Simulacra",
+        "ja-JP": "偽物と模造品",
+        "ko-KR": "사기극"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1551",
+      "names": {
+        "zh-CN": "钟响于暮色",
+        "zh-TW": "鐘響於暮色",
+        "en-US": "As the Bell Tolls",
+        "ja-JP": "黄昏に響く鐘",
+        "ko-KR": "황혼의 종소리"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1552",
+      "names": {
+        "zh-CN": "史诗的终点",
+        "zh-TW": "史詩的終點",
+        "en-US": "An Epic's End",
+        "ja-JP": "叙事詩の終焉",
+        "ko-KR": "서사시의 끝"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1555",
+      "names": {
+        "zh-CN": "汇入涓流中",
+        "zh-TW": "匯入涓流中",
+        "en-US": "Into the Gentle Current",
+        "ja-JP": "細流に流れ込んで",
+        "ko-KR": "개울 속으로"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1556",
+      "names": {
+        "zh-CN": "流浪即兴曲",
+        "zh-TW": "流浪即興曲",
+        "en-US": "The Wandering Improviser",
+        "ja-JP": "さすらいの即興曲",
+        "ko-KR": "방랑 즉흥곡"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1557",
+      "names": {
+        "zh-CN": "生者的苦旅",
+        "zh-TW": "生者的苦旅",
+        "en-US": "Bitter March of the Living",
+        "ja-JP": "残された者の旅",
+        "ko-KR": "살아있는 자의 고행"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1443",
+      "names": {
+        "zh-CN": "碑文已逝",
+        "zh-TW": "碑文已逝",
+        "en-US": "Faded Epitaphs",
+        "ja-JP": "色褪せたエピタフ",
+        "ko-KR": "사라진 비문"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1558",
+      "names": {
+        "zh-CN": "千万次应验",
+        "zh-TW": "千萬次應驗",
+        "en-US": "The Thousandfold Fate",
+        "ja-JP": "予言されし千万の運命",
+        "ko-KR": "천만번의 효험"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1559",
+      "names": {
+        "zh-CN": "跃过命运线",
+        "zh-TW": "躍過命運線",
+        "en-US": "Her Willful Leap",
+        "ja-JP": "運命を跳び越えて",
+        "ko-KR": "운명의 선을 넘어"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1560",
+      "names": {
+        "zh-CN": "无意识梦魇",
+        "zh-TW": "無意識夢魘",
+        "en-US": "Shadows in the Subconscious",
+        "ja-JP": "潜在意識の影",
+        "ko-KR": "무의식의 악몽"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1444",
+      "names": {
+        "zh-CN": "“倒影”所指",
+        "zh-TW": "“倒影”所指",
+        "en-US": "In Their Figures",
+        "ja-JP": "「投影」が指し示すもの",
+        "ko-KR": "‘반사된 형상’의 지시"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1561",
+      "names": {
+        "zh-CN": "我心如赤焰",
+        "zh-TW": "我心如赤焰",
+        "en-US": "Singleness of Heart",
+        "ja-JP": "澄みわたる真心",
+        "ko-KR": "화염 같은 내 심장이여"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1562",
+      "names": {
+        "zh-CN": "行至阿刻戎",
+        "zh-TW": "行至阿刻戎",
+        "en-US": "Across the Acheron",
+        "ja-JP": "アケロンを渡りて",
+        "ko-KR": "아케론을 건너"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1445",
+      "names": {
+        "zh-CN": "世多别离",
+        "zh-TW": "世多別離",
+        "en-US": "Parting's Quiet Lament",
+        "ja-JP": "別れの嘆き",
+        "ko-KR": "수많은 이별"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1563",
+      "names": {
+        "zh-CN": "天地一悠游",
+        "zh-TW": "天地一悠遊",
+        "en-US": "Wayfarer of the Dao",
+        "ja-JP": "天地悠遊",
+        "ko-KR": "천지 유람"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1564",
+      "names": {
+        "zh-CN": "功名尘与土",
+        "zh-TW": "功名塵與土",
+        "en-US": "All Honor is but Dust",
+        "ja-JP": "功名、塵芥に帰す",
+        "ko-KR": "공명이란 티끌과 흙일 뿐"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1446",
+      "names": {
+        "zh-CN": "无事听风",
+        "zh-TW": "無事聽風",
+        "en-US": "The Wind's Listener",
+        "ja-JP": "風に耳を傾けば",
+        "ko-KR": "한가로이 듣는 바람"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1565",
+      "names": {
+        "zh-CN": "振翅一瞬间",
+        "zh-TW": "振翅一瞬間",
+        "en-US": "The Fluttering Moment",
+        "ja-JP": "羽ばたきの刹那",
+        "ko-KR": "날갯짓의 순간"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1566",
+      "names": {
+        "zh-CN": "世界多喧闹",
+        "zh-TW": "世界多喧鬧",
+        "en-US": "Drown Out the Hustle",
+        "ja-JP": "喧騒を遠ざけて",
+        "ko-KR": "소란스러운 세상"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1447",
+      "names": {
+        "zh-CN": "天助自助",
+        "zh-TW": "天助自助",
+        "en-US": "Luck Be a Lady",
+        "ja-JP": "天は自ら助くる者を助く",
+        "ko-KR": "하늘은 스스로 돕는 자를 돕는다"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1567",
+      "names": {
+        "zh-CN": "解答的边界",
+        "zh-TW": "解答的邊界",
+        "en-US": "The Riddle's Limit",
+        "ja-JP": "謎の境界線",
+        "ko-KR": "해답의 경계"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1568",
+      "names": {
+        "zh-CN": "昨日雨声轻",
+        "zh-TW": "昨日雨聲輕",
+        "en-US": "The Soft Rain of Yesterday",
+        "ja-JP": "昨日の雨音は軽く",
+        "ko-KR": "어제의 가벼운 빗소리"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1569",
+      "names": {
+        "zh-CN": "蜕至我为我",
+        "zh-TW": "蛻至我為我",
+        "en-US": "Until I Am Me",
+        "ja-JP": "私が「私」になるまで",
+        "ko-KR": "허물을 벗어 내가 되리라"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1570",
+      "names": {
+        "zh-CN": "圣歌应缄默",
+        "zh-TW": "聖歌應緘默",
+        "en-US": "The Silent Anthem",
+        "ja-JP": "沈黙のアンセム",
+        "ko-KR": "성가는 침묵하라"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1448",
+      "names": {
+        "zh-CN": "成长阵痛",
+        "zh-TW": "成長陣痛",
+        "en-US": "Growing Pains",
+        "ja-JP": "成長の痛み",
+        "ko-KR": "성장통"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1573",
+      "names": {
+        "zh-CN": "光之外的梦",
+        "zh-TW": "A Dream Beyond Light",
+        "en-US": "A Dream Beyond Light",
+        "ja-JP": "光の彼方にある夢",
+        "ko-KR": "A Dream Beyond Light"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1574",
+      "names": {
+        "zh-CN": "光影的栖所",
+        "zh-TW": "Where Light and Shadows Rest",
+        "en-US": "Where Light and Shadows Rest",
+        "ja-JP": "光と影の棲家",
+        "ko-KR": "Where Light and Shadows Rest"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1449",
+      "names": {
+        "zh-CN": "暂别旧夜",
+        "zh-TW": "Farewell to the Old Night",
+        "en-US": "Farewell to the Old Night",
+        "ja-JP": "古き夜に別れを",
+        "ko-KR": "Farewell to the Old Night"
+      },
+      "rarity": 4,
+      "glPresent": true
+    },
+    {
+      "id": "1571",
+      "names": {
+        "zh-CN": "艺术原子能",
+        "zh-TW": "藝術原子能",
+        "en-US": "The Art of Atoms",
+        "ja-JP": "原子の芸術",
+        "ko-KR": "예술 원자력"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1572",
+      "names": {
+        "zh-CN": "科学编舞法",
+        "zh-TW": "科學編舞法",
+        "en-US": "The Dance of Science",
+        "ja-JP": "科学の振付",
+        "ko-KR": "과학 안무법"
+      },
+      "rarity": 5,
+      "glPresent": true
+    },
+    {
+      "id": "1450",
+      "names": {
+        "zh-CN": "以饰真相",
+        "zh-TW": "Dressing Up the Truth",
+        "en-US": "Dressing Up the Truth",
+        "ja-JP": "Dressing Up the Truth",
+        "ko-KR": "Dressing Up the Truth"
+      },
+      "rarity": 4,
+      "glPresent": false
+    },
+    {
+      "id": "1575",
+      "names": {
+        "zh-CN": "宣告以弦鸣",
+        "zh-TW": "Arrow of Verdict",
+        "en-US": "Arrow of Verdict",
+        "ja-JP": "Arrow of Verdict",
+        "ko-KR": "Arrow of Verdict"
+      },
+      "rarity": 5,
+      "glPresent": false
+    },
+    {
+      "id": "1576",
+      "names": {
+        "zh-CN": "拢于心潮间",
+        "zh-TW": "Tides Held Within",
+        "en-US": "Tides Held Within",
+        "ja-JP": "Tides Held Within",
+        "ko-KR": "Tides Held Within"
+      },
+      "rarity": 5,
+      "glPresent": false
+    }
+  ]
+}

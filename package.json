@@ -1,0 +1,51 @@
+{
+  "name": "r1999-timekeeper-fleet",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b --pretty false",
+    "test:store": "tsx scripts/test-store.ts",
+    "test:share": "tsx scripts/test-share-code.ts",
+    "test:assets": "tsx scripts/test-assets.ts",
+    "build:source": "tsx scripts/extract-catalog-source.ts",
+    "build:characters": "tsx scripts/build-characters.ts",
+    "build:psychubes": "tsx scripts/build-psychubes.ts",
+    "sync:gl": "tsx scripts/sync-gl-data.ts",
+    "sync:cn": "tsx scripts/sync-cn-data.ts",
+    "sync:names": "tsx scripts/sync-name-fallbacks.ts",
+    "sync:order": "tsx scripts/sync-release-order.ts",
+    "sync": "tsx scripts/sync-all.ts",
+    "preview": "vite preview",
+    "build:names": "tsx scripts/build-names.ts",
+    "test:names": "tsx scripts/test-names.ts",
+    "test": "npm run test:names && npm run test:release && npm run test:pipeline && npm run test:architecture && npm run test:rollback && npm run test:assets && npm run test:export && npm run test:language && npm run test:store && npm run test:share && npm run test:render && npm run typecheck",
+    "test:release": "tsx scripts/test-release.ts",
+    "test:rollback": "tsx scripts/test-rollback-directory.ts",
+    "test:pipeline": "tsx scripts/test-pipeline.ts",
+    "test:architecture": "tsx scripts/test-architecture.ts",
+    "test:render": "tsx scripts/test-render.tsx",
+    "test:export": "tsx scripts/test-export.ts",
+    "test:language": "tsx scripts/test-language.ts"
+  },
+  "dependencies": {
+    "html2canvas-pro": "2.4.0",
+    "lucide-react": "^0.469.0",
+    "modern-screenshot": "^4.4.33",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "sharp": "^0.35.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7"
+  }
+}

@@ -1,0 +1,142 @@
+import type { CharacterDef, PsychubeDef } from "../src/types/catalog";
+
+/** 測試用固定 catalog（空 catalog 下讓 store 測試不假陽性） */
+export const fixtureCharacters: CharacterDef[] = [
+  {
+    id: "3003",
+    baseId: "3003",
+    names: {
+      "zh-CN": "槲寄生",
+      "zh-TW": "槲寄生",
+      "en-US": "Mistletoe",
+      "ja-JP": "ミストルティン",
+      "ko-KR": "미슬토",
+    },
+    maxInsight: 3,
+    rarity: 6,
+    releaseOrder: 1,
+    released: true,
+    defaultVariant: "300301",
+    skins: [
+      { id: "300301", type: "default", released: true },
+      { id: "300302", type: "insight", released: true },
+      { id: "300303", type: "skin", released: false },
+    ],
+  },
+  {
+    id: "3004",
+    baseId: "3004",
+    names: {
+      "zh-CN": "十四行詩",
+      "zh-TW": "十四行詩",
+      "en-US": "Sonetto",
+      "ja-JP": "ソネット",
+      "ko-KR": "소네토",
+    },
+    maxInsight: 2,
+    rarity: 5,
+    releaseOrder: 2,
+    released: true,
+    defaultVariant: "300401",
+    skins: [{ id: "300401", type: "default", released: true }],
+  },
+  {
+    id: "3005",
+    baseId: "3005",
+    names: {
+      "zh-CN": "未来角色",
+      "zh-TW": "未來角色",
+      "en-US": "Future Character",
+      "ja-JP": "未来キャラ",
+      "ko-KR": "미래 캐릭터",
+    },
+    maxInsight: 3,
+    rarity: 6,
+    releaseOrder: 0,
+    released: false,
+    defaultVariant: "300501",
+    skins: [{ id: "300501", type: "default", released: true }],
+  },
+  {
+    id: "3149",
+    baseId: "3149",
+    names: {
+      "zh-CN": "双生舞伶",
+      "zh-TW": "雙生舞伶",
+      "en-US": "The Twins",
+      "ja-JP": "双子",
+      "ko-KR": "쌍둥이",
+    },
+    maxInsight: 3,
+    rarity: 5,
+    releaseOrder: 3,
+    released: true,
+    defaultVariant: "314901",
+    skins: [{ id: "314901", type: "default", released: true }],
+    psychubeSlots: 2,
+    exclusivePsychubeIds: ["1571", "1572"],
+  },
+];
+
+export const fixturePsychubes: PsychubeDef[] = [
+  {
+    id: "1000",
+    names: {
+      "zh-CN": "必要的紀錄",
+      "zh-TW": "必要的紀錄",
+      "en-US": "Necessary Records",
+      "ja-JP": "必要の記録",
+      "ko-KR": "필요한 기록",
+    },
+    rarity: 6,
+    released: true,
+  },
+  {
+    id: "1001",
+    names: {
+      "zh-CN": "歡愉",
+      "zh-TW": "歡愉",
+      "en-US": "Joy",
+      "ja-JP": "歓喜",
+      "ko-KR": "환희",
+    },
+    rarity: 5,
+    released: true,
+  },
+  {
+    id: "1571",
+    names: {
+      "zh-CN": "艺术原子能",
+      "zh-TW": "藝術原子能",
+      "en-US": "The Art of Atoms",
+      "ja-JP": "原子の芸術",
+      "ko-KR": "예술 원자력",
+    },
+    rarity: 5,
+    released: true,
+  },
+  {
+    id: "1572",
+    names: {
+      "zh-CN": "科学编舞法",
+      "zh-TW": "科學編舞法",
+      "en-US": "The Dance of Science",
+      "ja-JP": "科学の振付",
+      "ko-KR": "과학 안무법",
+    },
+    rarity: 5,
+    released: true,
+  },
+  {
+    id: "1002",
+    names: {
+      "zh-CN": "未來心相",
+      "zh-TW": "未來心相",
+      "en-US": "Future Psychube",
+      "ja-JP": "未来の心相",
+      "ko-KR": "미래 의지",
+    },
+    rarity: 6,
+    released: false,
+  },
+];

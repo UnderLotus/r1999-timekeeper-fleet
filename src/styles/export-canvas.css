@@ -1,0 +1,242 @@
+/* Export Canvas — reuse the overview's Team/Pool component geometry. */
+.export-layer {
+  position: fixed;
+  left: -20000px;
+  top: 0;
+  width: max-content;
+  pointer-events: none;
+}
+
+.export-canvas {
+  width: 1480px;
+  padding: 32px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 190px),
+    var(--surface-main);
+  color: var(--ink-primary);
+  font-family: var(--font-ui);
+}
+
+.export-canvas__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 36px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border-primary);
+}
+
+.export-canvas__eyebrow {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--ink-muted);
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+}
+
+.export-canvas__identity h1 {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.38em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+.export-canvas__wordmark,
+.export-canvas__localized-title {
+  flex: 0 0 auto;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.export-canvas__wordmark {
+  font-size: 27px;
+}
+
+.export-canvas__localized-title {
+  font-size: 24px;
+  letter-spacing: 0.04em;
+}
+
+.export-section {
+  margin-top: 24px;
+}
+
+.export-section__heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 10px;
+}
+
+.export-section__heading--nested {
+  margin-top: 22px;
+}
+
+.export-section__heading h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Same two-column team overview and the same slot proportions as the homepage. */
+.export-canvas .export-team-board {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.export-canvas .export-team {
+  display: block;
+  padding: 10px;
+}
+
+.export-team__head {
+  justify-content: flex-start;
+}
+
+.export-team__head h3 {
+  margin: 0;
+  color: var(--ink-primary);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.export-canvas .team-panel__slots {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.export-canvas .team-slot__character,
+.export-canvas .team-slot__psy {
+  cursor: default;
+}
+
+.export-canvas .team-slot__psychubes {
+  padding-right: 0;
+}
+
+.export-team__psychube-names {
+  min-width: 0;
+  align-self: stretch;
+  flex: 1 1 auto;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1px;
+  margin-left: 2px;
+  color: var(--ink-secondary);
+  font-family: var(--font-display);
+  font-size: 9px;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.export-team__psychube-names--dual {
+  margin-left: 5px;
+  font-size: 8px;
+}
+
+.export-team__psychube-name {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Same auto-fill card density as the homepage. */
+.export-canvas .export-pool {
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 10px 8px;
+  padding: 0;
+}
+
+.export-canvas .export-character-card,
+.export-canvas .export-psychube-card {
+  cursor: default;
+}
+
+.export-canvas .export-character-card .char-card__portrait,
+.export-canvas .export-psychube-card .psy-card__frame {
+  border-color: var(--accent-gold);
+}
+
+.export-canvas .export-character-card .portrait-portray {
+  pointer-events: none;
+}
+
+.export-hidden-mark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink-muted);
+  font-family: var(--font-display);
+  font-size: 24px;
+}
+
+.export-canvas__nothing {
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 36px 0 28px;
+}
+
+.export-canvas__nothing-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.export-canvas__nothing-copy {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  color: var(--ink-secondary);
+  font-family: var(--font-display);
+  text-align: center;
+}
+
+.export-canvas__nothing-copy p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+}
+
+.export-canvas__nothing-copy p + p {
+  color: var(--ink-muted);
+  font-size: 11px;
+}
+
+.export-empty {
+  display: grid;
+  min-height: 72px;
+  place-items: center;
+  border: 1px dashed var(--border-light);
+  color: var(--ink-muted);
+  font-family: var(--font-display);
+  font-size: 11px;
+}
+
+.export-canvas__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 11px;
+  border-top: 1px solid var(--border-light);
+  color: var(--ink-muted);
+  font-family: var(--font-display);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+}

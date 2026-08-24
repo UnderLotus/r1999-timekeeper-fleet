@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.piw/
+.pi/
+*.tsbuildinfo
+.DS_Store
+.venv/
+
+# Source PNG is downloaded transiently by sync-assets; runtime and deployment use WebP.
+/public/assets/characters/*.png
+/public/assets/psychubes/*.png
+
+# Upstream package caches; commit only scripts/data/catalog-source.json.
+/scripts/data/cn/
+/scripts/data/gl/
