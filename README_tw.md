@@ -2,7 +2,7 @@
 
 整理《重返未來：1999》角色、心相和隊伍配置的小工具
 
-**[English](README.md)**
+**[English](README.md) · [日本語](README_jp.md)**
 
 ---
 

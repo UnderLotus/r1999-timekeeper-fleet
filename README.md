@@ -2,7 +2,7 @@
 
 A small tool for organizing characters, psychubes, and team configurations in _Reverse: 1999_
 
-**[繁體中文](README_tw.md)**
+**[繁體中文](README_tw.md) · [日本語](README_jp.md)**
 
 ---
 
