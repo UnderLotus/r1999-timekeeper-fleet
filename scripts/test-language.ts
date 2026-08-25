@@ -42,6 +42,21 @@ check(
       (locale) => supportedLocales.includes(locale),
     ),
 );
+const psychubeAmplificationTerms: Array<[LangCode, string, string]> = [
+  ["zh-CN", "增幅", "默认增幅"],
+  ["zh-TW", "增幅", "預設增幅"],
+  ["en-US", "Amplification", "Default amplification"],
+  ["ja-JP", "増幅", "デフォルト増幅"],
+  ["ko-KR", "증폭", "기본 증폭"],
+];
+check(
+  "psychube terms match Global localization language_10030511",
+  psychubeAmplificationTerms.every(
+    ([locale, term, defaultTerm]) =>
+      getUiText(locale, "psychubeImprint") === term &&
+      getUiText(locale, "defaultPsychubeImprint") === defaultTerm,
+  ),
+);
 check(
   "localized templates preserve and interpolate required placeholders",
   supportedLocales.every((locale) => {

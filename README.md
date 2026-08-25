@@ -1,6 +1,6 @@
 # r1999-timekeeper-fleet
 
-A small tool for organizing characters, psychubes, and team configurations in *Reverse: 1999*
+A small tool for organizing characters, psychubes, and team configurations in _Reverse: 1999_
 
 **[繁體中文](README_tw.md)**
 
@@ -29,11 +29,12 @@ Likewise, click a psychube to mark it as owned
 
 After a psychube is owned:
 
-- Click it again to increase its Imprint, up to 5
-- Use the − in the upper-left corner to lower its Imprint
+- Click it again to increase its Amplification, up to 5
+- Use the − in the upper-left corner to lower its Amplification
 - Use the × in the upper-right corner to remove the owned status
 
 Because the vast majority of psychubes only have one copy, the function for managing multiple copies of a psychube is omitted here.
+For veteran players who already own most psychubes, “Set Defaults” can mark them all as owned at once; then simply unmark the few you are missing.
 
 ### Teams
 
@@ -77,7 +78,6 @@ Exports are always based on "the workspace you are currently viewing."
 That is, if you are viewing someone else's shared preview, that preview is what will be exported
 
 ---
-
 
 ## Development
 

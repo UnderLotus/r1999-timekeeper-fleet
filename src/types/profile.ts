@@ -27,7 +27,7 @@ export interface Team {
 
 export interface Profile {
   characters: Record<string, CharacterBuild>;
-  /** key presence = 持有；value = 疊影 1–5。 */
+  /** key presence = 持有；value = 增幅 1–5。 */
   psychubes: Record<string, number>;
   /** 恰 4 隊 */
   teams: Team[];
