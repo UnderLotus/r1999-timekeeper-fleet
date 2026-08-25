@@ -12,6 +12,7 @@ import {
 import { AssetIcon } from "./AssetIcon";
 import { InsightGlyph } from "./InsightGlyph";
 import { PortrayBadge } from "./PortrayBadge";
+import { PsychubeAmplificationBadge } from "./PsychubeAmplificationBadge";
 import { PortraitPortray } from "./PortraitPortray";
 import { ResonanceIcon } from "./ResonanceIcon";
 
@@ -124,12 +125,17 @@ function ExportTeam({
                         key={psyIndex}
                       >
                         {psychube && !psychubeHidden ? (
-                          <AssetIcon
-                            kind="psychube"
-                            id={psychube.id}
-                            alt={psychubeView!.name}
-                            loading="eager"
-                          />
+                          <>
+                            <AssetIcon
+                              kind="psychube"
+                              id={psychube.id}
+                              alt={psychubeView!.name}
+                              loading="eager"
+                            />
+                            <PsychubeAmplificationBadge
+                              value={psychubeView!.amplification}
+                            />
+                          </>
                         ) : psychubeHidden ? (
                           "?"
                         ) : null}
@@ -360,8 +366,8 @@ export function ExportCanvas({
                               loading="eager"
                             />
                           )}
-                          {!hidden && imprint > 1 && (
-                            <span className="psy-card__imprint">{imprint}</span>
+                          {!hidden && (
+                            <PsychubeAmplificationBadge value={imprint} />
                           )}
                         </span>
                         <span className="psy-card__name">{name}</span>

@@ -71,9 +71,11 @@ export function presentTeamSlot(
     : undefined;
   const psychubes = [slot.psychubeId, slot.psychubeId2].map((id) => {
     const psychube = id ? getPsychube(id) : undefined;
-    return psychube
-      ? presentPsychube(psychube, lang, revealFuture, hiddenLabel)
-      : undefined;
+    if (!psychube) return undefined;
+    return {
+      ...presentPsychube(psychube, lang, revealFuture, hiddenLabel),
+      amplification: profile.psychubes[psychube.id] ?? 0,
+    };
   });
   return { character, psychubes };
 }

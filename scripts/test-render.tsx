@@ -37,7 +37,7 @@ profile.characters[futureCharacter.id] = {
   activeVariant: null,
 };
 profile.psychubes[releasedPsychube.id] = 2;
-profile.psychubes[futurePsychube.id] = 1;
+profile.psychubes[futurePsychube.id] = 3;
 profile.teams[0].slots[0] = {
   characterId: character.id,
   psychubeId: futurePsychube.id,
@@ -46,7 +46,7 @@ profile.teams[0].slots[0] = {
 
 const dualProfile = emptyProfile();
 dualProfile.characters[twins.id] = { ...ADD_DEFAULT, activeVariant: null };
-dualProfile.psychubes[artPsychube.id] = 1;
+dualProfile.psychubes[artPsychube.id] = 4;
 dualProfile.psychubes[sciencePsychube.id] = 1;
 dualProfile.teams[0].slots[0] = {
   characterId: twins.id,
@@ -54,11 +54,15 @@ dualProfile.teams[0].slots[0] = {
   psychubeId2: sciencePsychube.id,
 };
 
-function renderTeam(revealFuture: boolean): string {
+function renderTeam(
+  revealFuture: boolean,
+  teamProfile: Profile = profile,
+  teamLang: LangCode = "en-US",
+): string {
   return renderToStaticMarkup(
     <TeamBoard
-      profile={profile}
-      lang="en-US"
+      profile={teamProfile}
+      lang={teamLang}
       revealFuture={revealFuture}
       assignment={null}
       onSlotClick={noop}
@@ -230,6 +234,12 @@ check(
     visibleTeam.includes(`/psychubes/${futurePsychube.id}.webp`),
 );
 check(
+  "team psychube uses the Pool amplification badge and accessible label",
+  visibleTeam.includes('<span class="psy-card__imprint">3</span>') &&
+    visibleTeam.includes('aria-label="Future Psychube · Amplification 3"') &&
+    !hiddenTeam.includes('class="psy-card__imprint"'),
+);
+check(
   "team navigation and slot actions use localized assistive labels",
   localizedTeam.includes(`aria-label="${getUiText("zh-TW", "teams")}"`) &&
     localizedTeam.includes(
@@ -257,12 +267,23 @@ check(
     !visibleExport.includes(getUiText("en-US", "teamN", { n: 2 })),
 );
 
+const dualTeam = renderTeam(true, dualProfile, "zh-TW");
+check(
+  "dual team psychubes show each owned amplification without a level-one badge",
+  dualTeam.includes('<span class="psy-card__imprint">4</span>') &&
+    !dualTeam.includes('<span class="psy-card__imprint">1</span>') &&
+    dualTeam.includes('aria-label="藝術原子能 · 增幅 4"') &&
+    dualTeam.includes('aria-label="科學編舞法 · 增幅 1"'),
+);
+
 const dualExport = renderExport(dualProfile, "teams", "zh-TW", true);
 check(
-  "dual psychube names keep equipment order in team exports",
+  "dual psychube names and amplification keep equipment order in team exports",
   dualExport.includes("藝術原子能") &&
     dualExport.includes("科學編舞法") &&
-    dualExport.indexOf("藝術原子能") < dualExport.indexOf("科學編舞法"),
+    dualExport.indexOf("藝術原子能") < dualExport.indexOf("科學編舞法") &&
+    dualExport.includes('<span class="psy-card__imprint">4</span>') &&
+    !dualExport.includes('<span class="psy-card__imprint">1</span>'),
 );
 
 const emptyProfileValue = emptyProfile();

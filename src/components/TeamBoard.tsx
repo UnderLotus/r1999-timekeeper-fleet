@@ -14,6 +14,7 @@ import { presentTeamSlot } from "../utils/presentation";
 import { AssetIcon } from "./AssetIcon";
 import { InsightGlyph } from "./InsightGlyph";
 import { PortrayBadge } from "./PortrayBadge";
+import { PsychubeAmplificationBadge } from "./PsychubeAmplificationBadge";
 import { ResonanceIcon } from "./ResonanceIcon";
 
 export function TeamBoard({
@@ -233,7 +234,7 @@ export function TeamBoard({
                                 )}
                                 aria-label={
                                   psy && !psyHidden
-                                    ? psychube!.name
+                                    ? `${psychube!.name} · ${getUiText(lang, "psychubeImprint")} ${psychube!.amplification}`
                                     : getUiText(lang, "emptyPsychube")
                                 }
                                 onClick={() =>
@@ -246,11 +247,16 @@ export function TeamBoard({
                                 }
                               >
                                 {psy && !psyHidden ? (
-                                  <AssetIcon
-                                    kind="psychube"
-                                    id={psy.id}
-                                    alt={psychube!.name}
-                                  />
+                                  <>
+                                    <AssetIcon
+                                      kind="psychube"
+                                      id={psy.id}
+                                      alt={psychube!.name}
+                                    />
+                                    <PsychubeAmplificationBadge
+                                      value={psychube!.amplification}
+                                    />
+                                  </>
                                 ) : psyHidden ? (
                                   "?"
                                 ) : (

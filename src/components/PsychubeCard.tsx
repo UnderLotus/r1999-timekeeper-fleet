@@ -4,6 +4,7 @@ import type { PsychubeDef } from "../types/catalog";
 import { PSYCHUBE_IMPRINT_MAX } from "../types/profile";
 import { psychubeName } from "../utils/catalog";
 import { AssetIcon } from "./AssetIcon";
+import { PsychubeAmplificationBadge } from "./PsychubeAmplificationBadge";
 
 export function PsychubeCard({
   def,
@@ -52,7 +53,7 @@ export function PsychubeCard({
       >
         <span className="psy-card__frame">
           <AssetIcon kind="psychube" id={def.id} alt={name} />
-          {imprint > 1 && <span className="psy-card__imprint">{imprint}</span>}
+          <PsychubeAmplificationBadge value={imprint} />
         </span>
         <span className="psy-card__name" title={name}>
           {name}
