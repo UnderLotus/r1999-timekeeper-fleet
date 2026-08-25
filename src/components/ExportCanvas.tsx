@@ -210,6 +210,21 @@ export function ExportCanvas({
             </span>
           </h1>
         </div>
+        <div className="export-canvas__project-link">
+          <div className="export-canvas__project-copy">
+            <span className="export-canvas__project-label">PROJECT PAGE</span>
+            <span className="export-canvas__project-url">
+              underlotus.github.io/r1999-timekeeper-fleet/
+            </span>
+          </div>
+          <img
+            className="export-canvas__project-qr"
+            src={assetSrc("/assets/ui/project-qrcode.svg")}
+            alt="Project homepage QR code"
+            loading="eager"
+            decoding="sync"
+          />
+        </div>
       </header>
 
       {!hasExportContent ? (

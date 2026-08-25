@@ -18,12 +18,55 @@
 }
 
 .export-canvas__header {
+  position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 36px;
   padding-bottom: 20px;
   border-bottom: 2px solid var(--border-primary);
+}
+
+.export-canvas__project-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  color: var(--ink-secondary);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.export-canvas__project-copy {
+  display: flex;
+  width: max-content;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.export-canvas__project-label {
+  font-size: 7px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.2em;
+}
+
+.export-canvas__project-url {
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.035em;
+  white-space: nowrap;
+}
+
+.export-canvas__project-qr {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 auto;
 }
 
 .export-canvas__eyebrow {
