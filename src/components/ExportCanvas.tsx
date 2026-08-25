@@ -2,7 +2,7 @@ import type { LangCode } from "../i18n/ui";
 import { getUiText } from "../i18n/ui";
 import type { Profile, Team } from "../types/profile";
 import { assetSrc } from "../utils/assets";
-import { allCharacters, allPsychubes } from "../utils/catalog";
+import { allCharacters, psychubesByRarityAndRecency } from "../utils/catalog";
 import { cx } from "../utils/design";
 import {
   presentCharacter,
@@ -188,7 +188,7 @@ export function ExportCanvas({
         profile.characters[definition.id] &&
         (revealFuture || definition.released),
     ),
-    ownedPsychubes = [...allPsychubes()].reverse().flatMap((definition) => {
+    ownedPsychubes = psychubesByRarityAndRecency().flatMap((definition) => {
       const imprint = profile.psychubes[definition.id];
       return imprint && (revealFuture || definition.released)
         ? [{ definition, imprint }]

@@ -122,12 +122,16 @@ const psychubeControls = renderToStaticMarkup(
     rarityFilter={[]}
     addDefaults={ADD_DEFAULT}
     defaultSkinMode="initial"
+    psychubeImprintDefault={1}
+    psychubeOwnershipStatus="unowned"
     onTab={noop}
     onSearch={noop}
     onFilter={noop}
     onRarity={noop}
     onDefaults={noop}
     onDefaultSkinMode={noop}
+    onPsychubeImprintDefault={noop}
+    onSetAllPsychubesOwned={noop}
   />,
 );
 const syntheticThreeStarPsychube = {
@@ -342,11 +346,14 @@ check(
 
 const psychubePool = renderPsychubePool(profile);
 check(
-  "psychube Pool renders newest catalog entries first",
+  "psychube Pool groups higher rarity first and newest first within each rarity",
   psychubePool.indexOf("Future Psychube") <
-    psychubePool.indexOf("The Dance of Science") &&
+    psychubePool.indexOf("Necessary Records") &&
+    psychubePool.indexOf("Necessary Records") <
+      psychubePool.indexOf("The Dance of Science") &&
     psychubePool.indexOf("The Dance of Science") <
-      psychubePool.indexOf("The Art of Atoms"),
+      psychubePool.indexOf("The Art of Atoms") &&
+    psychubePool.indexOf("The Art of Atoms") < psychubePool.indexOf("Joy"),
 );
 
 const localizedCharacter = renderToStaticMarkup(

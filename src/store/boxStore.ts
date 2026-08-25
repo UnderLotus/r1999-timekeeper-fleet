@@ -15,6 +15,7 @@ import {
 } from "../types/profile";
 import type { InsightIndex, LangCode } from "../types/catalog";
 import {
+  allPsychubes,
   getCharacter,
   getPsychube,
   legalInsights,
@@ -47,6 +48,7 @@ export interface Preferences {
   showFutureSight: boolean;
   addDefaults: Omit<CharacterBuild, "activeVariant">;
   defaultSkinMode: DefaultSkinMode;
+  psychubeImprintDefault: number;
 }
 
 export interface BoxStore {
@@ -94,6 +96,8 @@ export interface BoxStore {
     value: Partial<Omit<CharacterBuild, "activeVariant">>,
   ) => void;
   setDefaultSkinMode: (value: DefaultSkinMode) => void;
+  setPsychubeImprintDefault: (value: number) => void;
+  setAllPsychubesOwned: (owned: boolean, imprint: number) => void;
 }
 
 const DEFAULT_UI: UIState = {
@@ -109,6 +113,7 @@ const DEFAULT_PREFERENCES: Preferences = {
   showFutureSight: false,
   addDefaults: { ...ADD_DEFAULT },
   defaultSkinMode: "initial",
+  psychubeImprintDefault: 1,
 };
 function finite(value: unknown, fallback: number): number {
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
@@ -131,6 +136,10 @@ function sanitizePreferences(value: unknown): Preferences {
     showFutureSight: value.showFutureSight === true,
     defaultSkinMode:
       value.defaultSkinMode === "insight" ? "insight" : "initial",
+    psychubeImprintDefault: Math.min(
+      PSYCHUBE_IMPRINT_MAX,
+      Math.max(1, Math.trunc(finite(value.psychubeImprintDefault, 1)) || 1),
+    ),
     addDefaults: {
       insight: Math.min(
         3,
@@ -387,7 +396,10 @@ export const useBoxStore = create<BoxStore>()(
           return;
         get()._setActiveProfile({
           ...profile,
-          psychubes: { ...profile.psychubes, [id]: 1 },
+          psychubes: {
+            ...profile.psychubes,
+            [id]: get().preferences.psychubeImprintDefault,
+          },
         });
       },
       setPsychubeImprint: (id, imprint) => {
@@ -459,7 +471,10 @@ export const useBoxStore = create<BoxStore>()(
             return false;
           requestedPsychubeId2 = pairedSecondary;
           if (!psychubes[pairedSecondary])
-            psychubes = { ...psychubes, [pairedSecondary]: 1 };
+            psychubes = {
+              ...psychubes,
+              [pairedSecondary]: get().preferences.psychubeImprintDefault,
+            };
         }
         const psychubeId2 =
           characterDef?.psychubeSlots === 2 ? requestedPsychubeId2 : null;
@@ -579,6 +594,50 @@ export const useBoxStore = create<BoxStore>()(
         }),
       setDefaultSkinMode: (defaultSkinMode) =>
         set({ preferences: { ...get().preferences, defaultSkinMode } }),
+      setPsychubeImprintDefault: (psychubeImprintDefault) =>
+        set({
+          preferences: sanitizePreferences({
+            ...get().preferences,
+            psychubeImprintDefault,
+          }),
+        }),
+      setAllPsychubesOwned: (owned, imprint) => {
+        const profile = active(get);
+        const selectable = new Set(
+          allPsychubes()
+            .filter(
+              (definition) =>
+                definition.released || futureSelectionAllowed(get),
+            )
+            .map((definition) => definition.id),
+        );
+        const cleanImprint = Math.min(
+          PSYCHUBE_IMPRINT_MAX,
+          Math.max(1, Math.trunc(imprint) || 1),
+        );
+        const psychubes = { ...profile.psychubes };
+        for (const id of selectable) {
+          if (owned) psychubes[id] = cleanImprint;
+          else delete psychubes[id];
+        }
+        const teams = owned
+          ? profile.teams
+          : profile.teams.map((team) => ({
+              ...team,
+              slots: team.slots.map((slot) => ({
+                ...slot,
+                psychubeId:
+                  slot.psychubeId && selectable.has(slot.psychubeId)
+                    ? null
+                    : slot.psychubeId,
+                psychubeId2:
+                  slot.psychubeId2 && selectable.has(slot.psychubeId2)
+                    ? null
+                    : slot.psychubeId2,
+              })),
+            }));
+        get()._setActiveProfile({ ...profile, psychubes, teams });
+      },
     }),
     {
       name: STORAGE_KEY,

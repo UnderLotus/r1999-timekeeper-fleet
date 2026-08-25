@@ -71,6 +71,7 @@ function resetLanguage(): void {
       showFutureSight: false,
       addDefaults: { ...ADD_DEFAULT },
       defaultSkinMode: "initial",
+      psychubeImprintDefault: 1,
     },
   });
 }

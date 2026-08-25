@@ -47,6 +47,7 @@ function fresh() {
       showFutureSight: false,
       addDefaults: { ...ADD_DEFAULT },
       defaultSkinMode: "initial",
+      psychubeImprintDefault: 1,
     },
   });
   return useBoxStore.getState();
@@ -147,6 +148,76 @@ check(
   })(),
 );
 check(
+  "psychube default imprint persists and applies to newly owned psychubes",
+  (() => {
+    fresh();
+    const s = useBoxStore.getState();
+    s.setPsychubeImprintDefault(4);
+    s.addPsychube(psy.id);
+    const state = useBoxStore.getState();
+    return (
+      state.preferences.psychubeImprintDefault === 4 &&
+      state.profile.psychubes[psy.id] === 4
+    );
+  })(),
+);
+check(
+  "psychube default imprint clamps to 1 through 5",
+  (() => {
+    fresh();
+    useBoxStore.getState().setPsychubeImprintDefault(99);
+    const max = useBoxStore.getState().preferences.psychubeImprintDefault;
+    useBoxStore.getState().setPsychubeImprintDefault(0);
+    const min = useBoxStore.getState().preferences.psychubeImprintDefault;
+    return max === 5 && min === 1;
+  })(),
+);
+check(
+  "mark all owned applies the selected imprint to released psychubes",
+  (() => {
+    fresh();
+    useBoxStore.getState().setAllPsychubesOwned(true, 3);
+    const profile = useBoxStore.getState().profile;
+    return (
+      fixturePsychubes
+        .filter((item) => item.released)
+        .every((item) => profile.psychubes[item.id] === 3) &&
+      fixturePsychubes
+        .filter((item) => !item.released)
+        .every((item) => !profile.psychubes[item.id])
+    );
+  })(),
+);
+check(
+  "mark all unowned clears visible psychube team references",
+  (() => {
+    fresh();
+    const s = useBoxStore.getState();
+    s.addCharacter(a.id);
+    s.addPsychube(psy.id);
+    s.assignSlot(0, 0, a.id, psy.id);
+    s.setAllPsychubesOwned(false, 1);
+    const profile = useBoxStore.getState().profile;
+    return (
+      !profile.psychubes[psy.id] &&
+      profile.teams[0].slots[0].psychubeId === null
+    );
+  })(),
+);
+check(
+  "bulk ownership preserves hidden future psychube data",
+  (() => {
+    fresh();
+    const futurePsychube = fixturePsychubes.find((item) => !item.released)!;
+    const s = useBoxStore.getState();
+    s.setShowFutureSight(true);
+    s.addPsychube(futurePsychube.id);
+    s.setShowFutureSight(false);
+    s.setAllPsychubesOwned(false, 1);
+    return useBoxStore.getState().profile.psychubes[futurePsychube.id] === 1;
+  })(),
+);
+check(
   "psychube requires character",
   (() => {
     fresh();
@@ -190,13 +261,14 @@ check(
   (() => {
     fresh();
     const s = useBoxStore.getState();
+    s.setPsychubeImprintDefault(4);
     s.addCharacter(twins.id);
     s.addPsychube(twinsPsy1.id);
     s.assignSlot(0, 0, twins.id, twinsPsy1.id);
     const profile = useBoxStore.getState().profile;
     const slot = profile.teams[0].slots[0];
     return (
-      profile.psychubes[twinsPsy2.id] === 1 &&
+      profile.psychubes[twinsPsy2.id] === 4 &&
       slot.psychubeId === twinsPsy1.id &&
       slot.psychubeId2 === twinsPsy2.id
     );
@@ -418,7 +490,9 @@ check(
       preferences: {},
     });
     return (
-      !!migrated.profile.characters[a.id] && migrated.profile.teams.length === 4
+      !!migrated.profile.characters[a.id] &&
+      migrated.profile.teams.length === 4 &&
+      migrated.preferences.psychubeImprintDefault === 1
     );
   })(),
 );

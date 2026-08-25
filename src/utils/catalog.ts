@@ -32,6 +32,17 @@ export function allCharacters(): readonly CharacterDef[] {
 export function allPsychubes(): readonly PsychubeDef[] {
   return psySource;
 }
+
+export function psychubesByRarityAndRecency(): PsychubeDef[] {
+  return psySource
+    .map((definition, index) => ({ definition, index }))
+    .sort(
+      (left, right) =>
+        (right.definition.rarity ?? -1) - (left.definition.rarity ?? -1) ||
+        right.index - left.index,
+    )
+    .map(({ definition }) => definition);
+}
 export function legalInsights(def: CharacterDef): InsightIndex[] {
   return [0, 1, 2, 3].slice(0, def.maxInsight + 1) as InsightIndex[];
 }

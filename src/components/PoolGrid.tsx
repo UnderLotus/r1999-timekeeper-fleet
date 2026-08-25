@@ -2,7 +2,11 @@ import type { LangCode } from "../i18n/ui";
 import { getUiText } from "../i18n/ui";
 import type { CharacterBuild } from "../types/profile";
 import type { InsightIndex } from "../types/catalog";
-import { allCharacters, allPsychubes, searchableNames } from "../utils/catalog";
+import {
+  allCharacters,
+  psychubesByRarityAndRecency,
+  searchableNames,
+} from "../utils/catalog";
 import type { AnchorRect } from "../utils/design";
 import { CharacterCard } from "./CharacterCard";
 import { PsychubeCard } from "./PsychubeCard";
@@ -57,8 +61,7 @@ export function PoolGrid({
   const q = search.trim().toLocaleLowerCase();
   if (tab === "psychubes") {
     const applicableRarityFilter = rarityFilter.filter((rarity) => rarity >= 3);
-    const list = [...allPsychubes()]
-      .reverse()
+    const list = psychubesByRarityAndRecency()
       .filter((item) => item.released || revealFuture)
       .filter((item) => {
         const owned = !!psychubes[item.id];

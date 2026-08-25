@@ -8,6 +8,7 @@ import { InsightGlyph } from "./InsightGlyph";
 import { Btn, SegButtons, Stepper } from "../utils/design";
 
 type AddDefaults = Omit<CharacterBuild, "activeVariant">;
+type PsychubeOwnershipMode = "unowned" | "owned";
 
 export function PoolControls({
   lang,
@@ -17,12 +18,16 @@ export function PoolControls({
   rarityFilter,
   addDefaults,
   defaultSkinMode,
+  psychubeImprintDefault,
+  psychubeOwnershipStatus,
   onTab,
   onSearch,
   onFilter,
   onRarity,
   onDefaults,
   onDefaultSkinMode,
+  onPsychubeImprintDefault,
+  onSetAllPsychubesOwned,
 }: {
   lang: LangCode;
   tab: "characters" | "psychubes";
@@ -31,12 +36,16 @@ export function PoolControls({
   rarityFilter: number[];
   addDefaults: AddDefaults;
   defaultSkinMode: DefaultSkinMode;
+  psychubeImprintDefault: number;
+  psychubeOwnershipStatus: PsychubeOwnershipMode | null;
   onTab: (tab: "characters" | "psychubes") => void;
   onSearch: (value: string) => void;
   onFilter: (value: FilterMode) => void;
   onRarity: (value: number[]) => void;
   onDefaults: (value: Partial<AddDefaults>) => void;
   onDefaultSkinMode: (value: DefaultSkinMode) => void;
+  onPsychubeImprintDefault: (value: number) => void;
+  onSetAllPsychubesOwned: (owned: boolean, imprint: number) => void;
 }): React.JSX.Element {
   const t = (key: string, params?: Record<string, string | number>) =>
     getUiText(lang, key, params);
@@ -44,18 +53,35 @@ export function PoolControls({
   const [draft, setDraft] = useState<AddDefaults>(addDefaults);
   const [draftSkinMode, setDraftSkinMode] =
     useState<DefaultSkinMode>(defaultSkinMode);
+  const [draftPsychubeImprint, setDraftPsychubeImprint] = useState(
+    psychubeImprintDefault,
+  );
+  const [draftPsychubeOwnership, setDraftPsychubeOwnership] =
+    useState<PsychubeOwnershipMode | null>(psychubeOwnershipStatus);
   const defaultsRef = useRef<HTMLDivElement>(null);
   const beginDefaults = () => {
     setDraft(addDefaults);
     setDraftSkinMode(defaultSkinMode);
+    setDraftPsychubeImprint(psychubeImprintDefault);
+    setDraftPsychubeOwnership(psychubeOwnershipStatus);
     setDefaultsOpen(true);
   };
   const cancelDefaults = () => setDefaultsOpen(false);
   const completeDefaults = () => {
-    onDefaults(draft);
-    onDefaultSkinMode(draftSkinMode);
+    if (tab === "characters") {
+      onDefaults(draft);
+      onDefaultSkinMode(draftSkinMode);
+    } else {
+      onPsychubeImprintDefault(draftPsychubeImprint);
+      if (draftPsychubeOwnership)
+        onSetAllPsychubesOwned(
+          draftPsychubeOwnership === "owned",
+          draftPsychubeImprint,
+        );
+    }
     setDefaultsOpen(false);
   };
+  useEffect(() => setDefaultsOpen(false), [tab]);
   useEffect(() => {
     if (!defaultsOpen) return;
     const onPointerDown = (event: PointerEvent) => {
@@ -148,148 +174,197 @@ export function PoolControls({
         </button>
         {defaultsOpen && (
           <div className="add-defaults__panel">
-            <div className="editor-modules add-defaults__modules">
-              <section className="editor-section">
-                <header className="editor-section__head">
-                  <span>{t("level")}</span>
-                  <output>Lv.{draft.level} / 60</output>
-                </header>
-                <div className="editor-section__controls">
-                  <Stepper
-                    label={t("level")}
-                    value={draft.level}
-                    min={1}
-                    max={60}
-                    onChange={(level) =>
-                      setDraft((value) => ({ ...value, level }))
-                    }
-                    decreaseLabel={t("decreaseValue", { name: t("level") })}
-                    increaseLabel={t("increaseValue", { name: t("level") })}
-                  />
-                  <SegButtons
-                    options={[1, 20, 30, 40, 50, 60].map((value) => ({
-                      key: String(value),
-                      label: value === 60 ? t("max") : String(value),
-                    }))}
-                    selected={String(draft.level)}
-                    onSelect={(value) =>
-                      setDraft((current) => ({
-                        ...current,
-                        level: Number(value),
-                      }))
-                    }
-                  />
-                </div>
-              </section>
-              <section className="editor-section editor-section--insight">
-                <header className="editor-section__head">
-                  <span>{t("insight")}</span>
-                  <output
-                    className="editor-section__current"
-                    aria-label={`${t("insight")} ${draft.insight}`}
-                  >
-                    <InsightGlyph insight={draft.insight} />
-                  </output>
-                </header>
-                <div className="editor-section__controls">
-                  <SegButtons
-                    options={[0, 1, 2, 3].map((value) => ({
-                      key: String(value),
-                      label: <InsightGlyph insight={value} />,
-                      ariaLabel: `${t("insight")} ${value}`,
-                    }))}
-                    className="insight-selector"
-                    selected={String(draft.insight)}
-                    onSelect={(value) =>
-                      setDraft((current) => ({
-                        ...current,
-                        insight: Number(value) as 0 | 1 | 2 | 3,
-                      }))
-                    }
-                  />
-                </div>
-              </section>
-              <section className="editor-section">
-                <header className="editor-section__head">
-                  <span>{t("resonance")}</span>
-                  <output>{draft.resonance}</output>
-                </header>
-                <div className="editor-section__controls">
-                  <Stepper
-                    label={t("resonance")}
-                    value={draft.resonance}
-                    min={0}
-                    max={15}
-                    onChange={(resonance) =>
-                      setDraft((value) => ({ ...value, resonance }))
-                    }
-                    decreaseLabel={t("decreaseValue", { name: t("resonance") })}
-                    increaseLabel={t("increaseValue", { name: t("resonance") })}
-                  />
-                  <SegButtons
-                    options={[1, 10, 15].map((value) => ({
-                      key: String(value),
-                      label: String(value),
-                    }))}
-                    selected={
-                      [1, 10, 15].includes(draft.resonance)
-                        ? String(draft.resonance)
-                        : undefined
-                    }
-                    onSelect={(value) =>
-                      setDraft((current) => ({
-                        ...current,
-                        resonance: Number(value),
-                      }))
-                    }
-                  />
-                </div>
-              </section>
-              <section className="editor-section">
-                <header className="editor-section__head">
-                  <span>{t("portray")}</span>
-                </header>
-                <div className="editor-section__controls">
-                  <SegButtons
-                    options={[0, 1, 2, 3, 4, 5].map((value) => ({
-                      key: String(value),
-                      label: String(value),
-                    }))}
-                    selected={String(draft.portray)}
-                    onSelect={(value) =>
-                      setDraft((current) => ({
-                        ...current,
-                        portray: Number(value),
-                      }))
-                    }
-                  />
-                </div>
-              </section>
-              <section className="editor-section add-defaults__skin-mode">
-                <header className="editor-section__head">
-                  <span>{t("defaultSkin")}</span>
-                  <output>
-                    {t(
-                      draftSkinMode === "initial"
-                        ? "skinDefault"
-                        : "skinInsight",
-                    )}
-                  </output>
-                </header>
-                <div className="editor-section__controls">
-                  <SegButtons
-                    options={[
-                      { key: "initial", label: t("skinDefault") },
-                      { key: "insight", label: t("skinInsight") },
-                    ]}
-                    selected={draftSkinMode}
-                    onSelect={(value) =>
-                      setDraftSkinMode(value as DefaultSkinMode)
-                    }
-                  />
-                </div>
-              </section>
-            </div>
+            {tab === "characters" ? (
+              <div className="editor-modules add-defaults__modules">
+                <section className="editor-section">
+                  <header className="editor-section__head">
+                    <span>{t("level")}</span>
+                    <output>Lv.{draft.level} / 60</output>
+                  </header>
+                  <div className="editor-section__controls">
+                    <Stepper
+                      label={t("level")}
+                      value={draft.level}
+                      min={1}
+                      max={60}
+                      onChange={(level) =>
+                        setDraft((value) => ({ ...value, level }))
+                      }
+                      decreaseLabel={t("decreaseValue", { name: t("level") })}
+                      increaseLabel={t("increaseValue", { name: t("level") })}
+                    />
+                    <SegButtons
+                      options={[1, 20, 30, 40, 50, 60].map((value) => ({
+                        key: String(value),
+                        label: value === 60 ? t("max") : String(value),
+                      }))}
+                      selected={String(draft.level)}
+                      onSelect={(value) =>
+                        setDraft((current) => ({
+                          ...current,
+                          level: Number(value),
+                        }))
+                      }
+                    />
+                  </div>
+                </section>
+                <section className="editor-section editor-section--insight">
+                  <header className="editor-section__head">
+                    <span>{t("insight")}</span>
+                    <output
+                      className="editor-section__current"
+                      aria-label={`${t("insight")} ${draft.insight}`}
+                    >
+                      <InsightGlyph insight={draft.insight} />
+                    </output>
+                  </header>
+                  <div className="editor-section__controls">
+                    <SegButtons
+                      options={[0, 1, 2, 3].map((value) => ({
+                        key: String(value),
+                        label: <InsightGlyph insight={value} />,
+                        ariaLabel: `${t("insight")} ${value}`,
+                      }))}
+                      className="insight-selector"
+                      selected={String(draft.insight)}
+                      onSelect={(value) =>
+                        setDraft((current) => ({
+                          ...current,
+                          insight: Number(value) as 0 | 1 | 2 | 3,
+                        }))
+                      }
+                    />
+                  </div>
+                </section>
+                <section className="editor-section">
+                  <header className="editor-section__head">
+                    <span>{t("resonance")}</span>
+                    <output>{draft.resonance}</output>
+                  </header>
+                  <div className="editor-section__controls">
+                    <Stepper
+                      label={t("resonance")}
+                      value={draft.resonance}
+                      min={0}
+                      max={15}
+                      onChange={(resonance) =>
+                        setDraft((value) => ({ ...value, resonance }))
+                      }
+                      decreaseLabel={t("decreaseValue", {
+                        name: t("resonance"),
+                      })}
+                      increaseLabel={t("increaseValue", {
+                        name: t("resonance"),
+                      })}
+                    />
+                    <SegButtons
+                      options={[1, 10, 15].map((value) => ({
+                        key: String(value),
+                        label: String(value),
+                      }))}
+                      selected={
+                        [1, 10, 15].includes(draft.resonance)
+                          ? String(draft.resonance)
+                          : undefined
+                      }
+                      onSelect={(value) =>
+                        setDraft((current) => ({
+                          ...current,
+                          resonance: Number(value),
+                        }))
+                      }
+                    />
+                  </div>
+                </section>
+                <section className="editor-section">
+                  <header className="editor-section__head">
+                    <span>{t("portray")}</span>
+                  </header>
+                  <div className="editor-section__controls">
+                    <SegButtons
+                      options={[0, 1, 2, 3, 4, 5].map((value) => ({
+                        key: String(value),
+                        label: String(value),
+                      }))}
+                      selected={String(draft.portray)}
+                      onSelect={(value) =>
+                        setDraft((current) => ({
+                          ...current,
+                          portray: Number(value),
+                        }))
+                      }
+                    />
+                  </div>
+                </section>
+                <section className="editor-section add-defaults__skin-mode">
+                  <header className="editor-section__head">
+                    <span>{t("defaultSkin")}</span>
+                    <output>
+                      {t(
+                        draftSkinMode === "initial"
+                          ? "skinDefault"
+                          : "skinInsight",
+                      )}
+                    </output>
+                  </header>
+                  <div className="editor-section__controls">
+                    <SegButtons
+                      options={[
+                        { key: "initial", label: t("skinDefault") },
+                        { key: "insight", label: t("skinInsight") },
+                      ]}
+                      selected={draftSkinMode}
+                      onSelect={(value) =>
+                        setDraftSkinMode(value as DefaultSkinMode)
+                      }
+                    />
+                  </div>
+                </section>
+              </div>
+            ) : (
+              <div className="editor-modules add-defaults__modules">
+                <section className="editor-section">
+                  <header className="editor-section__head">
+                    <span>{t("defaultPsychubeImprint")}</span>
+                    <output>{draftPsychubeImprint}</output>
+                  </header>
+                  <div className="editor-section__controls">
+                    <SegButtons
+                      options={[1, 2, 3, 4, 5].map((value) => ({
+                        key: String(value),
+                        label: String(value),
+                      }))}
+                      selected={String(draftPsychubeImprint)}
+                      onSelect={(value) =>
+                        setDraftPsychubeImprint(Number(value))
+                      }
+                    />
+                  </div>
+                </section>
+                <section className="editor-section">
+                  <header className="editor-section__head">
+                    <span>{t("defaultPsychubeOwnership")}</span>
+                  </header>
+                  <div className="editor-section__controls">
+                    <SegButtons
+                      options={[
+                        {
+                          key: "unowned",
+                          label: t("allPsychubesUnowned"),
+                        },
+                        { key: "owned", label: t("allPsychubesOwned") },
+                      ]}
+                      selected={draftPsychubeOwnership ?? undefined}
+                      onSelect={(value) =>
+                        setDraftPsychubeOwnership(
+                          value as PsychubeOwnershipMode,
+                        )
+                      }
+                    />
+                  </div>
+                </section>
+              </div>
+            )}
             <div className="editor-actions add-defaults__actions">
               <Btn variant="neutral" onClick={cancelDefaults}>
                 {t("cancel")}

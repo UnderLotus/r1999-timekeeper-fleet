@@ -21,7 +21,11 @@ import type { FilterMode } from "./store/boxStore";
 import type { Profile } from "./types/profile";
 import { assetSrc } from "./utils/assets";
 import type { ExportProgress } from "./utils/export-image";
-import { getCharacter, profileHasFutureContent } from "./utils/catalog";
+import {
+  allPsychubes,
+  getCharacter,
+  profileHasFutureContent,
+} from "./utils/catalog";
 import type { AnchorRect } from "./utils/design";
 import {
   decodeSharePayload,
@@ -107,6 +111,18 @@ export default function App(): React.JSX.Element {
     revealFuture = activeIsPreview
       ? store.previewShowFutureSight
       : preferences.showFutureSight;
+  const visiblePsychubes = allPsychubes().filter(
+      (definition) => definition.released || revealFuture,
+    ),
+    ownedVisiblePsychubes = visiblePsychubes.filter(
+      (definition) => activeProfile.psychubes[definition.id],
+    ).length,
+    psychubeOwnershipStatus =
+      ownedVisiblePsychubes === 0
+        ? ("unowned" as const)
+        : ownedVisiblePsychubes === visiblePsychubes.length
+          ? ("owned" as const)
+          : null;
   useEffect(() => {
     document.title = t("appTitle");
     document.documentElement.lang = lang;
@@ -394,12 +410,16 @@ export default function App(): React.JSX.Element {
           rarityFilter={ui.rarityFilter}
           addDefaults={preferences.addDefaults}
           defaultSkinMode={preferences.defaultSkinMode}
+          psychubeImprintDefault={preferences.psychubeImprintDefault}
+          psychubeOwnershipStatus={psychubeOwnershipStatus}
           onTab={store.setTab}
           onSearch={store.setSearch}
           onFilter={store.setFilterMode}
           onRarity={store.setRarityFilter}
           onDefaults={store.setAddDefaults}
           onDefaultSkinMode={store.setDefaultSkinMode}
+          onPsychubeImprintDefault={store.setPsychubeImprintDefault}
+          onSetAllPsychubesOwned={store.setAllPsychubesOwned}
         />
         <PoolGrid
           tab={ui.tab}
