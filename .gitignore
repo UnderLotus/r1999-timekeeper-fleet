@@ -13,3 +13,6 @@ dist/
 # Upstream package caches; commit only scripts/data/catalog-source.json.
 /scripts/data/cn/
 /scripts/data/gl/
+
+# Local agent development notes; keep outside the published project.
+/docs/development.md

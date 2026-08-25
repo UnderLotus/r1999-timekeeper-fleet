@@ -22,6 +22,26 @@ function check(name: string, value: boolean, detail = ""): void {
     console.error("  ✗ " + name + (detail ? " — " + detail : ""));
   }
 }
+function overwriteBits(
+  token: string,
+  start: number,
+  width: number,
+  value: number,
+): string {
+  const bytes = Uint8Array.from(Buffer.from(token, "base64url"));
+  for (let offset = 0; offset < width; offset++) {
+    const position = start + offset,
+      bit = (value >> (width - offset - 1)) & 1,
+      mask = 1 << (7 - (position & 7));
+    if (bit) bytes[position >> 3] |= mask;
+    else bytes[position >> 3] &= ~mask;
+  }
+  return Buffer.from(bytes).toString("base64url");
+}
+function roundTrip(profile: ReturnType<typeof emptyProfile>) {
+  return decodeSharePayload(encodeShareToken(profileToPayload(profile)))
+    ?.profile;
+}
 const a = fixtureCharacters[0],
   b = fixtureCharacters[1],
   twins = fixtureCharacters.find((item) => item.id === "3149")!,
@@ -130,6 +150,117 @@ check(
     legacyV3.profile.teams[0].slots[0].characterId === a.id &&
     legacyV3.profile.teams[0].slots[0].psychubeId === psy.id,
 );
+const fixedV4Token =
+  "QAy7usbwZd4AARiaAAQBh9CGIyMSEzpm6jluZXoiJ7lj7Au7D6AAAu8AAAAAAAAAAAAAAAAAAAAxNGIxiQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAu7D6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const fixedV4 = decodeSharePayload(fixedV4Token);
+check(
+  "fixed public v4 fixture retains builds, skin, dual psychubes, and teams",
+  fixedV4?.version === 4 &&
+    fixedV4.profile.characters[a.id]?.level === 45 &&
+    fixedV4.profile.characters[a.id]?.activeVariant === a.skins.at(-1)!.id &&
+    fixedV4.profile.teams[0].name === "雨幕舞台" &&
+    fixedV4.profile.teams[1].slots[0].characterId === twins.id &&
+    fixedV4.profile.teams[1].slots[0].psychubeId === twinsPsy1.id &&
+    fixedV4.profile.teams[1].slots[0].psychubeId2 === twinsPsy2.id,
+);
+check(
+  "v5 materially shortens the representative v4 profile",
+  token.length <= Math.floor(fixedV4Token.length * 0.65),
+  `v4=${fixedV4Token.length}, v5=${token.length}`,
+);
+
+const emptyV5Token = encodeShareToken(profileToPayload(emptyProfile()));
+check(
+  "empty v5 round trips with zero-width local references",
+  emptyV5Token.length === 8 && !!roundTrip(emptyProfile()),
+  `length=${emptyV5Token.length}`,
+);
+const ownedOnlyWithSkin = emptyProfile();
+ownedOnlyWithSkin.characters[a.id] = {
+  ...ADD_DEFAULT,
+  activeVariant: a.skins.at(-1)!.id,
+};
+const ownedOnlyResult = roundTrip(ownedOnlyWithSkin);
+check(
+  "owned-only preset remains independent from a non-default valid skin",
+  ownedOnlyResult?.characters[a.id]?.insight === 0 &&
+    ownedOnlyResult.characters[a.id].level === 1 &&
+    ownedOnlyResult.characters[a.id].portray === 0 &&
+    ownedOnlyResult.characters[a.id].resonance === 1 &&
+    ownedOnlyResult.characters[a.id].activeVariant === a.skins.at(-1)!.id,
+);
+const literalPresetToken = encodeShareToken(
+  profileToPayload(ownedOnlyWithSkin),
+);
+const originalAddDefault = { ...ADD_DEFAULT };
+let literalPresetResult: ReturnType<typeof decodeSharePayload> = null;
+try {
+  Object.assign(ADD_DEFAULT, {
+    insight: 2,
+    level: 30,
+    portray: 5,
+    resonance: 15,
+  });
+  literalPresetResult = decodeSharePayload(literalPresetToken);
+} finally {
+  Object.assign(ADD_DEFAULT, originalAddDefault);
+}
+check(
+  "v5 preset semantics do not depend on mutable add defaults",
+  literalPresetResult?.profile.characters[a.id]?.insight === 0 &&
+    literalPresetResult.profile.characters[a.id].level === 1 &&
+    literalPresetResult.profile.characters[a.id].portray === 0 &&
+    literalPresetResult.profile.characters[a.id].resonance === 1,
+);
+const insightThreePresets = emptyProfile();
+insightThreePresets.characters[a.id] = {
+  insight: 3,
+  level: 60,
+  portray: 0,
+  resonance: 10,
+  activeVariant: null,
+};
+insightThreePresets.characters[twins.id] = {
+  insight: 3,
+  level: 60,
+  portray: 2,
+  resonance: 15,
+  activeVariant: null,
+};
+const insightThreeResult = roundTrip(insightThreePresets);
+check(
+  "I3/L60 preset preserves default and escaped portray/resonance values",
+  insightThreeResult?.characters[a.id]?.portray === 0 &&
+    insightThreeResult.characters[a.id].resonance === 10 &&
+    insightThreeResult.characters[twins.id]?.portray === 2 &&
+    insightThreeResult.characters[twins.id].resonance === 15,
+);
+const genericBuild = emptyProfile();
+genericBuild.characters[a.id] = {
+  insight: 2,
+  level: 45,
+  portray: 3,
+  resonance: 7,
+  activeVariant: null,
+};
+const genericBuildResult = roundTrip(genericBuild);
+check(
+  "generic build escape preserves non-preset cultivation",
+  genericBuildResult?.characters[a.id]?.level === 45 &&
+    genericBuildResult.characters[a.id].portray === 3 &&
+    genericBuildResult.characters[a.id].resonance === 7,
+);
+const everyImprint = emptyProfile();
+fixturePsychubes.forEach((item, index) => {
+  everyImprint.psychubes[item.id] = index + 1;
+});
+const imprintResult = roundTrip(everyImprint);
+check(
+  "psychube default and escape paths preserve imprints 1 through 5",
+  fixturePsychubes.every(
+    (item, index) => imprintResult?.psychubes[item.id] === index + 1,
+  ),
+);
 const tokenForLocalPreference = (showFutureSight: boolean): string => {
   const localState = {
     profile: sample(),
@@ -151,6 +282,108 @@ check(
     !("showFutureSight" in decodedShape) &&
     !("showFutureSight" in decodedShape.profile),
 );
+const twoCloseIds = emptyProfile();
+twoCloseIds.characters[a.id] = { ...ADD_DEFAULT, activeVariant: null };
+twoCloseIds.characters[b.id] = { ...ADD_DEFAULT, activeVariant: null };
+const twoCloseIdsToken = encodeShareToken(profileToPayload(twoCloseIds));
+// Header (4) + count (10) + first ID (14) + owned preset (1) + variant (1).
+const secondDeltaOffset = 30;
+check(
+  "malformed zero/unbounded gamma delta is rejected",
+  decodeSharePayload(
+    overwriteBits(twoCloseIdsToken, secondDeltaOffset, 14, 0),
+  ) === null,
+);
+check(
+  "delta accumulation beyond the 14-bit official ID range is rejected",
+  decodeSharePayload(overwriteBits(twoCloseIdsToken, 14, 14, 16383)) === null,
+);
+const boundaryCharacters: CharacterDef[] = [1, 16383].map((id, index) => ({
+  ...a,
+  id: String(id),
+  baseId: String(id),
+  releaseOrder: index + 1,
+  defaultVariant: `${id}01`,
+  skins: [{ id: `${id}01`, type: "default", released: true }],
+}));
+setCatalogForTesting(boundaryCharacters, fixturePsychubes);
+const maximumDeltaProfile = emptyProfile();
+for (const item of boundaryCharacters)
+  maximumDeltaProfile.characters[item.id] = {
+    ...ADD_DEFAULT,
+    activeVariant: null,
+  };
+const maximumDeltaToken = encodeShareToken(
+  profileToPayload(maximumDeltaProfile),
+);
+check(
+  "maximum legal 14-bit ID and delta round trip",
+  Object.keys(roundTrip(maximumDeltaProfile)?.characters ?? {}).length === 2,
+);
+check(
+  "a token truncated in the middle of a gamma delta is rejected",
+  decodeSharePayload(
+    Buffer.from(maximumDeltaToken, "base64url")
+      .subarray(0, 5)
+      .toString("base64url"),
+  ) === null,
+);
+setCatalogForTesting(fixtureCharacters, fixturePsychubes);
+// Two characters require 2-bit references; 3 is outside the wire count.
+check(
+  "local references beyond the encoded collection count are rejected",
+  decodeSharePayload(overwriteBits(twoCloseIdsToken, 49, 2, 3)) === null,
+);
+// A present skin suffix is constrained to the literal wire range 1..127.
+check(
+  "a present zero skin suffix is rejected",
+  decodeSharePayload(overwriteBits(literalPresetToken, 30, 7, 0)) === null,
+);
+check(
+  "unsupported future share versions are rejected",
+  decodeSharePayload(overwriteBits(token, 0, 4, 6)) === null,
+);
+const variedDeltas = emptyProfile();
+for (const item of fixtureCharacters)
+  variedDeltas.characters[item.id] = { ...ADD_DEFAULT, activeVariant: null };
+check(
+  "sorted delta encoding handles repeated small deltas and larger jumps",
+  Object.keys(roundTrip(variedDeltas)?.characters ?? {}).length ===
+    fixtureCharacters.length,
+);
+
+const positionalProfile = emptyProfile();
+for (const item of fixtureCharacters)
+  positionalProfile.characters[item.id] = {
+    ...ADD_DEFAULT,
+    activeVariant: null,
+  };
+for (const item of fixturePsychubes.slice(0, 4))
+  positionalProfile.psychubes[item.id] = 1;
+positionalProfile.teams[0].slots[0] = {
+  characterId: twins.id,
+  psychubeId: twinsPsy1.id,
+  psychubeId2: twinsPsy2.id,
+};
+const positionalToken = encodeShareToken(profileToPayload(positionalProfile));
+setCatalogForTesting(
+  fixtureCharacters.filter((item) => item.id !== "3005"),
+  fixturePsychubes.filter((item) => item.id !== "1001"),
+);
+const positionalResult = decodeSharePayload(positionalToken)?.profile;
+check(
+  "unknown wire positions do not shift character or dual psychube references",
+  positionalResult?.teams[0].slots[0].characterId === twins.id &&
+    positionalResult.teams[0].slots[0].psychubeId === twinsPsy1.id &&
+    positionalResult.teams[0].slots[0].psychubeId2 === twinsPsy2.id,
+);
+check(
+  "local reference widths derive from wire counts before unknown IDs are removed",
+  Object.keys(positionalResult?.characters ?? {}).length === 3 &&
+    Object.keys(positionalResult?.psychubes ?? {}).length === 3,
+);
+setCatalogForTesting(fixtureCharacters, fixturePsychubes);
+
 const stale = sample();
 stale.characters[a.id].activeVariant = "999999";
 const clean = payloadToProfile(
@@ -200,7 +433,7 @@ const syntheticPsychubes = Array.from({ length: 1024 }, (_, index) =>
   syntheticPsychube(index),
 );
 setCatalogForTesting(syntheticCharacters, syntheticPsychubes);
-for (const count of [255, 256]) {
+for (const count of [255, 256, 512]) {
   const decodedBoundary = decodeSharePayload(
     encodeShareToken(profileToPayload(syntheticProfile(count, count))),
   );
