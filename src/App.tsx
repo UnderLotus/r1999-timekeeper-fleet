@@ -103,6 +103,7 @@ export default function App(): React.JSX.Element {
     );
   const exportRef = useRef<HTMLDivElement>(null),
     exportInFlight = useRef(false),
+    shareCopiedTimer = useRef<number | null>(null),
     handledHash = useRef<string | null>(null),
     assignmentPreviousFilter = useRef<FilterMode | null>(null),
     lang = preferences.lang,
@@ -140,6 +141,13 @@ export default function App(): React.JSX.Element {
     if (consumeStorageError()) setStorageWarning(true);
     return () => window.removeEventListener(STORAGE_ERROR_EVENT, warning);
   }, []);
+  useEffect(
+    () => () => {
+      if (shareCopiedTimer.current !== null)
+        window.clearTimeout(shareCopiedTimer.current);
+    },
+    [],
+  );
   useEffect(() => {
     let removeHashListener = () => {};
     const unsubscribe = onHydrated(() => {
@@ -210,8 +218,13 @@ export default function App(): React.JSX.Element {
     const url = shareUrl(activeProfile);
     try {
       await navigator.clipboard.writeText(url);
+      if (shareCopiedTimer.current !== null)
+        window.clearTimeout(shareCopiedTimer.current);
       setShareCopied(true);
-      setTimeout(() => setShareCopied(false), 1600);
+      shareCopiedTimer.current = window.setTimeout(() => {
+        setShareCopied(false);
+        shareCopiedTimer.current = null;
+      }, 1600);
     } catch {
       setDialog({ kind: "share", url });
     }

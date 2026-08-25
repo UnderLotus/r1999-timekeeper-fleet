@@ -1,4 +1,4 @@
-import { Eye, EyeOff, ImageDown, RotateCcw, Share2 } from "lucide-react";
+import { Check, Eye, EyeOff, ImageDown, RotateCcw, Share2 } from "lucide-react";
 import { getUiText } from "../i18n/ui";
 import type { LangCode } from "../i18n/ui";
 import { Btn } from "../utils/design";
@@ -73,6 +73,17 @@ export function TopBar({
           <span>{t("export")}</span>
         </Btn>
       </div>
+      {shareCopied && (
+        <div
+          className="share-copy-toast"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <Check size={16} aria-hidden="true" />
+          <span>{t("urlCopied")}</span>
+        </div>
+      )}
     </header>
   );
 }

@@ -445,6 +445,31 @@ check(
     exportActionGroup.includes(getUiText("en-US", "export")) &&
     (exportActionGroup.match(/<button\b/g) ?? []).length === 2,
 );
+check(
+  "share success toast stays absent before a successful copy",
+  !busyTopBar.includes("share-copy-toast"),
+);
+const copiedTopBar = renderToStaticMarkup(
+  <TopBar
+    lang="zh-TW"
+    showFutureSight={false}
+    shareCopied
+    exportDisabled={false}
+    onLang={noop}
+    onFuture={noop}
+    onReset={noop}
+    onShare={noop}
+    onExport={noop}
+  />,
+);
+check(
+  "share success exposes a localized polite status toast",
+  copiedTopBar.includes('class="share-copy-toast"') &&
+    copiedTopBar.includes('role="status"') &&
+    copiedTopBar.includes('aria-live="polite"') &&
+    copiedTopBar.includes('aria-atomic="true"') &&
+    copiedTopBar.includes(getUiText("zh-TW", "urlCopied")),
+);
 
 const partialCharacter = {
   ...character,
