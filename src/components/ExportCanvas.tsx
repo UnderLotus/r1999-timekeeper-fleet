@@ -16,7 +16,8 @@ import { PsychubeAmplificationBadge } from "./PsychubeAmplificationBadge";
 import { PortraitPortray } from "./PortraitPortray";
 import { ResonanceIcon } from "./ResonanceIcon";
 
-export type ExportMode = "teams" | "pool" | "both";
+import type { ExportMode } from "../types/export";
+export type { ExportMode } from "../types/export";
 
 function ExportTeam({
   team,

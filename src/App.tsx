@@ -1,38 +1,32 @@
 import { Github } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { CharacterEditor } from "./components/CharacterEditor";
 import { AppDialogs, type DialogState } from "./components/AppDialogs";
 import { ExportCanvas } from "./components/ExportCanvas";
-import type { ExportMode } from "./components/ExportCanvas";
+import type { ExportMode } from "./types/export";
 import { PoolControls } from "./components/PoolControls";
 import { PoolGrid } from "./components/PoolGrid";
 import { SkinPicker } from "./components/SkinPicker";
 import { TeamBoard } from "./components/TeamBoard";
 import { TopBar } from "./components/TopBar";
 import { getUiText } from "./i18n/ui";
-import type { LangCode } from "./i18n/ui";
-import {
-  characterRefs,
-  onHydrated,
-  psychubeRefs,
-  useBoxStore,
-} from "./store/boxStore";
-import type { FilterMode } from "./store/boxStore";
+import { onHydrated, useBoxStore } from "./store/boxStore";
+import type { BoxStore } from "./store/boxStore";
 import type { Profile } from "./types/profile";
 import { assetSrc } from "./utils/assets";
-import type { ExportProgress } from "./utils/export-image";
+import { createExportJob, type ExportJob } from "./utils/export-job";
 import {
-  allPsychubes,
   getCharacter,
   profileHasFutureContent,
 } from "./utils/catalog";
+import { characterRefs, psychubeRefs } from "./utils/profile-mutations";
+import { createPoolView } from "./utils/pool-model";
 import type { AnchorRect } from "./utils/design";
 import {
-  decodeSharePayload,
-  encodeShareToken,
-  payloadToProfile,
-  profileToPayload,
-} from "./utils/share-code";
+  createBrowserSharePreviewSession,
+  type SharePreviewSession,
+  type SharePreviewStoreState,
+} from "./utils/share-preview-session";
 import { consumeStorageError, STORAGE_ERROR_EVENT } from "./utils/storage";
 import "./styles/tokens.css";
 import "./styles/design-system.css";
@@ -52,38 +46,36 @@ type EditorState = {
   anchor: AnchorRect;
 } | null;
 type SkinState = { id: string; anchor: AnchorRect } | null;
-interface ExportSnapshot {
-  profile: Profile;
-  lang: LangCode;
-  mode: ExportMode;
-  revealFuture: boolean;
+function toSharePreviewState(state: BoxStore): SharePreviewStoreState {
+  return {
+    profile: state.profile,
+    previewProfile: state.previewProfile,
+    activeIsPreview: state.activeIsPreview,
+    previewShowFutureSight: state.previewShowFutureSight,
+    localShowFutureSight: state.preferences.showFutureSight,
+  };
 }
-function profileFromHash(): Profile | null {
-  const params = new URLSearchParams(location.hash.replace(/^#/, "")),
-    token = params.get("p");
-  if (!token) return null;
-  const payload = decodeSharePayload(token);
-  return payload ? payloadToProfile(payload) : null;
-}
-function setHash(profile: Profile | null): void {
-  const params = new URLSearchParams(location.hash.replace(/^#/, ""));
-  if (profile) params.set("p", encodeShareToken(profileToPayload(profile)));
-  else params.delete("p");
-  const hash = params.toString();
-  history.replaceState(
-    null,
-    "",
-    location.pathname + location.search + (hash ? `#${hash}` : ""),
-  );
-}
-function shareUrl(profile: Profile): string {
-  return `${location.origin}${location.pathname}${location.search}#p=${encodeShareToken(profileToPayload(profile))}`;
-}
-function cloneProfile(profile: Profile): Profile {
-  return JSON.parse(JSON.stringify(profile)) as Profile;
-}
+const sharePreviewStore = {
+  getState: () => toSharePreviewState(useBoxStore.getState()),
+  subscribe: (listener: (state: SharePreviewStoreState) => void) =>
+    useBoxStore.subscribe((state) => listener(toSharePreviewState(state))),
+  enterPreview: (profile: Profile, showFutureSight: boolean) =>
+    useBoxStore.getState().enterPreview(profile, showFutureSight),
+  setPreviewShowFutureSight: (value: boolean) =>
+    useBoxStore.getState().setPreviewShowFutureSight(value),
+  exitPreview: () => useBoxStore.getState().exitPreview(),
+  importPreview: (enableFutureSight: boolean) =>
+    useBoxStore.getState().importPreview(enableFutureSight),
+};
 export default function App(): React.JSX.Element {
   const store = useBoxStore();
+  const shareSessionRef = useRef<SharePreviewSession | null>(null);
+  if (shareSessionRef.current === null)
+    shareSessionRef.current = createBrowserSharePreviewSession(
+      sharePreviewStore,
+      onHydrated,
+    );
+  const shareSession = shareSessionRef.current;
   const { profile, previewProfile, activeIsPreview, ui, preferences } = store;
   const activeProfile =
     activeIsPreview && previewProfile ? previewProfile : profile;
@@ -95,35 +87,37 @@ export default function App(): React.JSX.Element {
     [futureNotice, setFutureNotice] = useState(false),
     [shareCopied, setShareCopied] = useState(false),
     [exportMode, setExportMode] = useState<ExportMode>("both"),
-    [exportSnapshot, setExportSnapshot] = useState<ExportSnapshot | null>(null),
-    [exportProgress, setExportProgress] = useState<ExportProgress | null>(null),
-    [mobileView, setMobileView] = useState<"teams" | "pool">("teams"),
-    [exportStatus, setExportStatus] = useState<"idle" | "working" | "error">(
-      "idle",
-    );
+    [mobileView, setMobileView] = useState<"teams" | "pool">("teams");
   const exportRef = useRef<HTMLDivElement>(null),
-    exportInFlight = useRef(false),
-    shareCopiedTimer = useRef<number | null>(null),
-    handledHash = useRef<string | null>(null),
-    assignmentPreviousFilter = useRef<FilterMode | null>(null),
+    exportJobRef = useRef<ExportJob | null>(null),
+    exportLifecycleRef = useRef(0),
+    shareCopiedTimer = useRef<number | null>(null);
+  if (exportJobRef.current === null)
+    exportJobRef.current = createExportJob({
+      getTarget: () => exportRef.current,
+    });
+  const exportJob = exportJobRef.current,
+    exportState = useSyncExternalStore(
+      exportJob.subscribe,
+      exportJob.getState,
+      exportJob.getState,
+    ),
     lang = preferences.lang,
     t = (key: string, params?: Record<string, string | number>) =>
       getUiText(lang, key, params),
     revealFuture = activeIsPreview
       ? store.previewShowFutureSight
       : preferences.showFutureSight;
-  const visiblePsychubes = allPsychubes().filter(
-      (definition) => definition.released || revealFuture,
-    ),
-    ownedVisiblePsychubes = visiblePsychubes.filter(
-      (definition) => activeProfile.psychubes[definition.id],
-    ).length,
-    psychubeOwnershipStatus =
-      ownedVisiblePsychubes === 0
-        ? ("unowned" as const)
-        : ownedVisiblePsychubes === visiblePsychubes.length
-          ? ("owned" as const)
-          : null;
+  const importInfo = shareSession.getImportInfo();
+  const poolView = createPoolView({
+    profile: activeProfile,
+    tab: ui.tab,
+    search: ui.search,
+    filterMode: ui.filterMode,
+    rarityFilter: ui.rarityFilter,
+    revealFuture,
+  });
+  const psychubeOwnershipStatus = poolView.psychubeOwnership.status;
   useEffect(() => {
     document.title = t("appTitle");
     document.documentElement.lang = lang;
@@ -148,109 +142,54 @@ export default function App(): React.JSX.Element {
     },
     [],
   );
+  useEffect(
+    () =>
+      shareSession.start((event) => {
+        if (event.kind === "invalid") setShareError(true);
+        else setDialog({ kind: "preview-spoiler" });
+      }),
+    [shareSession],
+  );
   useEffect(() => {
-    let removeHashListener = () => {};
-    const unsubscribe = onHydrated(() => {
-      const open = () => {
-        if (!location.hash.includes("p=")) return;
-        if (handledHash.current === location.hash) return;
-        handledHash.current = location.hash;
-        const incoming = profileFromHash();
-        if (!incoming) {
-          setHash(null);
-          setShareError(true);
-          return;
-        }
-        if (profileHasFutureContent(incoming))
-          setDialog({ kind: "preview-spoiler", profile: incoming });
-        else {
-          useBoxStore.getState().enterPreview(incoming, false);
-        }
-      };
-      open();
-      window.addEventListener("hashchange", open);
-      removeHashListener = () => window.removeEventListener("hashchange", open);
-    });
+    const lifecycle = ++exportLifecycleRef.current;
     return () => {
-      unsubscribe();
-      removeHashListener();
+      // React StrictMode rehearses an effect cleanup before its second setup.
+      window.setTimeout(() => {
+        if (exportLifecycleRef.current === lifecycle) exportJob.dispose();
+      });
     };
-  }, []);
-  useEffect(() => {
-    if (!activeIsPreview || !previewProfile) return;
-    const timer = window.setTimeout(() => setHash(previewProfile), 180);
-    return () => clearTimeout(timer);
-  }, [activeIsPreview, previewProfile]);
-  useEffect(() => {
-    if (!exportSnapshot) return;
-    let cancelled = false;
-    const run = async () => {
-      await new Promise<void>((resolve) =>
-        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
-      );
-      if (cancelled) return;
-      try {
-        const { exportJpeg } = await import("./utils/export-image");
-        const element = exportRef.current;
-        if (!element) throw new Error("Export canvas is unavailable");
-        await exportJpeg(element, (value) => {
-          if (!cancelled) setExportProgress(value);
-        });
-        if (!cancelled) setExportStatus("idle");
-      } catch (error) {
-        console.error(error);
-        if (!cancelled) setExportStatus("error");
-      } finally {
-        exportInFlight.current = false;
-        if (!cancelled) setExportSnapshot(null);
-      }
-    };
-    void run();
-    return () => {
-      cancelled = true;
-    };
-  }, [exportSnapshot]);
+  }, [exportJob]);
   const editorDef = editor ? getCharacter(editor.id) : undefined,
     editorBuild = editor ? activeProfile.characters[editor.id] : undefined,
     skinDef = skin ? getCharacter(skin.id) : undefined,
     skinBuild = skin ? activeProfile.characters[skin.id] : undefined;
   const copyShare = async () => {
-    const url = shareUrl(activeProfile);
-    try {
-      await navigator.clipboard.writeText(url);
-      if (shareCopiedTimer.current !== null)
-        window.clearTimeout(shareCopiedTimer.current);
-      setShareCopied(true);
-      shareCopiedTimer.current = window.setTimeout(() => {
-        setShareCopied(false);
-        shareCopiedTimer.current = null;
-      }, 1600);
-    } catch {
-      setDialog({ kind: "share", url });
+    const result = await shareSession.copyCurrent();
+    if (!result.copied) {
+      setDialog({ kind: "share", url: result.url });
+      return;
     }
+    if (shareCopiedTimer.current !== null)
+      window.clearTimeout(shareCopiedTimer.current);
+    setShareCopied(true);
+    shareCopiedTimer.current = window.setTimeout(() => {
+      setShareCopied(false);
+      shareCopiedTimer.current = null;
+    }, 1600);
   };
   const startExport = () => {
-    if (exportInFlight.current) return;
-    exportInFlight.current = true;
-    setExportProgress(null);
-    setExportStatus("working");
-    setExportSnapshot({
-      profile: cloneProfile(activeProfile),
+    exportJob.start({
+      profile: activeProfile,
       lang,
       mode: exportMode,
       revealFuture,
     });
   };
   const leavePreview = () => {
-    setHash(null);
-    handledHash.current = null;
-    store.exitPreview();
+    shareSession.leavePreview();
   };
   const endAssignment = () => {
-    const previousFilter = assignmentPreviousFilter.current;
-    assignmentPreviousFilter.current = null;
     store.setAssignment(null);
-    if (previousFilter !== null) store.setFilterMode(previousFilter);
   };
   const beginAssignment = (
     team: number,
@@ -258,10 +197,7 @@ export default function App(): React.JSX.Element {
     kind: "character" | "psychube",
     psychubeIndex: 0 | 1,
   ) => {
-    if (!ui.assignment) assignmentPreviousFilter.current = ui.filterMode;
     store.setAssignment({ team, slot, kind, psychubeIndex });
-    store.setTab(kind === "character" ? "characters" : "psychubes");
-    store.setFilterMode("owned");
     setMobileView("pool");
   };
   return (
@@ -270,12 +206,12 @@ export default function App(): React.JSX.Element {
         lang={lang}
         showFutureSight={revealFuture}
         shareCopied={shareCopied}
-        exportDisabled={exportStatus === "working"}
+        exportDisabled={exportState.status === "working"}
         onLang={store.setLang}
         onFuture={() => {
           if (activeIsPreview) {
             if (store.previewShowFutureSight) {
-              store.setPreviewShowFutureSight(false);
+              shareSession.setPreviewFutureSight(false);
             } else {
               setDialog({ kind: "preview-future-warning" });
             }
@@ -294,7 +230,7 @@ export default function App(): React.JSX.Element {
         onReset={() => setDialog({ kind: "reset" })}
         onShare={() => void copyShare()}
         onExport={() => {
-          if (!exportInFlight.current) setDialog({ kind: "export" });
+          if (exportState.status !== "working") setDialog({ kind: "export" });
         }}
       />
       {storageWarning && (
@@ -425,6 +361,7 @@ export default function App(): React.JSX.Element {
           defaultSkinMode={preferences.defaultSkinMode}
           psychubeImprintDefault={preferences.psychubeImprintDefault}
           psychubeOwnershipStatus={psychubeOwnershipStatus}
+          rarityOptions={poolView.rarityOptions}
           onTab={store.setTab}
           onSearch={store.setSearch}
           onFilter={store.setFilterMode}
@@ -435,14 +372,9 @@ export default function App(): React.JSX.Element {
           onSetAllPsychubesOwned={store.setAllPsychubesOwned}
         />
         <PoolGrid
-          tab={ui.tab}
+          view={poolView}
           lang={lang}
           revealFuture={revealFuture}
-          ownedCharacters={activeProfile.characters}
-          psychubes={activeProfile.psychubes}
-          search={ui.search}
-          filterMode={ui.filterMode}
-          rarityFilter={ui.rarityFilter}
           assignment={ui.assignment}
           onAddCharacter={store.addCharacter}
           onOpenEditor={(id, field, anchor) => setEditor({ id, field, anchor })}
@@ -555,35 +487,42 @@ export default function App(): React.JSX.Element {
         lang={lang}
         exportMode={exportMode}
         setExportMode={setExportMode}
-        exportBusy={exportStatus === "working"}
-        onClearShareHash={() => setHash(null)}
+        exportBusy={exportState.status === "working"}
+        importHasFutureContent={importInfo?.hasFutureContent ?? false}
+        importLocalFutureSight={importInfo?.localFutureSightEnabled ?? false}
+        onPreviewSpoilerConfirm={() => {
+          shareSession.confirmIncomingPreview(true);
+        }}
+        onPreviewSpoilerCancel={shareSession.cancelIncomingPreview}
+        onPreviewFutureConfirm={() => {
+          shareSession.setPreviewFutureSight(true);
+        }}
+        onImportPreview={shareSession.importPreview}
         onExport={startExport}
       />
-      {exportStatus === "working" && (
+      {exportState.status === "working" && (
         <div className="export-status" role="status">
-          {exportProgress?.phase === "loading" && exportProgress.total > 0
+          {exportState.progress?.phase === "loading" &&
+          exportState.progress.total > 0
             ? t("exportProgress", {
-                loaded: exportProgress.loaded,
-                total: exportProgress.total,
+                loaded: exportState.progress.loaded,
+                total: exportState.progress.total,
               })
             : t("exportWorking")}
         </div>
       )}
-      {exportStatus === "error" && (
+      {exportState.status === "error" && (
         <button
           type="button"
           className="export-error"
-          onClick={() => {
-            setExportStatus("idle");
-            setExportProgress(null);
-          }}
+          onClick={exportJob.dismissError}
         >
           {t("exportError")}
         </button>
       )}
-      {exportSnapshot && (
+      {exportState.snapshot && (
         <div className="export-layer" ref={exportRef} aria-hidden="true">
-          <ExportCanvas {...exportSnapshot} />
+          <ExportCanvas {...exportState.snapshot} />
         </div>
       )}
     </main>

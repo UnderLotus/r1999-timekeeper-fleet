@@ -1,4 +1,4 @@
-import type { InsightIndex } from "../types/catalog";
+import type { CharacterDef, InsightIndex } from "../types/catalog";
 import type { CharacterBuild, Profile } from "../types/profile";
 import {
   emptyProfile,
@@ -10,7 +10,10 @@ import {
   SLOTS_PER_TEAM,
   TEAM_COUNT,
 } from "../types/profile";
-import { getCharacter, getPsychube } from "./catalog";
+import {
+  profileMutationCatalog,
+  type ProfileMutationCatalog,
+} from "./catalog";
 
 export const ADD_DEFAULT: Omit<CharacterBuild, "activeVariant"> = {
   insight: 0,
@@ -24,13 +27,31 @@ function finite(value: unknown, fallback: number): number {
 function record(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
-function sanitizeBuild(id: string, value: unknown): CharacterBuild | null {
-  const def = getCharacter(id);
+export function normalizeLegalInsight(
+  def: CharacterDef,
+  value: unknown,
+  catalog: Pick<ProfileMutationCatalog, "legalInsights">,
+): InsightIndex | null {
+  const requested = Math.max(
+    0,
+    Math.trunc(finite(value, ADD_DEFAULT.insight)),
+  );
+  const legal = catalog.legalInsights(def);
+  if (legal.length === 0) return null;
+  const atOrBelow = legal.filter((insight) => insight <= requested);
+  return (atOrBelow.length > 0
+    ? Math.max(...atOrBelow)
+    : Math.min(...legal)) as InsightIndex;
+}
+function sanitizeBuild(
+  id: string,
+  value: unknown,
+  catalog: Pick<ProfileMutationCatalog, "getCharacter" | "legalInsights">,
+): CharacterBuild | null {
+  const def = catalog.getCharacter(id);
   if (!def || !record(value)) return null;
-  const insight = Math.min(
-    def.maxInsight,
-    Math.max(0, Math.trunc(finite(value.insight, ADD_DEFAULT.insight))),
-  ) as InsightIndex;
+  const insight = normalizeLegalInsight(def, value.insight, catalog);
+  if (insight === null) return null;
   const requested =
     typeof value.activeVariant === "string" ? value.activeVariant : null;
   return {
@@ -53,17 +74,23 @@ function sanitizeBuild(id: string, value: unknown): CharacterBuild | null {
         : null,
   };
 }
-export function sanitizeProfile(value: unknown): Profile {
+export function sanitizeProfile(
+  value: unknown,
+  catalog: Pick<
+    ProfileMutationCatalog,
+    "getCharacter" | "getPsychube" | "legalInsights"
+  > = profileMutationCatalog,
+): Profile {
   const out = emptyProfile();
   if (!record(value)) return out;
   if (record(value.characters))
     for (const [id, build] of Object.entries(value.characters)) {
-      const clean = sanitizeBuild(id, build);
+      const clean = sanitizeBuild(id, build, catalog);
       if (clean) out.characters[id] = clean;
     }
   if (record(value.psychubes))
     for (const [id, imprint] of Object.entries(value.psychubes)) {
-      if (!getPsychube(id)) continue;
+      if (!catalog.getPsychube(id)) continue;
       const clean = Math.min(
         PSYCHUBE_IMPRINT_MAX,
         Math.max(0, Math.trunc(finite(imprint, 0))),
@@ -87,7 +114,7 @@ export function sanitizeProfile(value: unknown): Profile {
       if (characterId && characters.has(characterId)) characterId = null;
       if (characterId) characters.add(characterId);
       const allowedSlots = characterId
-        ? (getCharacter(characterId)?.psychubeSlots ?? 1)
+        ? (catalog.getCharacter(characterId)?.psychubeSlots ?? 1)
         : 0;
       const equipped: Array<string | null> = [null, null];
       for (let index = 0; index < allowedSlots; index++) {

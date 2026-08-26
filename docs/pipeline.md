@@ -39,7 +39,7 @@ npm run build:psychubes
 
 ## 已實裝怎麼判
 
-- 角色看 Global `character.json` 的 `isOnline === "1"`。
+- 角色看 Global `character.json` 的 `isOnline`：`1` 立即視為已實裝，`0`／空值／缺席為未實裝；`YYYY-MM-DD HH:mm:ss` 是 English Global server-local timestamp，依 Fleet 追蹤的 UTC−05:00 offset 轉成 UTC，只有早於本次建置 clock 才視為已實裝。其他格式會讓流程失敗。
 - 初始與洞悉立繪跟角色走，不套衣著規則。
 - 真正的衣著看 Global `skin.json` 有沒有該 ID。
 - 心相必須同時存在於中國服集合與 Global `equip.json`。

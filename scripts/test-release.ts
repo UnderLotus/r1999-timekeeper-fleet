@@ -37,16 +37,57 @@ function throws(run: () => void): boolean {
 function json<T>(relative: string): T {
   return JSON.parse(readFileSync(path.join(ROOT, relative), "utf-8")) as T;
 }
-check(`isOnline "1" is released`, resolveGlobalIsOnline("1"));
-check(`isOnline "0" is unreleased`, !resolveGlobalIsOnline("0"));
-check("empty isOnline is unreleased", !resolveGlobalIsOnline(""));
+const releaseClock = new Date("2026-09-03T10:00:00.000Z");
+const globalUtcOffsetMinutes = -5 * 60;
+const globalIsOnlineFixtures: readonly [string, unknown, boolean][] = [
+  ["numeric 1", 1, true],
+  ["string 1", "1", true],
+  ["numeric 0", 0, false],
+  ["string 0", "0", false],
+  ["empty", "", false],
+  ["null", null, false],
+  ["missing", undefined, false],
+  ["past timestamp", "2026-09-03 04:59:59", true],
+  ["future timestamp", "2026-09-03 05:00:01", false],
+  ["equal timestamp", "2026-09-03 05:00:00", false],
+];
+for (const [label, value, expected] of globalIsOnlineFixtures)
+  check(
+    `isOnline ${label}`,
+    resolveGlobalIsOnline(value, releaseClock, globalUtcOffsetMinutes) === expected,
+  );
 check(
-  "missing Global character is unreleased",
-  !resolveGlobalIsOnline(undefined),
+  "server-local timestamp conversion uses the explicit region offset",
+  resolveGlobalIsOnline(
+    "2026-09-03 04:59:59",
+    new Date("2026-09-03T09:59:59.000Z"),
+    globalUtcOffsetMinutes,
+  ) === false &&
+    resolveGlobalIsOnline(
+      "2026-09-03 04:59:59",
+      new Date("2026-09-03T10:00:00.000Z"),
+      globalUtcOffsetMinutes,
+    ) === true,
 );
 check(
-  "unknown isOnline fails loudly",
-  throws(() => resolveGlobalIsOnline("2")),
+  "unknown string isOnline fails loudly",
+  throws(() => resolveGlobalIsOnline("2", releaseClock, globalUtcOffsetMinutes)),
+);
+check(
+  "unknown numeric isOnline fails loudly",
+  throws(() => resolveGlobalIsOnline(2, releaseClock, globalUtcOffsetMinutes)),
+);
+check(
+  "non-Global timestamp syntax fails loudly",
+  throws(() => resolveGlobalIsOnline("2026-09-03T05:00:00Z", releaseClock, globalUtcOffsetMinutes)),
+);
+check(
+  "invalid Global timestamp calendar date fails loudly",
+  throws(() => resolveGlobalIsOnline("2026-02-30 05:00:00", releaseClock, globalUtcOffsetMinutes)),
+);
+check(
+  "invalid release clock fails loudly",
+  throws(() => resolveGlobalIsOnline("2026-09-03 04:59:59", new Date(NaN), globalUtcOffsetMinutes)),
 );
 check(
   "manual false overrides released character",

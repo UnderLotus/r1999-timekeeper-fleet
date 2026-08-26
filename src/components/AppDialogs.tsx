@@ -1,21 +1,17 @@
 import type { Dispatch, SetStateAction } from "react";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { ShareDialog } from "./ShareDialog";
-import type { ExportMode } from "./ExportCanvas";
+import type { ExportMode } from "../types/export";
 import { getUiText, type LangCode } from "../i18n/ui";
 import { useBoxStore } from "../store/boxStore";
 import type { Profile } from "../types/profile";
-import {
-  characterName,
-  getCharacter,
-  profileHasFutureContent,
-} from "../utils/catalog";
+import { characterName, getCharacter } from "../utils/catalog";
 
 export type DialogState =
   | { kind: "reset" }
   | { kind: "future-warning" }
   | { kind: "preview-future-warning" }
-  | { kind: "preview-spoiler"; profile: Profile }
+  | { kind: "preview-spoiler" }
   | { kind: "import" }
   | { kind: "remove-char"; id: string }
   | { kind: "remove-psy"; id: string }
@@ -32,7 +28,12 @@ export function AppDialogs({
   exportMode,
   setExportMode,
   exportBusy,
-  onClearShareHash,
+  importHasFutureContent,
+  importLocalFutureSight,
+  onPreviewSpoilerConfirm,
+  onPreviewSpoilerCancel,
+  onPreviewFutureConfirm,
+  onImportPreview,
   onExport,
 }: {
   dialog: DialogState;
@@ -42,7 +43,12 @@ export function AppDialogs({
   exportMode: ExportMode;
   setExportMode: Dispatch<SetStateAction<ExportMode>>;
   exportBusy: boolean;
-  onClearShareHash: () => void;
+  importHasFutureContent: boolean;
+  importLocalFutureSight: boolean;
+  onPreviewSpoilerConfirm: () => void;
+  onPreviewSpoilerCancel: () => void;
+  onPreviewFutureConfirm: () => void;
+  onImportPreview: (enableFutureSight: boolean) => void;
   onExport: () => void;
 }): React.JSX.Element {
   const store = useBoxStore();
@@ -71,7 +77,7 @@ export function AppDialogs({
           body={t("futureWarningBody")}
           lang={lang}
           onConfirm={() => {
-            store.setPreviewShowFutureSight(true);
+            onPreviewFutureConfirm();
             close();
           }}
           onCancel={close}
@@ -85,11 +91,11 @@ export function AppDialogs({
           lang={lang}
           confirmLabel={t("revealPreview")}
           onConfirm={() => {
-            store.enterPreview(dialog.profile, true);
+            onPreviewSpoilerConfirm();
             close();
           }}
           onCancel={() => {
-            onClearShareHash();
+            onPreviewSpoilerCancel();
             close();
           }}
         />
@@ -157,8 +163,7 @@ export function AppDialogs({
           open
           title={t("confirmImportTitle")}
           body={
-            profileHasFutureContent(activeProfile) &&
-            !store.preferences.showFutureSight
+            importHasFutureContent && !importLocalFutureSight
               ? t("confirmImportFutureBody", {
                   c: Object.keys(activeProfile.characters).length,
                   p: Object.keys(activeProfile.psychubes).length,
@@ -170,25 +175,21 @@ export function AppDialogs({
           }
           lang={lang}
           confirmLabel={
-            profileHasFutureContent(activeProfile) &&
-            !store.preferences.showFutureSight
+            importHasFutureContent && !importLocalFutureSight
               ? t("importKeepHidden")
               : t("confirm")
           }
           secondaryConfirmLabel={
-            profileHasFutureContent(activeProfile) &&
-            !store.preferences.showFutureSight
+            importHasFutureContent && !importLocalFutureSight
               ? t("importEnableFuture")
               : undefined
           }
           onConfirm={() => {
-            store.importPreview(false);
-            onClearShareHash();
+            onImportPreview(false);
             close();
           }}
           onSecondaryConfirm={() => {
-            store.importPreview(true);
-            onClearShareHash();
+            onImportPreview(true);
             close();
           }}
           onCancel={close}

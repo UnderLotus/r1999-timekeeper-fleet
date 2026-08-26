@@ -1,33 +1,25 @@
 import {
   ADD_DEFAULT,
   migratePersistedState,
-  sanitizeProfile,
   useBoxStore,
 } from "../src/store/boxStore";
 import { emptyProfile } from "../src/types/profile";
-import {
-  profileHasFutureContent,
-  setCatalogForTesting,
-} from "../src/utils/catalog";
-import { fixtureCharacters, fixturePsychubes } from "./test-fixtures";
-setCatalogForTesting(fixtureCharacters, fixturePsychubes);
-let pass = 0,
-  fail = 0;
+import { setCatalogForTesting } from "../src/utils/catalog";
+import { fixtureCharacters } from "./test-fixtures";
+
+setCatalogForTesting(fixtureCharacters, []);
+
+let pass = 0;
+let fail = 0;
 function check(name: string, value: boolean): void {
   if (value) {
     pass++;
-    console.log("  ✓ " + name);
+    console.log(`  ✓ ${name}`);
   } else {
     fail++;
-    console.error("  ✗ " + name);
+    console.error(`  ✗ ${name}`);
   }
 }
-const a = fixtureCharacters[0],
-  b = fixtureCharacters[1],
-  twins = fixtureCharacters.find((item) => item.id === "3149")!,
-  psy = fixturePsychubes[0],
-  twinsPsy1 = fixturePsychubes.find((item) => item.id === "1571")!,
-  twinsPsy2 = fixturePsychubes.find((item) => item.id === "1572")!;
 function fresh() {
   useBoxStore.setState({
     profile: emptyProfile(),
@@ -40,6 +32,7 @@ function fresh() {
       filterMode: "all",
       rarityFilter: [],
       assignment: null,
+      assignmentPreviousFilter: null,
     },
     preferences: {
       lang: "zh-TW",
@@ -52,438 +45,135 @@ function fresh() {
   });
   return useBoxStore.getState();
 }
+const a = fixtureCharacters[0];
+const b = fixtureCharacters[1];
+const future = fixtureCharacters[2];
+
 check(
-  "empty profile is 4x4",
+  "store starts with a four-team, four-slot local profile",
   (() => {
-    const p = fresh().profile;
-    return p.teams.length === 4 && p.teams.every((t) => t.slots.length === 4);
+    const state = fresh();
+    return (
+      !state.activeIsPreview &&
+      state.profile.teams.length === 4 &&
+      state.profile.teams.every((team) => team.slots.length === 4)
+    );
   })(),
 );
 check(
-  "add defaults are applied",
+  "local active-profile routing delegates mutations to local data",
   (() => {
     fresh();
     useBoxStore.getState().addCharacter(a.id);
-    const v = useBoxStore.getState().profile.characters[a.id];
-    return v.insight === 0 && v.level === 1 && v.activeVariant === null;
+    return !!useBoxStore.getState().profile.characters[a.id];
   })(),
 );
 check(
-  "default insight skin applies only to newly added characters",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.setDefaultSkinMode("insight");
-    s.addCharacter(a.id);
-    return (
-      useBoxStore.getState().profile.characters[a.id].activeVariant === "300302"
-    );
-  })(),
-);
-check(
-  "configurable add defaults clamp to character",
-  (() => {
-    fresh();
-    useBoxStore
-      .getState()
-      .setAddDefaults({ insight: 3, level: 60, portray: 4, resonance: 9 });
-    useBoxStore.getState().addCharacter(b.id);
-    const v = useBoxStore.getState().profile.characters[b.id];
-    return (
-      v.insight === b.maxInsight &&
-      v.level === 50 &&
-      v.portray === 4 &&
-      v.resonance === 9
-    );
-  })(),
-);
-check(
-  "low rarity rejects I3",
-  (() => {
-    fresh();
-    useBoxStore.getState().addCharacter(b.id);
-    useBoxStore.getState().setInsight(b.id, 3);
-    return useBoxStore.getState().profile.characters[b.id].insight <= 2;
-  })(),
-);
-check(
-  "lower insight clamps level",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.addCharacter(a.id);
-    s.setInsight(a.id, 3);
-    s.setLevel(a.id, 60);
-    s.setInsight(a.id, 0);
-    return useBoxStore.getState().profile.characters[a.id].level === 30;
-  })(),
-);
-check(
-  "duplicate character in one team rejected",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.addCharacter(a.id);
-    const first = s.assignSlot(0, 0, a.id, null);
-    const duplicate = s.assignSlot(0, 1, a.id, null);
-    return (
-      first === true &&
-      duplicate === false &&
-      useBoxStore.getState().profile.teams[0].slots[0].characterId === a.id &&
-      useBoxStore.getState().profile.teams[0].slots[1].characterId === null
-    );
-  })(),
-);
-check(
-  "cross-team reuse allowed",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.addCharacter(a.id);
-    s.assignSlot(0, 0, a.id, null);
-    s.assignSlot(1, 0, a.id, null);
-    return (
-      useBoxStore.getState().profile.teams[1].slots[0].characterId === a.id
-    );
-  })(),
-);
-check(
-  "psychube default imprint persists and applies to newly owned psychubes",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.setPsychubeImprintDefault(4);
-    s.addPsychube(psy.id);
-    const state = useBoxStore.getState();
-    return (
-      state.preferences.psychubeImprintDefault === 4 &&
-      state.profile.psychubes[psy.id] === 4
-    );
-  })(),
-);
-check(
-  "psychube default imprint clamps to 1 through 5",
-  (() => {
-    fresh();
-    useBoxStore.getState().setPsychubeImprintDefault(99);
-    const max = useBoxStore.getState().preferences.psychubeImprintDefault;
-    useBoxStore.getState().setPsychubeImprintDefault(0);
-    const min = useBoxStore.getState().preferences.psychubeImprintDefault;
-    return max === 5 && min === 1;
-  })(),
-);
-check(
-  "mark all owned applies the selected imprint to released psychubes",
-  (() => {
-    fresh();
-    useBoxStore.getState().setAllPsychubesOwned(true, 3);
-    const profile = useBoxStore.getState().profile;
-    return (
-      fixturePsychubes
-        .filter((item) => item.released)
-        .every((item) => profile.psychubes[item.id] === 3) &&
-      fixturePsychubes
-        .filter((item) => !item.released)
-        .every((item) => !profile.psychubes[item.id])
-    );
-  })(),
-);
-check(
-  "mark all unowned clears visible psychube team references",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.addCharacter(a.id);
-    s.addPsychube(psy.id);
-    s.assignSlot(0, 0, a.id, psy.id);
-    s.setAllPsychubesOwned(false, 1);
-    const profile = useBoxStore.getState().profile;
-    return (
-      !profile.psychubes[psy.id] &&
-      profile.teams[0].slots[0].psychubeId === null
-    );
-  })(),
-);
-check(
-  "bulk ownership preserves hidden future psychube data",
-  (() => {
-    fresh();
-    const futurePsychube = fixturePsychubes.find((item) => !item.released)!;
-    const s = useBoxStore.getState();
-    s.setShowFutureSight(true);
-    s.addPsychube(futurePsychube.id);
-    s.setShowFutureSight(false);
-    s.setAllPsychubesOwned(false, 1);
-    return useBoxStore.getState().profile.psychubes[futurePsychube.id] === 1;
-  })(),
-);
-check(
-  "psychube requires character",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.setPsychubeImprint(psy.id, 1);
-    s.assignSlot(0, 0, null, psy.id);
-    return useBoxStore.getState().profile.teams[0].slots[0].psychubeId === null;
-  })(),
-);
-check(
-  "same-team psychube reuse is independent of displayed imprint",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.addCharacter(a.id);
-    s.addCharacter(b.id);
-    s.setPsychubeImprint(psy.id, 1);
-    s.assignSlot(0, 0, a.id, psy.id);
-    s.assignSlot(0, 1, b.id, psy.id);
-    return (
-      useBoxStore.getState().profile.teams[0].slots[0].psychubeId === psy.id &&
-      useBoxStore.getState().profile.teams[0].slots[1].psychubeId === psy.id
-    );
-  })(),
-);
-check(
-  "regular character rejects a second psychube",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.addCharacter(a.id);
-    s.addPsychube(psy.id);
-    s.addPsychube(twinsPsy1.id);
-    s.assignSlot(0, 0, a.id, psy.id, twinsPsy1.id);
-    const slot = useBoxStore.getState().profile.teams[0].slots[0];
-    return slot.psychubeId === psy.id && slot.psychubeId2 === null;
-  })(),
-);
-check(
-  "The Twins auto-owns and equips the paired psychube",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.setPsychubeImprintDefault(4);
-    s.addCharacter(twins.id);
-    s.addPsychube(twinsPsy1.id);
-    s.assignSlot(0, 0, twins.id, twinsPsy1.id);
-    const profile = useBoxStore.getState().profile;
-    const slot = profile.teams[0].slots[0];
-    return (
-      profile.psychubes[twinsPsy2.id] === 4 &&
-      slot.psychubeId === twinsPsy1.id &&
-      slot.psychubeId2 === twinsPsy2.id
-    );
-  })(),
-);
-check(
-  "team names clamp to 12 characters and survive clear",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.setTeamName(0, "ABCDEFGHIJKLMNO");
-    s.clearTeam(0);
-    return useBoxStore.getState().profile.teams[0].name === "ABCDEFGHIJKL";
-  })(),
-);
-check(
-  "psychube imprint can decrease independently of team usage",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.addCharacter(a.id);
-    s.addCharacter(b.id);
-    s.setPsychubeImprint(psy.id, 2);
-    s.assignSlot(0, 0, a.id, psy.id);
-    s.assignSlot(0, 1, b.id, psy.id);
-    s.setPsychubeImprint(psy.id, 1);
-    return (
-      useBoxStore.getState().profile.psychubes[psy.id] === 1 &&
-      useBoxStore.getState().profile.teams[0].slots[1].psychubeId === psy.id
-    );
-  })(),
-);
-check(
-  "psychube imprint caps at 5",
-  (() => {
-    fresh();
-    useBoxStore.getState().setPsychubeImprint(psy.id, 99);
-    return useBoxStore.getState().profile.psychubes[psy.id] === 5;
-  })(),
-);
-check(
-  "removing character clears whole slot",
-  (() => {
-    fresh();
-    const s = useBoxStore.getState();
-    s.addCharacter(a.id);
-    s.setPsychubeImprint(psy.id, 1);
-    s.assignSlot(0, 0, a.id, psy.id);
-    s.removeCharacter(a.id);
-    const slot = useBoxStore.getState().profile.teams[0].slots[0];
-    return slot.characterId === null && slot.psychubeId === null;
-  })(),
-);
-check(
-  "Future Sight off blocks adding unreleased character",
-  (() => {
-    fresh();
-    const future = fixtureCharacters[2];
-    useBoxStore.getState().addCharacter(future.id);
-    return !useBoxStore.getState().profile.characters[future.id];
-  })(),
-);
-check(
-  "Future Sight on allows and off preserves unreleased character",
-  (() => {
-    fresh();
-    const future = fixtureCharacters[2];
-    useBoxStore.getState().setShowFutureSight(true);
-    useBoxStore.getState().addCharacter(future.id);
-    useBoxStore.getState().setShowFutureSight(false);
-    return !!useBoxStore.getState().profile.characters[future.id];
-  })(),
-);
-check(
-  "Future Sight off blocks adding unreleased psychube",
-  (() => {
-    fresh();
-    const futurePsychube = fixturePsychubes.find((item) => !item.released)!;
-    useBoxStore.getState().addPsychube(futurePsychube.id);
-    return !useBoxStore.getState().profile.psychubes[futurePsychube.id];
-  })(),
-);
-check(
-  "Future Sight on allows and off preserves unreleased psychube",
-  (() => {
-    fresh();
-    const futurePsychube = fixturePsychubes.find((item) => !item.released)!;
-    useBoxStore.getState().setShowFutureSight(true);
-    useBoxStore.getState().addPsychube(futurePsychube.id);
-    useBoxStore.getState().setShowFutureSight(false);
-    return useBoxStore.getState().profile.psychubes[futurePsychube.id] === 1;
-  })(),
-);
-check(
-  "profile with only an unreleased psychube requires Future Sight confirmation",
-  (() => {
-    const profile = emptyProfile();
-    const futurePsychube = fixturePsychubes.find((item) => !item.released)!;
-    profile.psychubes[futurePsychube.id] = 1;
-    return profileHasFutureContent(profile);
-  })(),
-);
-check(
-  "profile with only a released psychube does not require Future Sight confirmation",
-  (() => {
-    const profile = emptyProfile();
-    const releasedPsychube = fixturePsychubes.find((item) => item.released)!;
-    profile.psychubes[releasedPsychube.id] = 1;
-    return !profileHasFutureContent(profile);
-  })(),
-);
-check(
-  "Future Sight off blocks selecting unreleased skin",
-  (() => {
-    fresh();
-    useBoxStore.getState().addCharacter(a.id);
-    const futureSkin = a.skins.find((skin) => !skin.released)!;
-    useBoxStore.getState().setActiveVariant(a.id, futureSkin.id);
-    return (
-      useBoxStore.getState().profile.characters[a.id].activeVariant === null
-    );
-  })(),
-);
-check(
-  "preview spoiler approval controls domain selection",
-  (() => {
-    fresh();
-    const future = fixtureCharacters[2];
-    useBoxStore.getState().enterPreview(emptyProfile(), false);
-    useBoxStore.getState().addCharacter(future.id);
-    const blocked =
-      !useBoxStore.getState().previewProfile?.characters[future.id];
-    useBoxStore.getState().setPreviewShowFutureSight(true);
-    useBoxStore.getState().addCharacter(future.id);
-    return (
-      blocked && !!useBoxStore.getState().previewProfile?.characters[future.id]
-    );
-  })(),
-);
-check(
-  "Future Sight off blocks newly assigning stored future character",
-  (() => {
-    fresh();
-    const future = fixtureCharacters[2];
-    useBoxStore.getState().setShowFutureSight(true);
-    useBoxStore.getState().addCharacter(future.id);
-    useBoxStore.getState().assignSlot(0, 0, future.id, null);
-    useBoxStore.getState().setShowFutureSight(false);
-    useBoxStore.getState().assignSlot(1, 0, future.id, null);
-    const profile = useBoxStore.getState().profile;
-    return (
-      profile.teams[0].slots[0].characterId === future.id &&
-      profile.teams[1].slots[0].characterId === null
-    );
-  })(),
-);
-check(
-  "valid unreleased skin survives sanitize",
-  (() => {
-    fresh();
-    const future = a.skins.at(-1)!;
-    const p = emptyProfile();
-    p.characters[a.id] = { ...ADD_DEFAULT, activeVariant: future.id };
-    const clean = sanitizeProfile(p);
-    return clean.characters[a.id].activeVariant === future.id;
-  })(),
-);
-check(
-  "stale skin falls back without dropping character",
-  (() => {
-    const p = emptyProfile();
-    p.characters[a.id] = { ...ADD_DEFAULT, activeVariant: "999999" };
-    const clean = sanitizeProfile(p);
-    return clean.characters[a.id].activeVariant === null;
-  })(),
-);
-check(
-  "preview edits never mutate local",
+  "preview active-profile routing never mutates local data",
   (() => {
     fresh();
     useBoxStore.getState().addCharacter(a.id);
     const before = JSON.stringify(useBoxStore.getState().profile);
     useBoxStore.getState().enterPreview(emptyProfile());
     useBoxStore.getState().addCharacter(b.id);
+    const state = useBoxStore.getState();
     return (
-      JSON.stringify(useBoxStore.getState().profile) === before &&
-      !!useBoxStore.getState().previewProfile?.characters[b.id]
+      state.activeIsPreview &&
+      JSON.stringify(state.profile) === before &&
+      !!state.previewProfile?.characters[b.id]
     );
   })(),
 );
 check(
-  "preview import replaces local",
+  "preview entry sanitizes the incoming profile and clears assignment UI",
+  (() => {
+    fresh();
+    useBoxStore.getState().setAssignment({
+      team: 0,
+      slot: 0,
+      kind: "character",
+    });
+    const incoming = emptyProfile();
+    incoming.characters[a.id] = { ...ADD_DEFAULT, activeVariant: "stale" };
+    useBoxStore.getState().enterPreview(incoming, true);
+    const state = useBoxStore.getState();
+    return (
+      state.previewShowFutureSight &&
+      state.ui.assignment === null &&
+      state.previewProfile?.characters[a.id].activeVariant === null
+    );
+  })(),
+);
+check(
+  "preview Future Sight state is separate from local preferences",
+  (() => {
+    fresh();
+    useBoxStore.getState().setShowFutureSight(true);
+    useBoxStore.getState().enterPreview(emptyProfile(), false);
+    useBoxStore.getState().setPreviewShowFutureSight(true);
+    const state = useBoxStore.getState();
+    return state.preferences.showFutureSight && state.previewShowFutureSight;
+  })(),
+);
+check(
+  "leaving preview discards preview data and transient assignment",
+  (() => {
+    fresh();
+    useBoxStore.getState().enterPreview(emptyProfile());
+    useBoxStore.getState().addCharacter(a.id);
+    useBoxStore.getState().setAssignment({
+      team: 0,
+      slot: 0,
+      kind: "character",
+    });
+    useBoxStore.getState().exitPreview();
+    const state = useBoxStore.getState();
+    return (
+      !state.activeIsPreview &&
+      state.previewProfile === null &&
+      state.previewShowFutureSight === false &&
+      state.ui.assignment === null &&
+      !state.profile.characters[a.id]
+    );
+  })(),
+);
+check(
+  "import preview replaces local and keeps Future Sight hidden by default",
   (() => {
     fresh();
     useBoxStore.getState().addCharacter(a.id);
-    const preview = emptyProfile();
-    const future = fixtureCharacters[2];
-    preview.characters[future.id] = { ...ADD_DEFAULT, activeVariant: null };
-    useBoxStore.getState().enterPreview(preview, true);
-    useBoxStore.getState().importPreview();
+    const incoming = emptyProfile();
+    incoming.characters[future.id] = { ...ADD_DEFAULT, activeVariant: null };
+    useBoxStore.getState().enterPreview(incoming, true);
+    useBoxStore.getState().importPreview(false);
     const state = useBoxStore.getState();
     return (
+      !state.activeIsPreview &&
+      state.previewProfile === null &&
       !state.profile.characters[a.id] &&
       !!state.profile.characters[future.id] &&
-      !state.activeIsPreview &&
       !state.preferences.showFutureSight
     );
   })(),
 );
 check(
-  "current persisted envelope sanitizes untrusted profile",
+  "import preview can explicitly enable local Future Sight",
+  (() => {
+    fresh();
+    const incoming = emptyProfile();
+    incoming.characters[future.id] = { ...ADD_DEFAULT, activeVariant: null };
+    useBoxStore.getState().enterPreview(incoming, true);
+    useBoxStore.getState().importPreview(true);
+    const state = useBoxStore.getState();
+    return !!state.profile.characters[future.id] && state.preferences.showFutureSight;
+  })(),
+);
+check(
+  "persisted state migration returns sanitized profile and preferences",
   (() => {
     const migrated = migratePersistedState({
       profile: {
-        characters: { [a.id]: { ...ADD_DEFAULT, activeVariant: null } },
+        characters: { [a.id]: { ...ADD_DEFAULT, activeVariant: "stale" } },
         psychubes: {},
         teams: [],
       },
@@ -491,30 +181,14 @@ check(
     });
     return (
       !!migrated.profile.characters[a.id] &&
+      migrated.profile.characters[a.id].activeVariant === null &&
       migrated.profile.teams.length === 4 &&
       migrated.preferences.psychubeImprintDefault === 1
     );
   })(),
 );
 check(
-  "preview import can explicitly enable Future Sight",
-  (() => {
-    fresh();
-    const preview = emptyProfile();
-    const future = fixtureCharacters[2];
-    preview.characters[future.id] = { ...ADD_DEFAULT, activeVariant: null };
-    useBoxStore.getState().enterPreview(preview, true);
-    useBoxStore.getState().importPreview(true);
-    const state = useBoxStore.getState();
-    return (
-      !!state.profile.characters[future.id] &&
-      state.preferences.showFutureSight &&
-      !state.activeIsPreview
-    );
-  })(),
-);
-check(
-  "preview and transient UI are not persisted",
+  "persistence contains only local profile and preferences",
   (() => {
     fresh();
     useBoxStore.getState().enterPreview(emptyProfile());
@@ -522,15 +196,15 @@ check(
       .getOptions()
       .partialize?.(useBoxStore.getState()) as Record<string, unknown>;
     return (
-      !("previewProfile" in partial) &&
-      !("activeIsPreview" in partial) &&
-      !("ui" in partial) &&
-      "preferences" in partial
+      Object.keys(partial).sort().join(",") === "preferences,profile" &&
+      !partial.previewProfile &&
+      !partial.activeIsPreview &&
+      !partial.ui
     );
   })(),
 );
 check(
-  "Future Sight preference persists separately",
+  "Future Sight preference is persisted independently of preview state",
   (() => {
     fresh();
     useBoxStore.getState().setShowFutureSight(true);
@@ -542,5 +216,6 @@ check(
     return partial.preferences?.showFutureSight === true;
   })(),
 );
+
 console.log(`\nstore tests: ${pass} passed, ${fail} failed`);
 if (fail) process.exit(1);

@@ -2,13 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import type { LangCode } from "../i18n/ui";
 import { getUiText } from "../i18n/ui";
-import type { DefaultSkinMode, FilterMode } from "../store/boxStore";
-import type { CharacterBuild } from "../types/profile";
+import {
+  beginPoolDefaults,
+  commitPoolDefaults,
+  type AddDefaults,
+  type DefaultSkinMode,
+  type FilterMode,
+  type PoolDefaultsDraft,
+  type PoolTab,
+  type PsychubeOwnershipMode,
+} from "../utils/pool-model";
 import { InsightGlyph } from "./InsightGlyph";
 import { Btn, SegButtons, Stepper } from "../utils/design";
-
-type AddDefaults = Omit<CharacterBuild, "activeVariant">;
-type PsychubeOwnershipMode = "unowned" | "owned";
 
 export function PoolControls({
   lang,
@@ -20,6 +25,7 @@ export function PoolControls({
   defaultSkinMode,
   psychubeImprintDefault,
   psychubeOwnershipStatus,
+  rarityOptions,
   onTab,
   onSearch,
   onFilter,
@@ -38,7 +44,8 @@ export function PoolControls({
   defaultSkinMode: DefaultSkinMode;
   psychubeImprintDefault: number;
   psychubeOwnershipStatus: PsychubeOwnershipMode | null;
-  onTab: (tab: "characters" | "psychubes") => void;
+  rarityOptions: readonly number[];
+  onTab: (tab: PoolTab) => void;
   onSearch: (value: string) => void;
   onFilter: (value: FilterMode) => void;
   onRarity: (value: number[]) => void;
@@ -53,30 +60,43 @@ export function PoolControls({
   const [draft, setDraft] = useState<AddDefaults>(addDefaults);
   const [draftSkinMode, setDraftSkinMode] =
     useState<DefaultSkinMode>(defaultSkinMode);
-  const [draftPsychubeImprint, setDraftPsychubeImprint] = useState(
+  const [draftPsychubeAmplification, setDraftPsychubeAmplification] = useState(
     psychubeImprintDefault,
   );
   const [draftPsychubeOwnership, setDraftPsychubeOwnership] =
     useState<PsychubeOwnershipMode | null>(psychubeOwnershipStatus);
   const defaultsRef = useRef<HTMLDivElement>(null);
   const beginDefaults = () => {
-    setDraft(addDefaults);
-    setDraftSkinMode(defaultSkinMode);
-    setDraftPsychubeImprint(psychubeImprintDefault);
-    setDraftPsychubeOwnership(psychubeOwnershipStatus);
+    const initial = beginPoolDefaults({
+      addDefaults,
+      defaultSkinMode,
+      psychubeAmplificationDefault: psychubeImprintDefault,
+      psychubeOwnershipStatus,
+    });
+    setDraft(initial.addDefaults);
+    setDraftSkinMode(initial.defaultSkinMode);
+    setDraftPsychubeAmplification(initial.psychubeAmplificationDefault);
+    setDraftPsychubeOwnership(initial.psychubeOwnershipStatus);
     setDefaultsOpen(true);
   };
   const cancelDefaults = () => setDefaultsOpen(false);
   const completeDefaults = () => {
-    if (tab === "characters") {
-      onDefaults(draft);
-      onDefaultSkinMode(draftSkinMode);
+    const draftState: PoolDefaultsDraft = {
+      addDefaults: { ...draft },
+      defaultSkinMode: draftSkinMode,
+      psychubeAmplificationDefault: draftPsychubeAmplification,
+      psychubeOwnershipStatus: draftPsychubeOwnership,
+    };
+    const committed = commitPoolDefaults(tab, draftState);
+    if (committed.tab === "characters") {
+      onDefaults(committed.addDefaults);
+      onDefaultSkinMode(committed.defaultSkinMode);
     } else {
-      onPsychubeImprintDefault(draftPsychubeImprint);
-      if (draftPsychubeOwnership)
+      onPsychubeImprintDefault(committed.psychubeAmplificationDefault);
+      if (committed.psychubeOwnershipStatus)
         onSetAllPsychubesOwned(
-          draftPsychubeOwnership === "owned",
-          draftPsychubeImprint,
+          committed.psychubeOwnershipStatus === "owned",
+          committed.psychubeAmplificationDefault,
         );
     }
     setDefaultsOpen(false);
@@ -143,25 +163,23 @@ export function PoolControls({
         ))}
       </div>
       <div className="rarity-filter" role="group" aria-label={t("rarity")}>
-        {(tab === "psychubes" ? [3, 4, 5, 6] : [2, 3, 4, 5, 6]).map(
-          (rarity) => (
-            <button
-              key={rarity}
-              type="button"
-              aria-pressed={rarityFilter.includes(rarity)}
-              data-active={rarityFilter.includes(rarity)}
-              onClick={() =>
-                onRarity(
-                  rarityFilter.includes(rarity)
-                    ? rarityFilter.filter((x) => x !== rarity)
-                    : [...rarityFilter, rarity],
-                )
-              }
-            >
-              ★{rarity}
-            </button>
-          ),
-        )}
+        {rarityOptions.map((rarity) => (
+          <button
+            key={rarity}
+            type="button"
+            aria-pressed={rarityFilter.includes(rarity)}
+            data-active={rarityFilter.includes(rarity)}
+            onClick={() =>
+              onRarity(
+                rarityFilter.includes(rarity)
+                  ? rarityFilter.filter((x) => x !== rarity)
+                  : [...rarityFilter, rarity],
+              )
+            }
+          >
+            ★{rarity}
+          </button>
+        ))}
       </div>
       <div className="add-defaults" ref={defaultsRef}>
         <button
@@ -326,7 +344,7 @@ export function PoolControls({
                 <section className="editor-section">
                   <header className="editor-section__head">
                     <span>{t("defaultPsychubeImprint")}</span>
-                    <output>{draftPsychubeImprint}</output>
+                    <output>{draftPsychubeAmplification}</output>
                   </header>
                   <div className="editor-section__controls">
                     <SegButtons
@@ -334,9 +352,9 @@ export function PoolControls({
                         key: String(value),
                         label: String(value),
                       }))}
-                      selected={String(draftPsychubeImprint)}
+                      selected={String(draftPsychubeAmplification)}
                       onSelect={(value) =>
-                        setDraftPsychubeImprint(Number(value))
+                        setDraftPsychubeAmplification(Number(value))
                       }
                     />
                   </div>

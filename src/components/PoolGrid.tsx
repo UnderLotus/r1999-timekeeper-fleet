@@ -1,25 +1,15 @@
 import type { LangCode } from "../i18n/ui";
 import { getUiText } from "../i18n/ui";
-import type { CharacterBuild } from "../types/profile";
 import type { InsightIndex } from "../types/catalog";
-import {
-  allCharacters,
-  psychubesByRarityAndRecency,
-  searchableNames,
-} from "../utils/catalog";
 import type { AnchorRect } from "../utils/design";
+import type { Assignment, PoolView } from "../utils/pool-model";
 import { CharacterCard } from "./CharacterCard";
 import { PsychubeCard } from "./PsychubeCard";
-import type { Assignment, FilterMode } from "../store/boxStore";
+
 export function PoolGrid({
-  tab,
+  view,
   lang,
   revealFuture,
-  ownedCharacters,
-  psychubes,
-  search,
-  filterMode,
-  rarityFilter,
   assignment,
   onAddCharacter,
   onOpenEditor,
@@ -33,14 +23,9 @@ export function PoolGrid({
   onRemovePsychube,
   onAddPsychube,
 }: {
-  tab: "characters" | "psychubes";
+  view: PoolView;
   lang: LangCode;
   revealFuture: boolean;
-  ownedCharacters: Record<string, CharacterBuild>;
-  psychubes: Record<string, number>;
-  search: string;
-  filterMode: FilterMode;
-  rarityFilter: number[];
   assignment: Assignment | null;
   onAddCharacter: (id: string) => void;
   onOpenEditor: (
@@ -58,89 +43,59 @@ export function PoolGrid({
   onRemovePsychube: (id: string) => void;
   onAddPsychube: (id: string) => void;
 }): React.JSX.Element {
-  const q = search.trim().toLocaleLowerCase();
-  if (tab === "psychubes") {
-    const applicableRarityFilter = rarityFilter.filter((rarity) => rarity >= 3);
-    const list = psychubesByRarityAndRecency()
-      .filter((item) => item.released || revealFuture)
-      .filter((item) => {
-        const owned = !!psychubes[item.id];
-        if (filterMode === "owned" && !owned) return false;
-        if (filterMode === "unowned" && owned) return false;
-        if (
-          applicableRarityFilter.length &&
-          item.rarity !== null &&
-          !applicableRarityFilter.includes(item.rarity + 1)
-        )
-          return false;
-        return !q || searchableNames(item.names).includes(q);
-      });
+  if (view.tab === "psychubes") {
     return (
       <div className="pool-grid">
-        {!list.length && (
+        {!view.psychubes.length && (
           <div className="pool-empty">
             {getUiText(lang, "noResultPsychube")}
           </div>
         )}
-        {list.map((item) => {
-          const imprint = psychubes[item.id] ?? 0,
-            owned = imprint > 0;
-          return (
-            <PsychubeCard
-              key={item.id}
-              def={item}
-              imprint={imprint}
-              lang={lang}
-              onAdd={() => onAddPsychube(item.id)}
-              onSetImprint={(value) => onSetPsychubeImprint(item.id, value)}
-              onRemove={() => onRemovePsychube(item.id)}
-              onAssign={
-                assignment?.kind === "psychube" && owned
-                  ? () => onPickPsychube(item.id)
-                  : undefined
-              }
-            />
-          );
-        })}
+        {view.psychubes.map(({ definition, amplification, owned }) => (
+          <PsychubeCard
+            key={definition.id}
+            def={definition}
+            imprint={amplification}
+            lang={lang}
+            onAdd={() => onAddPsychube(definition.id)}
+            onSetImprint={(value) =>
+              onSetPsychubeImprint(definition.id, value)
+            }
+            onRemove={() => onRemovePsychube(definition.id)}
+            onAssign={
+              assignment?.kind === "psychube" && owned
+                ? () => onPickPsychube(definition.id)
+                : undefined
+            }
+          />
+        ))}
       </div>
     );
   }
-  const list = allCharacters()
-    .filter((item) => item.released || revealFuture)
-    .filter((item) => {
-      const owned = !!ownedCharacters[item.id];
-      if (filterMode === "owned" && !owned) return false;
-      if (filterMode === "unowned" && owned) return false;
-      const rarity = item.rarity === null ? null : item.rarity + 1;
-      if (
-        rarityFilter.length &&
-        rarity !== null &&
-        !rarityFilter.includes(rarity)
-      )
-        return false;
-      return !q || searchableNames(item.names).includes(q);
-    });
+
   return (
     <div className="pool-grid">
-      {!list.length && (
+      {!view.characters.length && (
         <div className="pool-empty">{getUiText(lang, "noResult")}</div>
       )}
-      {list.map((def) => (
+      {view.characters.map(({ definition, build, owned }) => (
         <CharacterCard
-          key={def.id}
-          def={def}
-          build={ownedCharacters[def.id]}
+          key={definition.id}
+          def={definition}
+          build={build}
           lang={lang}
           revealFuture={revealFuture}
-          onAdd={() => onAddCharacter(def.id)}
-          onOpenEditor={(field, anchor) => onOpenEditor(def.id, field, anchor)}
-          onOpenSkin={(anchor) => onOpenSkin(def.id, anchor)}
-          onRemove={() => onRemoveCharacter(def.id)}
-          onSetInsight={(value) => onSetInsight(def.id, value)}
-          onSetResonance={(value) => onSetResonance(def.id, value)}
+          onAdd={() => onAddCharacter(definition.id)}
+          onOpenEditor={(field, anchor) =>
+            onOpenEditor(definition.id, field, anchor)
+          }
+          onOpenSkin={(anchor) => onOpenSkin(definition.id, anchor)}
+          onRemove={() => onRemoveCharacter(definition.id)}
+          onSetInsight={(value) => onSetInsight(definition.id, value)}
+          onSetResonance={(value) => onSetResonance(definition.id, value)}
           onAssign={
-            assignment?.kind === "character" && ownedCharacters[def.id]
-              ? () => onPickCharacter(def.id)
+            assignment?.kind === "character" && owned
+              ? () => onPickCharacter(definition.id)
               : undefined
           }
         />

@@ -1,11 +1,6 @@
 import { domToJpeg } from "modern-screenshot";
-
-export type ExportPhase = "loading" | "rendering";
-export interface ExportProgress {
-  phase: ExportPhase;
-  loaded: number;
-  total: number;
-}
+import type { ExportProgress } from "../types/export";
+export type { ExportProgress } from "../types/export";
 
 const EXPORT_SCALE = 1.5;
 const WEBKIT_EXPORT_SCALE = 1.75;
@@ -28,6 +23,33 @@ function rejectAfter(ms: number, message: string): Promise<never> {
   );
 }
 
+function waitForImage(image: HTMLImageElement): Promise<void> {
+  if (image.complete) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    const timeoutId = window.setTimeout(() => {
+      finish(new Error(`Timed out loading export asset: ${image.src}`));
+    }, 15_000);
+    const cleanup = () => {
+      window.clearTimeout(timeoutId);
+      image.removeEventListener("load", onLoad);
+      image.removeEventListener("error", onError);
+    };
+    const finish = (error?: Error) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      if (error) reject(error);
+      else resolve();
+    };
+    const onLoad = () => finish();
+    const onError = () => finish();
+    image.addEventListener("load", onLoad);
+    image.addEventListener("error", onError);
+    if (image.complete) finish();
+  });
+}
+
 async function waitForImages(
   root: HTMLElement,
   onProgress?: (value: ExportProgress) => void,
@@ -40,17 +62,7 @@ async function waitForImages(
   await Promise.all(
     images.map(async (image) => {
       image.loading = "eager";
-      if (!image.complete) {
-        await Promise.race([
-          new Promise<void>((resolve) => {
-            const done = () => resolve();
-            image.addEventListener("load", done, { once: true });
-            image.addEventListener("error", done, { once: true });
-            if (image.complete) done();
-          }),
-          rejectAfter(15_000, `Timed out loading export asset: ${image.src}`),
-        ]);
-      }
+      await waitForImage(image);
       if (image.naturalWidth === 0)
         throw new Error(
           `Failed to load export asset: ${image.currentSrc || image.src}`,
@@ -143,10 +155,9 @@ export async function exportJpeg(
   element: HTMLElement,
   onProgress?: (value: ExportProgress) => void,
 ): Promise<void> {
-  await Promise.race([
-    document.fonts.ready.then(() => undefined),
-    delay(5_000),
-  ]);
+  const fontsReady =
+    "fonts" in document ? document.fonts.ready : Promise.resolve();
+  await Promise.race([fontsReady, delay(5_000)]);
   await waitForImages(element, onProgress);
   onProgress?.({ phase: "rendering", loaded: 0, total: 0 });
 
@@ -165,10 +176,17 @@ export async function exportJpeg(
 
   const objectUrl = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
-  anchor.href = objectUrl;
-  anchor.download = `r1999-timekeeper-fleet-${date()}.jpg`;
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  window.setTimeout(() => URL.revokeObjectURL(objectUrl), 10_000);
+  const revoke = () => URL.revokeObjectURL(objectUrl);
+  try {
+    anchor.href = objectUrl;
+    anchor.download = `r1999-timekeeper-fleet-${date()}.jpg`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(revoke, 10_000);
+  } catch (error) {
+    anchor.remove();
+    revoke();
+    throw error;
+  }
 }

@@ -13,6 +13,14 @@ import { LEVEL_CAPS } from "../types/profile";
 let charSource: readonly CharacterDef[] = characters;
 let psySource: readonly PsychubeDef[] = psychubes;
 
+/** Catalog capabilities required by Profile mutation and sanitization. */
+export interface ProfileMutationCatalog {
+  getCharacter(id: string): CharacterDef | undefined;
+  getPsychube(id: string): PsychubeDef | undefined;
+  allPsychubes(): readonly PsychubeDef[];
+  legalInsights(def: CharacterDef): readonly InsightIndex[];
+}
+
 export function setCatalogForTesting(
   c: readonly CharacterDef[],
   p: readonly PsychubeDef[],
@@ -46,6 +54,14 @@ export function psychubesByRarityAndRecency(): PsychubeDef[] {
 export function legalInsights(def: CharacterDef): InsightIndex[] {
   return [0, 1, 2, 3].slice(0, def.maxInsight + 1) as InsightIndex[];
 }
+
+export const profileMutationCatalog: ProfileMutationCatalog = {
+  getCharacter,
+  getPsychube,
+  allPsychubes,
+  legalInsights,
+};
+
 export function levelCap(_def: CharacterDef, insight: InsightIndex): number {
   return LEVEL_CAPS[insight];
 }

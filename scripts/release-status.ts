@@ -155,7 +155,75 @@ export function indexReleaseOverrides(
   return { characters, skins, psychubes };
 }
 
-export function resolveGlobalIsOnline(value: unknown): boolean {
+const GLOBAL_IS_ONLINE_TIMESTAMP =
+  /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+
+/** Fleet tracks the English Global release region's server-local timestamps. */
+export const GLOBAL_SERVER_UTC_OFFSET_MINUTES = -5 * 60;
+
+function parseGlobalTimestamp(
+  value: string,
+  utcOffsetMinutes: number,
+): number | null {
+  const match = GLOBAL_IS_ONLINE_TIMESTAMP.exec(value);
+  if (!match) return null;
+  if (
+    !Number.isInteger(utcOffsetMinutes) ||
+    utcOffsetMinutes < -14 * 60 ||
+    utcOffsetMinutes > 14 * 60
+  )
+    throw new RangeError(
+      "Global release UTC offset must be an integer between -14:00 and +14:00",
+    );
+  const [, yearText, monthText, dayText, hourText, minuteText, secondText] =
+    match;
+  const year = Number(yearText);
+  const month = Number(monthText);
+  const day = Number(dayText);
+  const hour = Number(hourText);
+  const minute = Number(minuteText);
+  const second = Number(secondText);
+  // The source value is a server-local wall clock. First validate its fields
+  // without using the machine timezone, then convert local time to UTC by
+  // subtracting the explicitly selected Global region offset.
+  const date = new Date(0);
+  date.setUTCFullYear(year, month - 1, day);
+  date.setUTCHours(hour, minute, second, 0);
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day ||
+    date.getUTCHours() !== hour ||
+    date.getUTCMinutes() !== minute ||
+    date.getUTCSeconds() !== second
+  )
+    throw new Error(`Invalid Global character isOnline timestamp: ${value}`);
+  return date.getTime() - utcOffsetMinutes * 60_000;
+}
+
+export type GlobalClock = Date | number;
+
+function clockMilliseconds(clock: GlobalClock): number {
+  const milliseconds = typeof clock === "number" ? clock : clock.getTime();
+  if (!Number.isFinite(milliseconds))
+    throw new RangeError("Global release clock must be a finite timestamp");
+  return milliseconds;
+}
+
+/**
+ * Resolve the Global client isOnline contract.
+ *
+ * Numeric/string 1 is immediately online; 0, empty and missing are offline.
+ * Other valid values are strictly YYYY-MM-DD HH:mm:ss server-local timestamps.
+ * A timestamp is online only when it is strictly earlier than the supplied
+ * server clock. The region offset is explicit so builds are machine-timezone
+ * independent and match the tracked English Global server.
+ */
+export function resolveGlobalIsOnline(
+  value: unknown,
+  clock: GlobalClock = new Date(),
+  utcOffsetMinutes = GLOBAL_SERVER_UTC_OFFSET_MINUTES,
+): boolean {
   if (
     value === undefined ||
     value === null ||
@@ -165,7 +233,12 @@ export function resolveGlobalIsOnline(value: unknown): boolean {
   )
     return false;
   if (value === "1" || value === 1) return true;
-  throw new Error(`Unknown Global character isOnline value: ${String(value)}`);
+  if (typeof value !== "string")
+    throw new Error(`Unknown Global character isOnline value: ${String(value)}`);
+  const timestamp = parseGlobalTimestamp(value, utcOffsetMinutes);
+  if (timestamp === null)
+    throw new Error(`Unknown Global character isOnline value: ${value}`);
+  return timestamp < clockMilliseconds(clock);
 }
 export function resolveCharacterRelease(
   glReleased: boolean,

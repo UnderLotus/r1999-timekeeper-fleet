@@ -19,6 +19,7 @@ import {
   setCatalogForTesting,
 } from "../src/utils/catalog";
 import { fixtureCharacters, fixturePsychubes } from "./test-fixtures";
+import { createPoolView, poolRarityOptions } from "../src/utils/pool-model";
 
 setCatalogForTesting(fixtureCharacters, fixturePsychubes);
 const noop = () => {};
@@ -93,14 +94,16 @@ function renderExport(
 function renderPsychubePool(poolProfile: Profile): string {
   return renderToStaticMarkup(
     <PoolGrid
-      tab="psychubes"
+      view={createPoolView({
+        profile: poolProfile,
+        tab: "psychubes",
+        search: "",
+        filterMode: "all",
+        rarityFilter: [],
+        revealFuture: true,
+      })}
       lang="en-US"
       revealFuture
-      ownedCharacters={poolProfile.characters}
-      psychubes={poolProfile.psychubes}
-      search=""
-      filterMode="all"
-      rarityFilter={[]}
       assignment={null}
       onAddCharacter={noop}
       onOpenEditor={noop}
@@ -128,6 +131,7 @@ const psychubeControls = renderToStaticMarkup(
     defaultSkinMode="initial"
     psychubeImprintDefault={1}
     psychubeOwnershipStatus="unowned"
+    rarityOptions={poolRarityOptions("psychubes")}
     onTab={noop}
     onSearch={noop}
     onFilter={noop}
@@ -145,14 +149,16 @@ const syntheticThreeStarPsychube = {
 setCatalogForTesting(fixtureCharacters, [syntheticThreeStarPsychube]);
 const psychubePoolWithHiddenTwoStarFilter = renderToStaticMarkup(
   <PoolGrid
-    tab="psychubes"
+    view={createPoolView({
+      profile: emptyProfile(),
+      tab: "psychubes",
+      search: "",
+      filterMode: "all",
+      rarityFilter: [2],
+      revealFuture: true,
+    })}
     lang="en-US"
     revealFuture
-    ownedCharacters={{}}
-    psychubes={{}}
-    search=""
-    filterMode="all"
-    rarityFilter={[2]}
     assignment={null}
     onAddCharacter={noop}
     onOpenEditor={noop}
