@@ -149,6 +149,7 @@
   font-family: var(--font-display);
   font-size: 14px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .export-canvas .team-panel__slots {
