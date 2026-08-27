@@ -27,6 +27,7 @@ const ASSET_REPO = "https://github.com/myssal/Reverse-1999-CN-Asset.git";
 const SOURCE_ROOT = path.join("/tmp", "r1999-team-asset-sync");
 const CHAR_SOURCE = path.join(SOURCE_ROOT, "singlebg/headicon_small");
 const PSY_SOURCE = path.join(SOURCE_ROOT, "singlebg/equip_defaulticon");
+const PRESERVED_CHARACTER_ASSET_IDS = new Set(["312503"]);
 interface HashEntry {
   png: string;
   webp: string;
@@ -143,6 +144,18 @@ async function stageKind(
   let reused = 0;
   let converted = 0;
   for (const id of ids) {
+    const output = path.join(staging, `${id}.webp`);
+    const production = path.join(productionDir, `${id}.webp`);
+    const cacheKey = id;
+    if (kind === "character" && PRESERVED_CHARACTER_ASSET_IDS.has(id)) {
+      if (!existsSync(production))
+        throw new Error(`Preserved character asset is missing: ${id}`);
+      await copyFile(production, output);
+      const webpHash = sha256(production);
+      nextCache[cacheKey] = { png: "preserved", webp: webpHash };
+      reused++;
+      continue;
+    }
     const source = path.join(sourceDir, `${id}.png`);
     if (!existsSync(source)) {
       if (!knownMissing.has(id))
@@ -150,9 +163,6 @@ async function stageKind(
       skipped.push(id);
       continue;
     }
-    const output = path.join(staging, `${id}.webp`);
-    const production = path.join(productionDir, `${id}.webp`);
-    const cacheKey = id;
     const pngHash = sha256(source);
     const cached = oldCache[id];
     if (
