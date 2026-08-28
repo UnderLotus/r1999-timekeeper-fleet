@@ -17,17 +17,21 @@ import { loadGeneratedCatalog } from "./generated-catalog";
 import { convertPngToLosslessWebp } from "./webp-converter";
 import { withPipelineLock } from "./sync-lock";
 import { assertExactAssetWorktree, exactAssetPaths } from "./asset-source";
+import {
+  assertKnownPreservedCharacterAssets,
+  loadCatalogPolicy,
+} from "./catalog-policy";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const CHAR_ASSET_DIR = path.join(ROOT, "public/assets/characters");
 const PSY_ASSET_DIR = path.join(ROOT, "public/assets/psychubes");
 const HASH_CACHE_FILE = path.join(__dirname, "data/asset-hash-cache.json");
+const POLICY_FILE = path.join(__dirname, "data/catalog-policy.json");
 const ASSET_REPO = "https://github.com/myssal/Reverse-1999-CN-Asset.git";
 const SOURCE_ROOT = path.join("/tmp", "r1999-team-asset-sync");
 const CHAR_SOURCE = path.join(SOURCE_ROOT, "singlebg/headicon_small");
 const PSY_SOURCE = path.join(SOURCE_ROOT, "singlebg/equip_defaulticon");
-const PRESERVED_CHARACTER_ASSET_IDS = new Set(["312503"]);
 interface HashEntry {
   png: string;
   webp: string;
@@ -130,6 +134,7 @@ async function stageKind(
   staging: string,
   oldCache: HashCache,
   knownMissing: ReadonlySet<string>,
+  preservedCharacterAssets: ReadonlySet<string>,
 ): Promise<{
   cache: HashCache;
   reused: number;
@@ -147,7 +152,7 @@ async function stageKind(
     const output = path.join(staging, `${id}.webp`);
     const production = path.join(productionDir, `${id}.webp`);
     const cacheKey = id;
-    if (kind === "character" && PRESERVED_CHARACTER_ASSET_IDS.has(id)) {
+    if (kind === "character" && preservedCharacterAssets.has(id)) {
       if (!existsSync(production))
         throw new Error(`Preserved character asset is missing: ${id}`);
       await copyFile(production, output);
@@ -245,6 +250,11 @@ async function install(
 async function main(): Promise<void> {
   console.log("sync-assets — exact-ID source cache + hash incremental WebP\n");
   const needed = collectNeeded();
+  const policy = loadCatalogPolicy(POLICY_FILE);
+  assertKnownPreservedCharacterAssets(policy, new Set(needed.characters));
+  const preservedCharacterAssets = new Set(
+    policy.preservedCharacterAssets.map((entry) => entry.id),
+  );
   refreshAssetRepo(needed);
   const oldCache = loadHashCache();
   const knownMissing = loadMissingAssets();
@@ -256,13 +266,21 @@ async function main(): Promise<void> {
   await Promise.all([mkdir(chars), mkdir(psychubes)]);
   try {
     const [charResult, psyResult] = await Promise.all([
-      stageKind("character", needed.characters, chars, oldCache, knownMissing),
+      stageKind(
+        "character",
+        needed.characters,
+        chars,
+        oldCache,
+        knownMissing,
+        preservedCharacterAssets,
+      ),
       stageKind(
         "psychube",
         needed.psychubes,
         psychubes,
         oldCache,
         knownMissing,
+        preservedCharacterAssets,
       ),
     ]);
     await install(chars, psychubes, {

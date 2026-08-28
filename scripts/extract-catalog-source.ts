@@ -62,6 +62,11 @@ export function extractCatalogSource(): void {
     policy,
     new Set(arcanists.map((entry) => String(entry.id))),
     new Set(cnEquips.map((entry) => String(entry.id))),
+    new Set(
+      arcanists.flatMap((entry) =>
+        entry.live2d.map((skin) => String(skin.id)),
+      ),
+    ),
   );
   const knownCharacterIds = new Set(arcanists.map((entry) => String(entry.id)));
   const nameFallbacks = loadNameFallbacks(

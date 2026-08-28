@@ -15,6 +15,12 @@
       "reason": "Greed is an upgrade material, not a display psychube"
     }
   ],
+  "preservedCharacterAssets": [
+    {
+      "id": "312503",
+      "reason": "CN headicon_small/312503.png is a story-expression avatar, so sync must preserve the reviewed garment icon"
+    }
+  ],
   "characterCapabilities": [
     {
       "baseId": "3149",

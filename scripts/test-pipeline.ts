@@ -125,7 +125,8 @@ check(
   "catalog policy keeps exclusions and capabilities out of builder constants",
   policy.excludedCharacters.some((entry) => entry.baseId === "3029") &&
     policy.excludedPsychubes.some((entry) => entry.id === "1000") &&
-    policy.characterCapabilities.some((entry) => entry.baseId === "3149"),
+    policy.characterCapabilities.some((entry) => entry.baseId === "3149") &&
+    policy.preservedCharacterAssets.some((entry) => entry.id === "312503"),
 );
 check(
   "catalog policy duplicate IDs fail loudly",
@@ -137,13 +138,33 @@ check(
       ],
       excludedPsychubes: [],
       characterCapabilities: [],
+      preservedCharacterAssets: [],
     }),
   ),
 );
 check(
-  "catalog policy stale targets fail loudly",
+  "catalog policy duplicate preserved asset IDs fail loudly",
   throws(() =>
-    assertKnownCatalogPolicy(policy, new Set(["1"]), new Set(["2"])),
+    parseCatalogPolicy({
+      excludedCharacters: [],
+      excludedPsychubes: [],
+      characterCapabilities: [],
+      preservedCharacterAssets: [
+        { id: "312503", reason: "a" },
+        { id: "312503", reason: "b" },
+      ],
+    }),
+  ),
+);
+check(
+  "catalog policy stale preserved asset targets fail loudly",
+  throws(() =>
+    assertKnownCatalogPolicy(
+      policy,
+      new Set(["3029", "3149"]),
+      new Set(["1000", "1001", "1571", "1572"]),
+      new Set(),
+    ),
   ),
 );
 const exactPaths = exactAssetPaths(

@@ -8,6 +8,7 @@ export interface CatalogPolicy {
     exclusivePsychubeIds: string[];
     reason: string;
   }[];
+  preservedCharacterAssets: { id: string; reason: string }[];
 }
 const isId = (value: unknown): value is string =>
   typeof value === "string" && /^\d+$/.test(value);
@@ -22,10 +23,11 @@ export function parseCatalogPolicy(value: unknown): CatalogPolicy {
   if (
     !Array.isArray(raw.excludedCharacters) ||
     !Array.isArray(raw.excludedPsychubes) ||
-    !Array.isArray(raw.characterCapabilities)
+    !Array.isArray(raw.characterCapabilities) ||
+    !Array.isArray(raw.preservedCharacterAssets)
   )
     throw new Error(
-      "catalog-policy requires excludedCharacters, excludedPsychubes, and characterCapabilities arrays",
+      "catalog-policy requires excludedCharacters, excludedPsychubes, characterCapabilities, and preservedCharacterAssets arrays",
     );
   const excludedCharacters = raw.excludedCharacters.map((entry, index) => {
     const row = entry as Record<string, unknown>;
@@ -74,6 +76,19 @@ export function parseCatalogPolicy(value: unknown): CatalogPolicy {
       };
     },
   );
+  const preservedCharacterAssets = raw.preservedCharacterAssets.map(
+    (entry, index) => {
+      const row = entry as Record<string, unknown>;
+      if (
+        !row ||
+        !isId(row.id) ||
+        typeof row.reason !== "string" ||
+        !row.reason.trim()
+      )
+        throw new Error(`Invalid preservedCharacterAssets[${index}]`);
+      return { id: row.id, reason: row.reason };
+    },
+  );
   unique(
     excludedCharacters.map((entry) => entry.baseId),
     "excluded character",
@@ -86,15 +101,36 @@ export function parseCatalogPolicy(value: unknown): CatalogPolicy {
     characterCapabilities.map((entry) => entry.baseId),
     "character capability",
   );
-  return { excludedCharacters, excludedPsychubes, characterCapabilities };
+  unique(
+    preservedCharacterAssets.map((entry) => entry.id),
+    "preserved character asset",
+  );
+  return {
+    excludedCharacters,
+    excludedPsychubes,
+    characterCapabilities,
+    preservedCharacterAssets,
+  };
 }
 export function loadCatalogPolicy(file: string): CatalogPolicy {
   return parseCatalogPolicy(JSON.parse(readFileSync(file, "utf-8")));
 }
+export function assertKnownPreservedCharacterAssets(
+  policy: CatalogPolicy,
+  knownCharacterAssets: ReadonlySet<string>,
+): void {
+  for (const entry of policy.preservedCharacterAssets)
+    if (!knownCharacterAssets.has(entry.id))
+      throw new Error(
+        `Catalog policy references unknown character asset: ${entry.id}`,
+      );
+}
+
 export function assertKnownCatalogPolicy(
   policy: CatalogPolicy,
   knownCharacters: ReadonlySet<string>,
   knownPsychubes: ReadonlySet<string>,
+  knownCharacterAssets: ReadonlySet<string>,
 ): void {
   for (const entry of [
     ...policy.excludedCharacters,
@@ -115,6 +151,7 @@ export function assertKnownCatalogPolicy(
         throw new Error(
           `Catalog capability references unknown psychube: ${id}`,
         );
+  assertKnownPreservedCharacterAssets(policy, knownCharacterAssets);
 }
 
 export function assertKnownCapabilities(

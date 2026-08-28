@@ -89,6 +89,7 @@ const policy: CatalogPolicy = {
   excludedCharacters: [{ baseId: "9999", reason: "fixture exclusion" }],
   excludedPsychubes: [{ id: "2002", reason: "fixture exclusion" }],
   characterCapabilities: [],
+  preservedCharacterAssets: [],
 };
 const result = composeCatalogSource({
   arcanists,

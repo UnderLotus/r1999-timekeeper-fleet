@@ -61,7 +61,7 @@ Future Sight 只是顯示與選擇開關。關閉時不會刪除已保存的未�
 - 角色：`public/assets/characters/`
 - 心相：`public/assets/psychubes/`
 
-`312503`「野樹莓／踏影歌」是人工圖片特例。CN 解包包的 `headicon_small/312503.png` 是 3.1 劇情表情，3.4 衣著沿用同一 ID 後也沒有替換該方形圖；因此網站使用人工確認的 `public/assets/characters/312503.webp`，`sync-assets.ts` 會保留並跳過這個 ID。下次野樹莓新增衣著時，重新檢查 CN 與 Global 包體；只有確認上游提供正確方形衣著圖後才移除此特例。
+`312503`「野樹莓／踏影歌」是人工圖片特例。CN 解包包的 `headicon_small/312503.png` 是 3.1 劇情表情，3.4 衣著沿用同一 ID 後也沒有替換該方形圖；因此網站使用人工確認的 `public/assets/characters/312503.webp`；這個 ID 記錄在 validated `scripts/data/catalog-policy.json`，`sync-assets.ts` 讀取 policy 後保留並跳過它。下次野樹莓新增衣著時，重新檢查 CN 與 Global 包體；只有確認上游提供正確方形衣著圖後才移除此特例。
 
 `sync-assets.ts` 只從 catalog 列出的精確 ID 下載檔案，不 checkout 整個素材目錄。沒有變更的圖片會由 hash cache 重用；新檔轉換後會檢查格式、尺寸、像素與完整覆蓋，再取代 production 目錄。
 
