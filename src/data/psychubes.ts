@@ -1332,7 +1332,7 @@ export const psychubes: PsychubeDef[] = [
       "ko-KR": "허물을 벗어 내가 되리라"
     },
     "rarity": 5,
-    "released": false
+    "released": true
   },
   {
     "id": "1570",

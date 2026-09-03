@@ -1,11 +1,5 @@
 {
-  "characters": [
-    {
-      "baseId": 3147,
-      "isReleased": false,
-      "note": "GL preload; Ms. Stranger is the second-half banner and is not live yet"
-    }
-  ],
+  "characters": [],
   "skins": [
     {
       "variantId": "313903",
@@ -48,11 +42,6 @@
       "id": "1449",
       "isReleased": false,
       "note": "暂别旧夜 is not released on Global yet"
-    },
-    {
-      "id": "1569",
-      "isReleased": false,
-      "note": "蜕至我为我 is not released on Global yet"
     }
   ]
 }
