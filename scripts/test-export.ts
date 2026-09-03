@@ -1,5 +1,6 @@
 import {
   exportJpeg,
+  cjkBaselineCompensation,
   usesWebKitExportWorkaround,
   type ExportProgress,
 } from "../src/utils/export-image";
@@ -33,6 +34,20 @@ check(
   !usesWebKitExportWorkaround(
     "Mozilla/5.0 AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36",
   ),
+);
+check(
+  "CJK export titles compensate the renderer ideographic baseline",
+  cjkBaselineCompensation("タイムキーパー編成", -6.8638916015625) ===
+    6.8638916015625 &&
+    cjkBaselineCompensation("司辰編隊", -6.8638916015625) ===
+      6.8638916015625 &&
+    cjkBaselineCompensation("타임키퍼 편성", -6.8638916015625) ===
+      6.8638916015625,
+);
+check(
+  "Latin and unavailable baseline metrics need no compensation",
+  cjkBaselineCompensation("Timekeeper Fleet", -6.8638916015625) === 0 &&
+    cjkBaselineCompensation("司辰編隊", Number.NaN) === 0,
 );
 
 const nativeWindow = globalThis.window;

@@ -5,6 +5,19 @@ export type { ExportProgress } from "../types/export";
 const EXPORT_SCALE = 1.5;
 const WEBKIT_EXPORT_SCALE = 1.75;
 const EXPORT_BACKGROUND = "#eee8da";
+const CJK_TEXT_PATTERN =
+  /[\u2e80-\u2fff\u3000-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uac00-\ud7af\uf900-\ufaff\uff01-\uffef]/;
+
+export function cjkBaselineCompensation(
+  text: string,
+  ideographicBaseline: number,
+): number {
+  return CJK_TEXT_PATTERN.test(text) &&
+    Number.isFinite(ideographicBaseline) &&
+    ideographicBaseline < 0
+    ? -ideographicBaseline
+    : 0;
+}
 
 export function usesWebKitExportWorkaround(userAgent: string): boolean {
   if (!userAgent.includes("AppleWebKit")) return false;
@@ -106,6 +119,20 @@ function canvasToJpegBlob(canvas: HTMLCanvasElement): Promise<Blob> {
   ]);
 }
 
+function measureCjkBaselineCompensation(element: HTMLElement): number {
+  // html2canvas-pro positions text from alphabetic metrics, then paints CJK
+  // glyphs on the ideographic baseline. Offset that baseline difference.
+  const style = getComputedStyle(element);
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  if (!context) return 0;
+  context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+  return cjkBaselineCompensation(
+    element.textContent ?? "",
+    context.measureText("Mg").ideographicBaseline,
+  );
+}
+
 /**
  * Safari's SVG foreignObject image decode is still unreliable and can stay
  * pending once many embedded images are present. Use html2canvas-pro's direct
@@ -115,6 +142,12 @@ function canvasToJpegBlob(canvas: HTMLCanvasElement): Promise<Blob> {
 async function renderWebKitJpeg(element: HTMLElement): Promise<Blob> {
   const target =
     element.querySelector<HTMLElement>(".export-canvas") ?? element;
+  const localizedTitle = target.querySelector<HTMLElement>(
+    ".export-canvas__localized-title",
+  );
+  const titleBaselineCompensation = localizedTitle
+    ? measureCjkBaselineCompensation(localizedTitle)
+    : 0;
   const width = target.scrollWidth;
   const height = target.scrollHeight;
   if (!width || !height) throw new Error("Export canvas has no dimensions");
@@ -136,6 +169,14 @@ async function renderWebKitJpeg(element: HTMLElement): Promise<Blob> {
           layer.style.left = "0";
           layer.style.top = "0";
           layer.style.position = "absolute";
+        }
+        const clonedLocalizedTitle =
+          documentClone.querySelector<HTMLElement>(
+            ".export-canvas__localized-title",
+          );
+        if (clonedLocalizedTitle && titleBaselineCompensation > 0) {
+          clonedLocalizedTitle.style.position = "relative";
+          clonedLocalizedTitle.style.top = `${titleBaselineCompensation}px`;
         }
       },
       removeContainer: true,
