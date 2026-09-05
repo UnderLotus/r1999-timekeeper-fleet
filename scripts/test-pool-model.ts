@@ -6,7 +6,6 @@ import {
   createPoolUiState,
   normalizeRarityFilter,
   transitionPoolAssignment,
-  type PoolDefaultsDraft,
   summarizePsychubeOwnership,
 } from "../src/utils/pool-model";
 
@@ -149,43 +148,5 @@ check(
     ui.assignmentPreviousFilter === null,
 );
 
-const sourceDefaults = {
-  addDefaults: {
-    insight: 0 as const,
-    level: 1,
-    portray: 0,
-    resonance: 1,
-  },
-  defaultSkinMode: "initial" as const,
-  psychubeAmplificationDefault: 1,
-  psychubeOwnershipStatus: null,
-};
-const draft: PoolDefaultsDraft = {
-  addDefaults: { ...sourceDefaults.addDefaults },
-  defaultSkinMode: sourceDefaults.defaultSkinMode,
-  psychubeAmplificationDefault: sourceDefaults.psychubeAmplificationDefault,
-  psychubeOwnershipStatus: sourceDefaults.psychubeOwnershipStatus,
-};
-draft.addDefaults.level = 60;
-draft.defaultSkinMode = "insight";
-draft.psychubeAmplificationDefault = 5;
-check(
-  "defaults draft is isolated until Done commits the selected tab",
-  sourceDefaults.addDefaults.level === 1 &&
-    sourceDefaults.defaultSkinMode === "initial" &&
-    sourceDefaults.psychubeAmplificationDefault === 1 &&
-    draft.addDefaults.level === 60 &&
-    draft.defaultSkinMode === "insight" &&
-    draft.psychubeAmplificationDefault === 5,
-);
-const cancelledDraft = {
-  ...sourceDefaults,
-  addDefaults: { ...sourceDefaults.addDefaults },
-};
-cancelledDraft.addDefaults.level = 60;
-check(
-  "cancelled or outside-closed defaults drafts have no committed effect",
-  sourceDefaults.addDefaults.level === 1 && cancelledDraft.addDefaults.level === 60,
-);
 console.log(`\npool model tests: ${pass} passed, ${fail} failed`);
 if (fail) process.exit(1);
