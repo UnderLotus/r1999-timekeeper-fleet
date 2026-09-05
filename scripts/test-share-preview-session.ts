@@ -1,7 +1,6 @@
 import {
-  decodeSharePayload,
+  decodeShareToken,
   encodeShareToken,
-  profileToPayload,
 } from "../src/utils/share-code";
 import { emptyProfile, type Profile } from "../src/types/profile";
 import { setCatalogForTesting } from "../src/utils/catalog";
@@ -57,7 +56,6 @@ function createHarness(failCopy = false): Harness {
   let state: SharePreviewStoreState = {
     profile: emptyProfile(),
     previewProfile: null,
-    activeIsPreview: false,
     previewShowFutureSight: false,
     localShowFutureSight: false,
   };
@@ -78,7 +76,6 @@ function createHarness(failCopy = false): Harness {
       publish({
         ...state,
         previewProfile: profile,
-        activeIsPreview: true,
         previewShowFutureSight: showFutureSight,
       }),
     setPreviewShowFutureSight: (value) =>
@@ -87,16 +84,14 @@ function createHarness(failCopy = false): Harness {
       publish({
         ...state,
         previewProfile: null,
-        activeIsPreview: false,
         previewShowFutureSight: false,
       }),
     importPreview: (enableFutureSight) => {
-      if (!state.activeIsPreview || !state.previewProfile) return;
+      if (!state.previewProfile) return;
       publish({
         ...state,
         profile: state.previewProfile,
         previewProfile: null,
-        activeIsPreview: false,
         previewShowFutureSight: false,
         localShowFutureSight: enableFutureSight
           ? true
@@ -179,7 +174,7 @@ const a = fixtureCharacters[0];
 const b = fixtureCharacters[1];
 const future = fixtureCharacters[2];
 const tokenFor = (profile: Profile): string =>
-  encodeShareToken(profileToPayload(profile));
+  encodeShareToken(profile);
 
 const valid = createHarness();
 valid.store.getState().profile.characters[a.id] = {
@@ -195,7 +190,7 @@ const validEvents: string[] = [];
 valid.session.start((event) => validEvents.push(event.kind));
 check(
   "valid v5 share enters isolated Preview without overwriting Local",
-  valid.state().activeIsPreview &&
+  valid.state().previewProfile !== null &&
     JSON.stringify(valid.state().profile) === localBefore &&
     !!valid.state().previewProfile?.characters[b.id] &&
     validEvents.length === 0,
@@ -208,12 +203,12 @@ futurePreview.session.start((event) => futureEvents.push(event.kind));
 check(
   "Future-content share waits for spoiler confirmation",
   futureEvents.join(",") === "requires-spoiler" &&
-    !futurePreview.state().activeIsPreview,
+    futurePreview.state().previewProfile === null,
 );
 check(
   "spoiler confirmation enters Preview with Future Sight enabled",
   futurePreview.session.confirmIncomingPreview(true) &&
-    futurePreview.state().activeIsPreview &&
+    futurePreview.state().previewProfile !== null &&
     futurePreview.state().previewShowFutureSight,
 );
 
@@ -227,7 +222,7 @@ gatedAfterPreview.flushTimers();
 check(
   "spoiler gate cancels an earlier Preview debounce before it can overwrite the incoming hash",
   gatedAfterPreview.hash() === `keep=1&p=${incomingFutureToken}` &&
-    gatedAfterPreview.state().activeIsPreview &&
+    gatedAfterPreview.state().previewProfile !== null &&
     gatedAfterPreview.state().previewProfile === previousPreview,
 );
 
@@ -248,7 +243,7 @@ canceled.session.start(() => {});
 canceled.session.cancelIncomingPreview();
 check(
   "canceling the spoiler gate clears the incoming share and stays Local",
-  canceled.hash() === "keep=1" && !canceled.state().activeIsPreview,
+  canceled.hash() === "keep=1" && canceled.state().previewProfile === null,
 );
 
 const invalid = createHarness();
@@ -268,14 +263,14 @@ const syncedToken = new URLSearchParams(synced.hash()).get("p");
 check(
   "Preview changes update the share hash through the debounced session",
   !!syncedToken &&
-    decodeSharePayload(syncedToken)?.profile.characters[a.id]?.level === 40,
+    decodeShareToken(syncedToken)?.profile.characters[a.id]?.level === 40,
 );
 synced.store.enterPreview(profileWithCharacter(b.id), false);
 synced.flushTimers();
 check(
   "debounced hash synchronization follows the latest Preview profile",
   !!new URLSearchParams(synced.hash()).get("p") &&
-    decodeSharePayload(new URLSearchParams(synced.hash()).get("p")!)?.profile
+    decodeShareToken(new URLSearchParams(synced.hash()).get("p")!)?.profile
       .characters[b.id] !== undefined,
 );
 
@@ -301,8 +296,7 @@ leaving.session.leavePreview();
 leaving.flushTimers();
 check(
   "leave Preview clears the share hash, cancels sync, and discards Preview",
-  !leaving.state().activeIsPreview &&
-    leaving.state().previewProfile === null &&
+  leaving.state().previewProfile === null &&
     !new URLSearchParams(leaving.hash()).has("p"),
 );
 
@@ -311,7 +305,7 @@ importHidden.store.enterPreview(profileWithCharacter(future.id), true);
 importHidden.session.importPreview(false);
 check(
   "Import keeps Future Sight disabled by default",
-  !importHidden.state().activeIsPreview &&
+  importHidden.state().previewProfile === null &&
     !!importHidden.state().profile.characters[future.id] &&
     !importHidden.state().localShowFutureSight &&
     !new URLSearchParams(importHidden.hash()).has("p"),
@@ -343,8 +337,8 @@ for (const [version, token] of [
     historical.session.confirmIncomingPreview(true);
   check(
     `session opens supported v${version} share tokens`,
-    decodeSharePayload(token)?.version === version &&
-      historical.state().activeIsPreview,
+    decodeShareToken(token)?.sourceVersion === version &&
+      historical.state().previewProfile !== null,
   );
 }
 

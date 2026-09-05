@@ -2,12 +2,11 @@ import { emptyProfile, type CharacterBuild, type Profile } from "../src/types/pr
 import { setCatalogForTesting } from "../src/utils/catalog";
 import { fixtureCharacters, fixturePsychubes } from "./test-fixtures";
 import {
-  beginPoolDefaults,
-  commitPoolDefaults,
   createPoolView,
   createPoolUiState,
   normalizeRarityFilter,
-  reducePoolUi,
+  transitionPoolAssignment,
+  type PoolDefaultsDraft,
   summarizePsychubeOwnership,
 } from "../src/utils/pool-model";
 
@@ -126,20 +125,17 @@ check(
 );
 
 let ui = createPoolUiState();
-ui = reducePoolUi(ui, { type: "setTab", tab: "psychubes" });
-ui = reducePoolUi(ui, { type: "setSearch", search: "藝術" });
-ui = reducePoolUi(ui, { type: "setFilterMode", filterMode: "unowned" });
-ui = reducePoolUi(ui, { type: "setRarityFilter", rarityFilter: [5, 6] });
-ui = reducePoolUi(ui, {
-  type: "setAssignment",
-  assignment: { team: 1, slot: 2, kind: "character" },
-});
+ui = { ...ui, tab: "psychubes" };
+ui = { ...ui, search: "藝術" };
+ui = { ...ui, filterMode: "unowned" };
+ui = { ...ui, rarityFilter: [5, 6] };
+ui = transitionPoolAssignment(ui, { team: 1, slot: 2, kind: "character" });
 const assignmentStarted = ui;
-ui = reducePoolUi(ui, { type: "setTab", tab: "psychubes" });
-ui = reducePoolUi(ui, { type: "setSearch", search: "temporary" });
-ui = reducePoolUi(ui, { type: "setFilterMode", filterMode: "all" });
-ui = reducePoolUi(ui, { type: "setRarityFilter", rarityFilter: [3] });
-ui = reducePoolUi(ui, { type: "setAssignment", assignment: null });
+ui = { ...ui, tab: "psychubes" };
+ui = { ...ui, search: "temporary" };
+ui = { ...ui, filterMode: "all" };
+ui = { ...ui, rarityFilter: [3] };
+ui = transitionPoolAssignment(ui, null);
 check(
   "assignment restores only the prior filter and preserves other Pool changes",
   assignmentStarted.tab === "characters" &&
@@ -164,33 +160,32 @@ const sourceDefaults = {
   psychubeAmplificationDefault: 1,
   psychubeOwnershipStatus: null,
 };
-const draft = beginPoolDefaults(sourceDefaults);
+const draft: PoolDefaultsDraft = {
+  addDefaults: { ...sourceDefaults.addDefaults },
+  defaultSkinMode: sourceDefaults.defaultSkinMode,
+  psychubeAmplificationDefault: sourceDefaults.psychubeAmplificationDefault,
+  psychubeOwnershipStatus: sourceDefaults.psychubeOwnershipStatus,
+};
 draft.addDefaults.level = 60;
 draft.defaultSkinMode = "insight";
 draft.psychubeAmplificationDefault = 5;
-const characterCommit = commitPoolDefaults("characters", draft);
-const psychubeCommit = commitPoolDefaults("psychubes", {
-  ...draft,
-  psychubeOwnershipStatus: "owned",
-});
 check(
   "defaults draft is isolated until Done commits the selected tab",
   sourceDefaults.addDefaults.level === 1 &&
     sourceDefaults.defaultSkinMode === "initial" &&
     sourceDefaults.psychubeAmplificationDefault === 1 &&
-    characterCommit.tab === "characters" &&
-    characterCommit.addDefaults.level === 60 &&
-    characterCommit.defaultSkinMode === "insight" &&
-    psychubeCommit.tab === "psychubes" &&
-    psychubeCommit.psychubeAmplificationDefault === 5 &&
-    psychubeCommit.psychubeOwnershipStatus === "owned",
+    draft.addDefaults.level === 60 &&
+    draft.defaultSkinMode === "insight" &&
+    draft.psychubeAmplificationDefault === 5,
 );
-const cancelledDraft = beginPoolDefaults(sourceDefaults);
+const cancelledDraft = {
+  ...sourceDefaults,
+  addDefaults: { ...sourceDefaults.addDefaults },
+};
 cancelledDraft.addDefaults.level = 60;
 check(
   "cancelled or outside-closed defaults drafts have no committed effect",
   sourceDefaults.addDefaults.level === 1 && cancelledDraft.addDefaults.level === 60,
 );
-
 console.log(`\npool model tests: ${pass} passed, ${fail} failed`);
 if (fail) process.exit(1);

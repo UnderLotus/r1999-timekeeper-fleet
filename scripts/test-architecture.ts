@@ -74,7 +74,6 @@ check(
   "preview and transient UI are excluded from persistence",
   Object.keys(persisted).sort().join(",") === "preferences,profile" &&
     !("previewProfile" in persisted) &&
-    !("activeIsPreview" in persisted) &&
     !("ui" in persisted),
 );
 

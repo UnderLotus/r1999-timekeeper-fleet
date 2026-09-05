@@ -3,15 +3,13 @@ import { Search } from "lucide-react";
 import type { LangCode } from "../i18n/ui";
 import { getUiText } from "../i18n/ui";
 import {
-  beginPoolDefaults,
-  commitPoolDefaults,
   type AddDefaults,
-  type DefaultSkinMode,
   type FilterMode,
   type PoolDefaultsDraft,
   type PoolTab,
   type PsychubeOwnershipMode,
 } from "../utils/pool-model";
+import type { DefaultSkinMode } from "../types/profile";
 import { InsightGlyph } from "./InsightGlyph";
 import { Btn, SegButtons, Stepper } from "../utils/design";
 
@@ -56,52 +54,36 @@ export function PoolControls({
 }): React.JSX.Element {
   const t = (key: string, params?: Record<string, string | number>) =>
     getUiText(lang, key, params);
-  const [defaultsOpen, setDefaultsOpen] = useState(false);
-  const [draft, setDraft] = useState<AddDefaults>(addDefaults);
-  const [draftSkinMode, setDraftSkinMode] =
-    useState<DefaultSkinMode>(defaultSkinMode);
-  const [draftPsychubeAmplification, setDraftPsychubeAmplification] = useState(
-    psychubeImprintDefault,
-  );
-  const [draftPsychubeOwnership, setDraftPsychubeOwnership] =
-    useState<PsychubeOwnershipMode | null>(psychubeOwnershipStatus);
+  const [draft, setDraft] = useState<PoolDefaultsDraft | null>(null);
+  const defaultsOpen = draft !== null;
   const defaultsRef = useRef<HTMLDivElement>(null);
   const beginDefaults = () => {
-    const initial = beginPoolDefaults({
-      addDefaults,
+    setDraft({
+      addDefaults: { ...addDefaults },
       defaultSkinMode,
       psychubeAmplificationDefault: psychubeImprintDefault,
       psychubeOwnershipStatus,
     });
-    setDraft(initial.addDefaults);
-    setDraftSkinMode(initial.defaultSkinMode);
-    setDraftPsychubeAmplification(initial.psychubeAmplificationDefault);
-    setDraftPsychubeOwnership(initial.psychubeOwnershipStatus);
-    setDefaultsOpen(true);
   };
-  const cancelDefaults = () => setDefaultsOpen(false);
+  const cancelDefaults = () => {
+    setDraft(null);
+  };
   const completeDefaults = () => {
-    const draftState: PoolDefaultsDraft = {
-      addDefaults: { ...draft },
-      defaultSkinMode: draftSkinMode,
-      psychubeAmplificationDefault: draftPsychubeAmplification,
-      psychubeOwnershipStatus: draftPsychubeOwnership,
-    };
-    const committed = commitPoolDefaults(tab, draftState);
-    if (committed.tab === "characters") {
-      onDefaults(committed.addDefaults);
-      onDefaultSkinMode(committed.defaultSkinMode);
+    if (!draft) return;
+    if (tab === "characters") {
+      onDefaults({ ...draft.addDefaults });
+      onDefaultSkinMode(draft.defaultSkinMode);
     } else {
-      onPsychubeImprintDefault(committed.psychubeAmplificationDefault);
-      if (committed.psychubeOwnershipStatus)
+      onPsychubeImprintDefault(draft.psychubeAmplificationDefault);
+      if (draft.psychubeOwnershipStatus)
         onSetAllPsychubesOwned(
-          committed.psychubeOwnershipStatus === "owned",
-          committed.psychubeAmplificationDefault,
+          draft.psychubeOwnershipStatus === "owned",
+          draft.psychubeAmplificationDefault,
         );
     }
-    setDefaultsOpen(false);
+    setDraft(null);
   };
-  useEffect(() => setDefaultsOpen(false), [tab]);
+  useEffect(() => setDraft(null), [tab]);
   useEffect(() => {
     if (!defaultsOpen) return;
     const onPointerDown = (event: PointerEvent) => {
@@ -111,6 +93,22 @@ export function PoolControls({
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [defaultsOpen]);
+  const draftState: PoolDefaultsDraft = draft ?? {
+    addDefaults: { ...addDefaults },
+    defaultSkinMode,
+    psychubeAmplificationDefault: psychubeImprintDefault,
+    psychubeOwnershipStatus,
+  };
+  const updateAddDefaults = (patch: Partial<AddDefaults>): void => {
+    setDraft((current) =>
+      current
+        ? { ...current, addDefaults: { ...current.addDefaults, ...patch } }
+        : current,
+    );
+  };
+  const updateDraft = (patch: Partial<PoolDefaultsDraft>): void => {
+    setDraft((current) => (current ? { ...current, ...patch } : current));
+  };
   return (
     <div className="pool-controls">
       <div className="ds-seg" role="tablist">
@@ -197,17 +195,15 @@ export function PoolControls({
                 <section className="editor-section">
                   <header className="editor-section__head">
                     <span>{t("level")}</span>
-                    <output>Lv.{draft.level} / 60</output>
+                    <output>Lv.{draftState.addDefaults.level} / 60</output>
                   </header>
                   <div className="editor-section__controls">
                     <Stepper
                       label={t("level")}
-                      value={draft.level}
+                      value={draftState.addDefaults.level}
                       min={1}
                       max={60}
-                      onChange={(level) =>
-                        setDraft((value) => ({ ...value, level }))
-                      }
+                      onChange={(level) => updateAddDefaults({ level })}
                       decreaseLabel={t("decreaseValue", { name: t("level") })}
                       increaseLabel={t("increaseValue", { name: t("level") })}
                     />
@@ -216,12 +212,9 @@ export function PoolControls({
                         key: String(value),
                         label: value === 60 ? t("max") : String(value),
                       }))}
-                      selected={String(draft.level)}
+                      selected={String(draftState.addDefaults.level)}
                       onSelect={(value) =>
-                        setDraft((current) => ({
-                          ...current,
-                          level: Number(value),
-                        }))
+                        updateAddDefaults({ level: Number(value) })
                       }
                     />
                   </div>
@@ -231,9 +224,9 @@ export function PoolControls({
                     <span>{t("insight")}</span>
                     <output
                       className="editor-section__current"
-                      aria-label={`${t("insight")} ${draft.insight}`}
+                      aria-label={`${t("insight")} ${draftState.addDefaults.insight}`}
                     >
-                      <InsightGlyph insight={draft.insight} />
+                      <InsightGlyph insight={draftState.addDefaults.insight} />
                     </output>
                   </header>
                   <div className="editor-section__controls">
@@ -244,12 +237,11 @@ export function PoolControls({
                         ariaLabel: `${t("insight")} ${value}`,
                       }))}
                       className="insight-selector"
-                      selected={String(draft.insight)}
+                      selected={String(draftState.addDefaults.insight)}
                       onSelect={(value) =>
-                        setDraft((current) => ({
-                          ...current,
+                        updateAddDefaults({
                           insight: Number(value) as 0 | 1 | 2 | 3,
-                        }))
+                        })
                       }
                     />
                   </div>
@@ -257,17 +249,15 @@ export function PoolControls({
                 <section className="editor-section">
                   <header className="editor-section__head">
                     <span>{t("resonance")}</span>
-                    <output>{draft.resonance}</output>
+                    <output>{draftState.addDefaults.resonance}</output>
                   </header>
                   <div className="editor-section__controls">
                     <Stepper
                       label={t("resonance")}
-                      value={draft.resonance}
+                      value={draftState.addDefaults.resonance}
                       min={0}
                       max={15}
-                      onChange={(resonance) =>
-                        setDraft((value) => ({ ...value, resonance }))
-                      }
+                      onChange={(resonance) => updateAddDefaults({ resonance })}
                       decreaseLabel={t("decreaseValue", {
                         name: t("resonance"),
                       })}
@@ -281,15 +271,12 @@ export function PoolControls({
                         label: String(value),
                       }))}
                       selected={
-                        [1, 10, 15].includes(draft.resonance)
-                          ? String(draft.resonance)
+                        [1, 10, 15].includes(draftState.addDefaults.resonance)
+                          ? String(draftState.addDefaults.resonance)
                           : undefined
                       }
                       onSelect={(value) =>
-                        setDraft((current) => ({
-                          ...current,
-                          resonance: Number(value),
-                        }))
+                        updateAddDefaults({ resonance: Number(value) })
                       }
                     />
                   </div>
@@ -304,12 +291,9 @@ export function PoolControls({
                         key: String(value),
                         label: String(value),
                       }))}
-                      selected={String(draft.portray)}
+                      selected={String(draftState.addDefaults.portray)}
                       onSelect={(value) =>
-                        setDraft((current) => ({
-                          ...current,
-                          portray: Number(value),
-                        }))
+                        updateAddDefaults({ portray: Number(value) })
                       }
                     />
                   </div>
@@ -319,7 +303,7 @@ export function PoolControls({
                     <span>{t("defaultSkin")}</span>
                     <output>
                       {t(
-                        draftSkinMode === "initial"
+                        draftState.defaultSkinMode === "initial"
                           ? "skinDefault"
                           : "skinInsight",
                       )}
@@ -331,9 +315,11 @@ export function PoolControls({
                         { key: "initial", label: t("skinDefault") },
                         { key: "insight", label: t("skinInsight") },
                       ]}
-                      selected={draftSkinMode}
+                      selected={draftState.defaultSkinMode}
                       onSelect={(value) =>
-                        setDraftSkinMode(value as DefaultSkinMode)
+                        updateDraft({
+                          defaultSkinMode: value as DefaultSkinMode,
+                        })
                       }
                     />
                   </div>
@@ -344,7 +330,7 @@ export function PoolControls({
                 <section className="editor-section">
                   <header className="editor-section__head">
                     <span>{t("defaultPsychubeImprint")}</span>
-                    <output>{draftPsychubeAmplification}</output>
+                    <output>{draftState.psychubeAmplificationDefault}</output>
                   </header>
                   <div className="editor-section__controls">
                     <SegButtons
@@ -352,9 +338,11 @@ export function PoolControls({
                         key: String(value),
                         label: String(value),
                       }))}
-                      selected={String(draftPsychubeAmplification)}
+                      selected={String(draftState.psychubeAmplificationDefault)}
                       onSelect={(value) =>
-                        setDraftPsychubeAmplification(Number(value))
+                        updateDraft({
+                          psychubeAmplificationDefault: Number(value),
+                        })
                       }
                     />
                   </div>
@@ -372,11 +360,11 @@ export function PoolControls({
                         },
                         { key: "owned", label: t("allPsychubesOwned") },
                       ]}
-                      selected={draftPsychubeOwnership ?? undefined}
+                      selected={draftState.psychubeOwnershipStatus ?? undefined}
                       onSelect={(value) =>
-                        setDraftPsychubeOwnership(
-                          value as PsychubeOwnershipMode,
-                        )
+                        updateDraft({
+                          psychubeOwnershipStatus: value as PsychubeOwnershipMode,
+                        })
                       }
                     />
                   </div>

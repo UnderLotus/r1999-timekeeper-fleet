@@ -1,5 +1,7 @@
 import type { InsightIndex } from "./catalog";
 
+export type DefaultSkinMode = "initial" | "insight";
+
 /** 角色培養狀態（LOC-38：skin 是角色級狀態，非隊級） */
 export interface CharacterBuild {
   insight: InsightIndex;

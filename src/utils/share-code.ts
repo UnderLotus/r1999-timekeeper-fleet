@@ -22,8 +22,8 @@ const MAX_OFFICIAL_ID = (1 << OFFICIAL_ID_BITS) - 1;
 const MAX_COLLECTION_COUNT = (1 << COLLECTION_COUNT_BITS) - 1;
 export const SHARE_PREFIX = "p=";
 
-export interface SharePayload {
-  version: number;
+export interface DecodedShareToken {
+  sourceVersion: number;
   profile: Profile;
 }
 
@@ -304,17 +304,8 @@ function getV5Imprint(reader: BitReader): number | null {
   return value === null ? null : value + 2;
 }
 
-export function profileToPayload(profile: Profile): SharePayload {
-  return { version: SHARE_VERSION, profile };
-}
-
-export function payloadToProfile(payload: SharePayload): Profile {
-  return payload.profile;
-}
-
-export function encodeShareToken(payload: SharePayload): string {
-  const profile = payload.profile,
-    writer = new BitWriter();
+export function encodeShareToken(profile: Profile): string {
+  const writer = new BitWriter();
   writer.put(SHARE_VERSION, VERSION_BITS);
 
   const characters = Object.entries(profile.characters)
@@ -555,7 +546,7 @@ function decodeV5Body(reader: BitReader): Profile | null {
   return profile;
 }
 
-export function decodeSharePayload(token: string): SharePayload | null {
+export function decodeShareToken(token: string): DecodedShareToken | null {
   const bytes = fromBase64Url(token);
   if (!bytes) return null;
   const reader = new BitReader(bytes);
@@ -570,5 +561,5 @@ export function decodeSharePayload(token: string): SharePayload | null {
           ? decodeV3V4Body(reader, LEGACY_COLLECTION_COUNT_BITS)
           : null;
   if (!profile || !reader.paddingIsCanonical()) return null;
-  return { version, profile: sanitizeProfile(profile) };
+  return { sourceVersion: version, profile: sanitizeProfile(profile) };
 }

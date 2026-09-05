@@ -1,8 +1,6 @@
 import {
-  decodeSharePayload,
+  decodeShareToken,
   encodeShareToken,
-  payloadToProfile,
-  profileToPayload,
   SHARE_VERSION,
 } from "../src/utils/share-code";
 import { ADD_DEFAULT } from "../src/store/boxStore";
@@ -39,7 +37,7 @@ function overwriteBits(
   return Buffer.from(bytes).toString("base64url");
 }
 function roundTrip(profile: ReturnType<typeof emptyProfile>) {
-  return decodeSharePayload(encodeShareToken(profileToPayload(profile)))
+  return decodeShareToken(encodeShareToken(profile))
     ?.profile;
 }
 const a = fixtureCharacters[0],
@@ -86,11 +84,11 @@ function sample() {
   return p;
 }
 const source = sample(),
-  token = encodeShareToken(profileToPayload(source)),
-  decoded = decodeSharePayload(token),
-  result = decoded ? payloadToProfile(decoded) : null;
+  token = encodeShareToken(source),
+  decoded = decodeShareToken(token),
+  result = decoded ? decoded.profile : null;
 check("round trip decodes", !!result);
-check("version is explicit", decoded?.version === SHARE_VERSION);
+check("version is explicit", decoded?.sourceVersion === SHARE_VERSION);
 check(
   "character build round trips",
   result?.characters[a.id]?.level === 45 &&
@@ -114,7 +112,7 @@ check(
 );
 check("token is base64url", /^[A-Za-z0-9_-]+$/.test(token));
 const verboseToken = encodeURIComponent(
-  JSON.stringify(profileToPayload(source)),
+  JSON.stringify(source),
 );
 check(
   "binary codec is smaller than the equivalent URL-encoded JSON payload",
@@ -123,26 +121,26 @@ check(
 );
 check(
   "truncated token rejected",
-  decodeSharePayload(token.slice(0, -1)) === null,
+  decodeShareToken(token.slice(0, -1)) === null,
 );
-check("invalid alphabet rejected", decodeSharePayload(token + "!") === null);
+check("invalid alphabet rejected", decodeShareToken(token + "!") === null);
 check(
   "appended canonical-looking data rejected",
-  decodeSharePayload(token + "A") === null,
+  decodeShareToken(token + "A") === null,
 );
 const wrong = (token[0] === "A" ? "B" : "A") + token.slice(1);
 check(
   "wrong version/corrupt header rejected",
-  decodeSharePayload(wrong) === null,
+  decodeShareToken(wrong) === null,
 );
-const reencoded = result ? encodeShareToken(profileToPayload(result)) : "";
+const reencoded = result ? encodeShareToken(result) : "";
 check("canonical re-encode stable", reencoded === token);
 const legacyV3Token =
   "MBLuymCAQ-hk9ERFdFnD80tMl3YfQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const legacyV3 = decodeSharePayload(legacyV3Token);
+const legacyV3 = decodeShareToken(legacyV3Token);
 check(
   "legacy v3 tokens retain selected characters, builds, psychubes, and teams",
-  legacyV3?.version === 3 &&
+  legacyV3?.sourceVersion === 3 &&
     legacyV3.profile.characters[a.id]?.level === 30 &&
     legacyV3.profile.characters[a.id]?.portray === 4 &&
     legacyV3.profile.psychubes[psy.id] === 3 &&
@@ -152,10 +150,10 @@ check(
 );
 const fixedV4Token =
   "QAy7usbwZd4AARiaAAQBh9CGIyMSEzpm6jluZXoiJ7lj7Au7D6AAAu8AAAAAAAAAAAAAAAAAAAAxNGIxiQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAu7D6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const fixedV4 = decodeSharePayload(fixedV4Token);
+const fixedV4 = decodeShareToken(fixedV4Token);
 check(
   "fixed public v4 fixture retains builds, skin, dual psychubes, and teams",
-  fixedV4?.version === 4 &&
+  fixedV4?.sourceVersion === 4 &&
     fixedV4.profile.characters[a.id]?.level === 45 &&
     fixedV4.profile.characters[a.id]?.activeVariant === a.skins.at(-1)!.id &&
     fixedV4.profile.teams[0].name === "雨幕舞台" &&
@@ -169,7 +167,7 @@ check(
   `v4=${fixedV4Token.length}, v5=${token.length}`,
 );
 
-const emptyV5Token = encodeShareToken(profileToPayload(emptyProfile()));
+const emptyV5Token = encodeShareToken(emptyProfile());
 check(
   "empty v5 round trips with zero-width local references",
   emptyV5Token.length === 8 && !!roundTrip(emptyProfile()),
@@ -189,11 +187,9 @@ check(
     ownedOnlyResult.characters[a.id].resonance === 1 &&
     ownedOnlyResult.characters[a.id].activeVariant === a.skins.at(-1)!.id,
 );
-const literalPresetToken = encodeShareToken(
-  profileToPayload(ownedOnlyWithSkin),
-);
+const literalPresetToken = encodeShareToken(ownedOnlyWithSkin);
 const originalAddDefault = { ...ADD_DEFAULT };
-let literalPresetResult: ReturnType<typeof decodeSharePayload> = null;
+let literalPresetResult: ReturnType<typeof decodeShareToken> = null;
 try {
   Object.assign(ADD_DEFAULT, {
     insight: 2,
@@ -201,7 +197,7 @@ try {
     portray: 5,
     resonance: 15,
   });
-  literalPresetResult = decodeSharePayload(literalPresetToken);
+  literalPresetResult = decodeShareToken(literalPresetToken);
 } finally {
   Object.assign(ADD_DEFAULT, originalAddDefault);
 }
@@ -266,7 +262,7 @@ const tokenForLocalPreference = (showFutureSight: boolean): string => {
     profile: sample(),
     preferences: { showFutureSight },
   };
-  return encodeShareToken(profileToPayload(localState.profile));
+  return encodeShareToken(localState.profile);
 };
 check(
   "local Future Sight preference does not affect the share token",
@@ -276,7 +272,7 @@ const decodedShape = decoded as unknown as
   | (Record<string, unknown> & { profile: Record<string, unknown> })
   | null;
 check(
-  "decoded share payload excludes local preferences",
+  "decoded share token excludes local preferences",
   !!decodedShape &&
     !("preferences" in decodedShape) &&
     !("showFutureSight" in decodedShape) &&
@@ -285,18 +281,18 @@ check(
 const twoCloseIds = emptyProfile();
 twoCloseIds.characters[a.id] = { ...ADD_DEFAULT, activeVariant: null };
 twoCloseIds.characters[b.id] = { ...ADD_DEFAULT, activeVariant: null };
-const twoCloseIdsToken = encodeShareToken(profileToPayload(twoCloseIds));
+const twoCloseIdsToken = encodeShareToken(twoCloseIds);
 // Header (4) + count (10) + first ID (14) + owned preset (1) + variant (1).
 const secondDeltaOffset = 30;
 check(
   "malformed zero/unbounded gamma delta is rejected",
-  decodeSharePayload(
+  decodeShareToken(
     overwriteBits(twoCloseIdsToken, secondDeltaOffset, 14, 0),
   ) === null,
 );
 check(
   "delta accumulation beyond the 14-bit official ID range is rejected",
-  decodeSharePayload(overwriteBits(twoCloseIdsToken, 14, 14, 16383)) === null,
+  decodeShareToken(overwriteBits(twoCloseIdsToken, 14, 14, 16383)) === null,
 );
 const boundaryCharacters: CharacterDef[] = [1, 16383].map((id, index) => ({
   ...a,
@@ -314,7 +310,7 @@ for (const item of boundaryCharacters)
     activeVariant: null,
   };
 const maximumDeltaToken = encodeShareToken(
-  profileToPayload(maximumDeltaProfile),
+  maximumDeltaProfile,
 );
 check(
   "maximum legal 14-bit ID and delta round trip",
@@ -322,7 +318,7 @@ check(
 );
 check(
   "a token truncated in the middle of a gamma delta is rejected",
-  decodeSharePayload(
+  decodeShareToken(
     Buffer.from(maximumDeltaToken, "base64url")
       .subarray(0, 5)
       .toString("base64url"),
@@ -332,16 +328,16 @@ setCatalogForTesting(fixtureCharacters, fixturePsychubes);
 // Two characters require 2-bit references; 3 is outside the wire count.
 check(
   "local references beyond the encoded collection count are rejected",
-  decodeSharePayload(overwriteBits(twoCloseIdsToken, 49, 2, 3)) === null,
+  decodeShareToken(overwriteBits(twoCloseIdsToken, 49, 2, 3)) === null,
 );
 // A present skin suffix is constrained to the literal wire range 1..127.
 check(
   "a present zero skin suffix is rejected",
-  decodeSharePayload(overwriteBits(literalPresetToken, 30, 7, 0)) === null,
+  decodeShareToken(overwriteBits(literalPresetToken, 30, 7, 0)) === null,
 );
 check(
   "unsupported future share versions are rejected",
-  decodeSharePayload(overwriteBits(token, 0, 4, 6)) === null,
+  decodeShareToken(overwriteBits(token, 0, 4, 6)) === null,
 );
 const variedDeltas = emptyProfile();
 for (const item of fixtureCharacters)
@@ -365,12 +361,12 @@ positionalProfile.teams[0].slots[0] = {
   psychubeId: twinsPsy1.id,
   psychubeId2: twinsPsy2.id,
 };
-const positionalToken = encodeShareToken(profileToPayload(positionalProfile));
+const positionalToken = encodeShareToken(positionalProfile);
 setCatalogForTesting(
   fixtureCharacters.filter((item) => item.id !== "3005"),
   fixturePsychubes.filter((item) => item.id !== "1001"),
 );
-const positionalResult = decodeSharePayload(positionalToken)?.profile;
+const positionalResult = decodeShareToken(positionalToken)?.profile;
 check(
   "unknown wire positions do not shift character or dual psychube references",
   positionalResult?.teams[0].slots[0].characterId === twins.id &&
@@ -386,15 +382,13 @@ setCatalogForTesting(fixtureCharacters, fixturePsychubes);
 
 const stale = sample();
 stale.characters[a.id].activeVariant = "999999";
-const clean = payloadToProfile(
-  decodeSharePayload(encodeShareToken(profileToPayload(stale)))!,
-);
+const clean = decodeShareToken(encodeShareToken(stale))!.profile;
 check("stale variant sanitizes", clean.characters[a.id].activeVariant === null);
 setCatalogForTesting(
   [...fixtureCharacters].reverse(),
   [...fixturePsychubes].reverse(),
 );
-const afterCatalogReorder = decodeSharePayload(token);
+const afterCatalogReorder = decodeShareToken(token);
 check(
   "catalog reordering does not break old token",
   afterCatalogReorder?.profile.teams[2].slots[3].characterId === a.id,
@@ -434,8 +428,8 @@ const syntheticPsychubes = Array.from({ length: 1024 }, (_, index) =>
 );
 setCatalogForTesting(syntheticCharacters, syntheticPsychubes);
 for (const count of [255, 256, 512]) {
-  const decodedBoundary = decodeSharePayload(
-    encodeShareToken(profileToPayload(syntheticProfile(count, count))),
+  const decodedBoundary = decodeShareToken(
+    encodeShareToken(syntheticProfile(count, count)),
   );
   check(
     `10-bit collection counts round trip ${count} entries`,
@@ -443,8 +437,8 @@ for (const count of [255, 256, 512]) {
       Object.keys(decodedBoundary?.profile.psychubes ?? {}).length === count,
   );
 }
-const decodedMaximum = decodeSharePayload(
-  encodeShareToken(profileToPayload(syntheticProfile(1023, 1023))),
+const decodedMaximum = decodeShareToken(
+  encodeShareToken(syntheticProfile(1023, 1023)),
 );
 check(
   "10-bit collection counts represent the explicit 1023-entry maximum",
@@ -453,7 +447,7 @@ check(
 );
 function encodingThrows(profile: ReturnType<typeof emptyProfile>): boolean {
   try {
-    encodeShareToken(profileToPayload(profile));
+    encodeShareToken(profile);
     return false;
   } catch (error) {
     return error instanceof RangeError;

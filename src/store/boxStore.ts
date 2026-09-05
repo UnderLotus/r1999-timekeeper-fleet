@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import { detectLanguage } from "../i18n/detect-language";
-import type { CharacterBuild, Profile } from "../types/profile";
+import type { CharacterBuild, DefaultSkinMode, Profile } from "../types/profile";
 import { emptyProfile, PSYCHUBE_IMPRINT_MAX } from "../types/profile";
 import type { InsightIndex, LangCode } from "../types/catalog";
 import {
@@ -18,15 +18,15 @@ import {
 } from "../utils/profile-mutations";
 import {
   createPoolUiState,
-  reducePoolUi,
+  transitionPoolAssignment,
   type Assignment,
-  type DefaultSkinMode,
   type FilterMode,
   type PoolUiState,
 } from "../utils/pool-model";
 export { ADD_DEFAULT, sanitizeProfile } from "../utils/profile-sanitize";
 export { characterRefs, psychubeRefs } from "../utils/profile-mutations";
-export type { Assignment, DefaultSkinMode, FilterMode } from "../utils/pool-model";
+export type { DefaultSkinMode } from "../types/profile";
+export type { Assignment, FilterMode } from "../utils/pool-model";
 export type { PoolUiState as UIState } from "../utils/pool-model";
 
 const STORAGE_KEY = "r1999-timekeeper-fleet-state";
@@ -43,7 +43,6 @@ export interface Preferences {
 export interface BoxStore {
   profile: Profile;
   previewProfile: Profile | null;
-  activeIsPreview: boolean;
   previewShowFutureSight: boolean;
   ui: PoolUiState;
   preferences: Preferences;
@@ -147,9 +146,7 @@ function sanitizePreferences(value: unknown): Preferences {
   };
 }
 function active(get: () => BoxStore): Profile {
-  return get().activeIsPreview
-    ? (get().previewProfile ?? emptyProfile())
-    : get().profile;
+  return get().previewProfile ?? get().profile;
 }
 
 export function migratePersistedState(persisted: unknown): {
@@ -173,7 +170,7 @@ const profileMutationEngine = createProfileMutationEngine(
 );
 
 function futureSelectionAllowed(get: () => BoxStore): boolean {
-  return get().activeIsPreview
+  return get().previewProfile !== null
     ? get().previewShowFutureSight
     : get().preferences.showFutureSight;
 }
@@ -196,51 +193,38 @@ export const useBoxStore = create<BoxStore>()(
     (set, get) => ({
       profile: emptyProfile(),
       previewProfile: null,
-      activeIsPreview: false,
       previewShowFutureSight: false,
       ui: { ...DEFAULT_UI },
       preferences: { ...DEFAULT_PREFERENCES, addDefaults: { ...ADD_DEFAULT } },
       _setActiveProfile: (profile) =>
-        get().activeIsPreview
+        get().previewProfile !== null
           ? set({ previewProfile: profile })
           : set({ profile }),
       enterPreview: (profile, showFutureSight = false) =>
         set({
           previewProfile: sanitizeProfile(profile),
-          activeIsPreview: true,
           previewShowFutureSight: showFutureSight,
-          ui: reducePoolUi(get().ui, {
-            type: "setAssignment",
-            assignment: null,
-          }),
+          ui: transitionPoolAssignment(get().ui, null),
         }),
       setPreviewShowFutureSight: (previewShowFutureSight) =>
         set({ previewShowFutureSight }),
       exitPreview: () =>
         set({
           previewProfile: null,
-          activeIsPreview: false,
           previewShowFutureSight: false,
-          ui: reducePoolUi(get().ui, {
-            type: "setAssignment",
-            assignment: null,
-          }),
+          ui: transitionPoolAssignment(get().ui, null),
         }),
       importPreview: (enableFutureSight = false) => {
         const preview = get().previewProfile;
-        if (!get().activeIsPreview || !preview) return;
+        if (!preview) return;
         set({
           profile: sanitizeProfile(preview),
           previewProfile: null,
-          activeIsPreview: false,
           previewShowFutureSight: false,
           preferences: enableFutureSight
             ? { ...get().preferences, showFutureSight: true }
             : get().preferences,
-          ui: reducePoolUi(get().ui, {
-            type: "setAssignment",
-            assignment: null,
-          }),
+          ui: transitionPoolAssignment(get().ui, null),
         });
       },
       addCharacter: (id) => {
@@ -304,25 +288,14 @@ export const useBoxStore = create<BoxStore>()(
       resetAll: () => {
         mutateActive(get, { type: "reset" });
       },
-      setTab: (tab) =>
-        set({ ui: reducePoolUi(get().ui, { type: "setTab", tab }) }),
-      setSearch: (search) =>
-        set({ ui: reducePoolUi(get().ui, { type: "setSearch", search }) }),
+      setTab: (tab) => set({ ui: { ...get().ui, tab } }),
+      setSearch: (search) => set({ ui: { ...get().ui, search } }),
       setFilterMode: (filterMode) =>
-        set({
-          ui: reducePoolUi(get().ui, { type: "setFilterMode", filterMode }),
-        }),
+        set({ ui: { ...get().ui, filterMode } }),
       setRarityFilter: (rarityFilter) =>
-        set({
-          ui: reducePoolUi(get().ui, {
-            type: "setRarityFilter",
-            rarityFilter,
-          }),
-        }),
+        set({ ui: { ...get().ui, rarityFilter: [...rarityFilter] } }),
       setAssignment: (assignment) =>
-        set({
-          ui: reducePoolUi(get().ui, { type: "setAssignment", assignment }),
-        }),
+        set({ ui: transitionPoolAssignment(get().ui, assignment) }),
       initializeLanguage: (browserLocale) => {
         const preferences = get().preferences;
         if (preferences.langChosen) return;

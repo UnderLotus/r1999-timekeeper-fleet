@@ -1,5 +1,5 @@
 import type { InsightIndex } from "../types/catalog";
-import type { CharacterBuild, Profile } from "../types/profile";
+import type { CharacterBuild, DefaultSkinMode, Profile } from "../types/profile";
 import {
   emptyProfile,
   LEVEL_CAPS,
@@ -16,8 +16,6 @@ import {
   normalizeLegalInsight,
   sanitizeProfile,
 } from "./profile-sanitize";
-
-export type DefaultSkinMode = "initial" | "insight";
 
 /**
  * Runtime choices that affect a Profile mutation. The active-profile owner

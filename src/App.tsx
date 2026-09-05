@@ -50,7 +50,6 @@ function toSharePreviewState(state: BoxStore): SharePreviewStoreState {
   return {
     profile: state.profile,
     previewProfile: state.previewProfile,
-    activeIsPreview: state.activeIsPreview,
     previewShowFutureSight: state.previewShowFutureSight,
     localShowFutureSight: state.preferences.showFutureSight,
   };
@@ -76,9 +75,9 @@ export default function App(): React.JSX.Element {
       onHydrated,
     );
   const shareSession = shareSessionRef.current;
-  const { profile, previewProfile, activeIsPreview, ui, preferences } = store;
-  const activeProfile =
-    activeIsPreview && previewProfile ? previewProfile : profile;
+  const { profile, previewProfile, ui, preferences } = store;
+  const isPreviewActive = previewProfile !== null;
+  const activeProfile = previewProfile ?? profile;
   const [editor, setEditor] = useState<EditorState>(null),
     [skin, setSkin] = useState<SkinState>(null),
     [dialog, setDialog] = useState<DialogState>(null),
@@ -105,7 +104,7 @@ export default function App(): React.JSX.Element {
     lang = preferences.lang,
     t = (key: string, params?: Record<string, string | number>) =>
       getUiText(lang, key, params),
-    revealFuture = activeIsPreview
+    revealFuture = isPreviewActive
       ? store.previewShowFutureSight
       : preferences.showFutureSight;
   const importInfo = shareSession.getImportInfo();
@@ -209,7 +208,7 @@ export default function App(): React.JSX.Element {
         exportDisabled={exportState.status === "working"}
         onLang={store.setLang}
         onFuture={() => {
-          if (activeIsPreview) {
+          if (isPreviewActive) {
             if (store.previewShowFutureSight) {
               shareSession.setPreviewFutureSight(false);
             } else {
@@ -253,7 +252,7 @@ export default function App(): React.JSX.Element {
           {t("shareInvalid")}
         </button>
       )}
-      {activeIsPreview && (
+      {isPreviewActive && (
         <div className="preview-banner">
           <strong>{t("previewBanner")}</strong>
           <button type="button" onClick={() => setDialog({ kind: "import" })}>

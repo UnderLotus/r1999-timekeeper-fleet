@@ -24,7 +24,6 @@ function fresh() {
   useBoxStore.setState({
     profile: emptyProfile(),
     previewProfile: null,
-    activeIsPreview: false,
     previewShowFutureSight: false,
     ui: {
       tab: "characters",
@@ -54,7 +53,7 @@ check(
   (() => {
     const state = fresh();
     return (
-      !state.activeIsPreview &&
+      state.previewProfile === null &&
       state.profile.teams.length === 4 &&
       state.profile.teams.every((team) => team.slots.length === 4)
     );
@@ -78,7 +77,7 @@ check(
     useBoxStore.getState().addCharacter(b.id);
     const state = useBoxStore.getState();
     return (
-      state.activeIsPreview &&
+      state.previewProfile !== null &&
       JSON.stringify(state.profile) === before &&
       !!state.previewProfile?.characters[b.id]
     );
@@ -129,7 +128,6 @@ check(
     useBoxStore.getState().exitPreview();
     const state = useBoxStore.getState();
     return (
-      !state.activeIsPreview &&
       state.previewProfile === null &&
       state.previewShowFutureSight === false &&
       state.ui.assignment === null &&
@@ -148,7 +146,6 @@ check(
     useBoxStore.getState().importPreview(false);
     const state = useBoxStore.getState();
     return (
-      !state.activeIsPreview &&
       state.previewProfile === null &&
       !state.profile.characters[a.id] &&
       !!state.profile.characters[future.id] &&
@@ -198,7 +195,6 @@ check(
     return (
       Object.keys(partial).sort().join(",") === "preferences,profile" &&
       !partial.previewProfile &&
-      !partial.activeIsPreview &&
       !partial.ui
     );
   })(),

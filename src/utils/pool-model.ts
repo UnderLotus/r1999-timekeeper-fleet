@@ -1,5 +1,5 @@
 import type { CharacterDef, PsychubeDef } from "../types/catalog";
-import type { CharacterBuild, Profile } from "../types/profile";
+import type { CharacterBuild, DefaultSkinMode, Profile } from "../types/profile";
 import {
   allCharacters,
   allPsychubes,
@@ -9,7 +9,6 @@ import {
 
 export type PoolTab = "characters" | "psychubes";
 export type FilterMode = "all" | "owned" | "unowned";
-export type DefaultSkinMode = "initial" | "insight";
 export type PsychubeOwnershipMode = "unowned" | "owned";
 
 export interface Assignment {
@@ -40,55 +39,35 @@ export function createPoolUiState(): PoolUiState {
   };
 }
 
-export type PoolUiIntent =
-  | { type: "setTab"; tab: PoolTab }
-  | { type: "setSearch"; search: string }
-  | { type: "setFilterMode"; filterMode: FilterMode }
-  | { type: "setRarityFilter"; rarityFilter: number[] }
-  | { type: "setAssignment"; assignment: Assignment | null };
-
 /**
- * Applies Pool intents without requiring Zustand. Starting an assignment captures
- * the user's filter once; ending it restores that exact filter even if the user
- * changes filters while choosing an entry.
+ * Applies the Pool assignment transition without requiring Zustand. Starting an
+ * assignment captures the user's filter once; ending it restores that exact
+ * filter even if the user changes filters while choosing an entry.
  */
-export function reducePoolUi(
+export function transitionPoolAssignment(
   state: PoolUiState,
-  intent: PoolUiIntent,
+  assignment: Assignment | null,
 ): PoolUiState {
-  switch (intent.type) {
-    case "setTab":
-      return { ...state, tab: intent.tab };
-    case "setSearch":
-      return { ...state, search: intent.search };
-    case "setFilterMode":
-      return { ...state, filterMode: intent.filterMode };
-    case "setRarityFilter":
-      return { ...state, rarityFilter: [...intent.rarityFilter] };
-    case "setAssignment": {
-      if (intent.assignment === null) {
-        if (!state.assignment)
-          return { ...state, assignment: null, assignmentPreviousFilter: null };
-        return {
-          ...state,
-          assignment: null,
-          filterMode: state.assignmentPreviousFilter ?? state.filterMode,
-          assignmentPreviousFilter: null,
-        };
-      }
-      return {
-        ...state,
-        assignment: intent.assignment,
-        tab:
-          intent.assignment.kind === "character" ? "characters" : "psychubes",
-        filterMode: "owned",
-        assignmentPreviousFilter:
-          state.assignment === null
-            ? state.filterMode
-            : state.assignmentPreviousFilter,
-      };
-    }
+  if (assignment === null) {
+    if (!state.assignment)
+      return { ...state, assignment: null, assignmentPreviousFilter: null };
+    return {
+      ...state,
+      assignment: null,
+      filterMode: state.assignmentPreviousFilter ?? state.filterMode,
+      assignmentPreviousFilter: null,
+    };
   }
+  return {
+    ...state,
+    assignment,
+    tab: assignment.kind === "character" ? "characters" : "psychubes",
+    filterMode: "owned",
+    assignmentPreviousFilter:
+      state.assignment === null
+        ? state.filterMode
+        : state.assignmentPreviousFilter,
+  };
 }
 
 export const CHARACTER_POOL_RARITIES = [2, 3, 4, 5, 6] as const;
@@ -255,57 +234,9 @@ export function createPoolView(input: PoolViewInput): PoolView {
 
 export type AddDefaults = Omit<CharacterBuild, "activeVariant">;
 
-export interface PoolDefaultsSource {
-  addDefaults: AddDefaults;
-  defaultSkinMode: DefaultSkinMode;
-  psychubeAmplificationDefault: number;
-  psychubeOwnershipStatus: PsychubeOwnershipMode | null;
-}
-
 export interface PoolDefaultsDraft {
   addDefaults: AddDefaults;
   defaultSkinMode: DefaultSkinMode;
   psychubeAmplificationDefault: number;
   psychubeOwnershipStatus: PsychubeOwnershipMode | null;
-}
-
-export function beginPoolDefaults(
-  source: PoolDefaultsSource,
-): PoolDefaultsDraft {
-  return {
-    addDefaults: { ...source.addDefaults },
-    defaultSkinMode: source.defaultSkinMode,
-    psychubeAmplificationDefault: source.psychubeAmplificationDefault,
-    psychubeOwnershipStatus: source.psychubeOwnershipStatus,
-  };
-}
-
-export type PoolDefaultsCommit =
-  | {
-      tab: "characters";
-      addDefaults: AddDefaults;
-      defaultSkinMode: DefaultSkinMode;
-    }
-  | {
-      tab: "psychubes";
-      psychubeAmplificationDefault: number;
-      psychubeOwnershipStatus: PsychubeOwnershipMode | null;
-    };
-
-/** Commit is the only operation that turns a draft into caller mutations. */
-export function commitPoolDefaults(
-  tab: PoolTab,
-  draft: PoolDefaultsDraft,
-): PoolDefaultsCommit {
-  if (tab === "characters")
-    return {
-      tab,
-      addDefaults: { ...draft.addDefaults },
-      defaultSkinMode: draft.defaultSkinMode,
-    };
-  return {
-    tab,
-    psychubeAmplificationDefault: draft.psychubeAmplificationDefault,
-    psychubeOwnershipStatus: draft.psychubeOwnershipStatus,
-  };
 }

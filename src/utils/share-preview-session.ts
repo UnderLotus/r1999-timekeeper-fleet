@@ -1,10 +1,8 @@
 import type { Profile } from "../types/profile";
 import { profileHasFutureContent } from "./catalog";
 import {
-  decodeSharePayload,
+  decodeShareToken,
   encodeShareToken,
-  payloadToProfile,
-  profileToPayload,
 } from "./share-code";
 
 export const SHARE_PREVIEW_SYNC_DELAY_MS = 180;
@@ -12,7 +10,6 @@ export const SHARE_PREVIEW_SYNC_DELAY_MS = 180;
 export interface SharePreviewStoreState {
   profile: Profile;
   previewProfile: Profile | null;
-  activeIsPreview: boolean;
   previewShowFutureSight: boolean;
   localShowFutureSight: boolean;
 }
@@ -95,9 +92,7 @@ function readHashParams(hash: string): URLSearchParams {
 }
 
 function activeProfile(state: SharePreviewStoreState): Profile {
-  return state.activeIsPreview && state.previewProfile
-    ? state.previewProfile
-    : state.profile;
+  return state.previewProfile ?? state.profile;
 }
 
 export function createSharePreviewSession(
@@ -121,7 +116,7 @@ export function createSharePreviewSession(
 
   const replaceEncodedProfile = (profile: Profile): void => {
     const params = readHashParams(options.location.getHash());
-    params.set("p", encodeShareToken(profileToPayload(profile)));
+    params.set("p", encodeShareToken(profile));
     options.location.replaceHash(params.toString());
   };
 
@@ -132,8 +127,7 @@ export function createSharePreviewSession(
       const state = options.store.getState();
       if (
         pendingIncoming === null &&
-        state.activeIsPreview &&
-        state.previewProfile === profile
+        state.previewProfile !== null && state.previewProfile === profile
       )
         replaceEncodedProfile(profile);
     }, syncDelayMs);
@@ -159,12 +153,12 @@ export function createSharePreviewSession(
     }
     if (handledHash === hash) return { kind: "ignored" };
     handledHash = hash;
-    const payload = decodeSharePayload(token);
-    if (!payload) {
+    const decoded = decodeShareToken(token);
+    if (!decoded) {
       clearShareHash();
       return { kind: "invalid" };
     }
-    const incoming = payloadToProfile(payload);
+    const incoming = decoded.profile;
     if (profileHasFutureContent(incoming)) {
       clearSyncTimer();
       pendingIncoming = incoming;
@@ -193,7 +187,7 @@ export function createSharePreviewSession(
       if (!started || runtimeStarted) return;
       runtimeStarted = true;
       const onStoreChange = (state: SharePreviewStoreState): void => {
-        if (!state.activeIsPreview || !state.previewProfile) {
+        if (!state.previewProfile) {
           clearSyncTimer();
           observedPreviewProfile = null;
           return;
@@ -260,7 +254,7 @@ export function createSharePreviewSession(
     },
     copyCurrent: async () => {
       const url = `${options.location.shareBaseUrl()}#p=${encodeShareToken(
-        profileToPayload(activeProfile(options.store.getState())),
+        activeProfile(options.store.getState()),
       )}`;
       try {
         await options.clipboard.writeText(url);
@@ -271,7 +265,7 @@ export function createSharePreviewSession(
     },
     getImportInfo: () => {
       const state = options.store.getState();
-      if (!state.activeIsPreview || !state.previewProfile) return null;
+      if (!state.previewProfile) return null;
       return {
         hasFutureContent: profileHasFutureContent(state.previewProfile),
         localFutureSightEnabled: state.localShowFutureSight,
