@@ -26,7 +26,7 @@ try {
         error.message.includes("Another catalog/asset sync"),
     );
   });
-  console.log("rollback/lock tests: 3 passed, 0 failed");
+  console.log("rollback/lock tests: passed");
 } finally {
   await rm(root, { recursive: true, force: true });
 }

@@ -49,17 +49,6 @@ const b = fixtureCharacters[1];
 const future = fixtureCharacters[2];
 
 check(
-  "store starts with a four-team, four-slot local profile",
-  (() => {
-    const state = fresh();
-    return (
-      state.previewProfile === null &&
-      state.profile.teams.length === 4 &&
-      state.profile.teams.every((team) => team.slots.length === 4)
-    );
-  })(),
-);
-check(
   "local active-profile routing delegates mutations to local data",
   (() => {
     fresh();

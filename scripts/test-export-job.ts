@@ -1,7 +1,6 @@
 import { emptyProfile } from "../src/types/profile";
 import {
   createExportJob,
-  type ExportJobState,
   type ExportRunner,
 } from "../src/utils/export-job";
 import type { ExportSnapshot } from "../src/types/export";
@@ -40,7 +39,6 @@ async function waitFor(
 
 const target = {} as HTMLElement;
 let release: () => void = () => {};
-const states: ExportJobState[] = [];
 const runningRunner: ExportRunner = async (_target, onProgress) => {
   onProgress({ phase: "rendering", loaded: 0, total: 0 });
   await new Promise<void>((resolve) => {
@@ -52,7 +50,6 @@ const runningJob = createExportJob({
   waitForRender: async () => {},
   runExport: runningRunner,
 });
-const unsubscribe = runningJob.subscribe(() => states.push(runningJob.getState()));
 const source = snapshot();
 source.profile.teams[0].name = "Stable snapshot";
 source.lang = "en-US";
@@ -78,8 +75,6 @@ check(
 );
 release();
 await waitFor(() => runningJob.getState().status === "idle");
-check("successful jobs release the snapshot and return idle", true);
-unsubscribe();
 runningJob.dispose();
 
 const missingTargetJob = createExportJob({

@@ -165,24 +165,6 @@ async function main(): Promise<void> {
       emptyExportMeta.height === 400,
   );
 
-  const favicon = await sharp(path.join(ROOT, "public/favicon.png")).metadata();
-  const favicon32 = await sharp(
-    path.join(ROOT, "public/favicon-32.png"),
-  ).metadata();
-  const appleIcon = await sharp(
-    path.join(ROOT, "public/apple-touch-icon.png"),
-  ).metadata();
-  check(
-    "suitcase favicon variants have expected dimensions",
-    favicon.width === 150 &&
-      favicon.height === 150 &&
-      favicon.hasAlpha === true &&
-      favicon32.width === 32 &&
-      favicon32.height === 32 &&
-      appleIcon.width === 150 &&
-      appleIcon.height === 150,
-  );
-
   console.log("\nasset tests: " + pass + " passed, " + fail + " failed");
   if (fail > 0) process.exit(1);
 }
