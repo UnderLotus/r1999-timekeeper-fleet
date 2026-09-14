@@ -2,20 +2,20 @@
   "schemaVersion": 3,
   "sourceHashes": {
     "cn/ArcanistMap.json": "c757b84efed7231b385b63f287184e0d03870928d07ecaf4682696b431a6163b",
-    "cn/character.json": "9098f5778c664b4d6bce7ba1acc74dc4a618c8e838282885018de7599f63f706",
-    "cn/equip.json": "ce82ac8d75d79bd20e660c87117930faaafb4107615becea0d44de4d181b1ca5",
-    "cn/skin.json": "b3df8370e4c6d316ca03933d21783dbd7609fa009b5002580e1025f2a48c4ceb",
-    "name-fallbacks.json": "81afd51aa830556c9ef3dbb225e2e23416de943f14310814579fcfb1e8661586",
+    "cn/character.json": "fe00365b1239b9d274aa76d3c445ef5f9e7dd298d53309fa10ab253e77efa281",
+    "cn/equip.json": "8a1ef31511e388166fb4ce0f486554efe4ec6ac92fd919caaa6344218afd5d00",
+    "cn/skin.json": "b3c567d59f08371b5d6f5d386009c050b97babfe17acff215c20ed10bfe50884",
+    "name-fallbacks.json": "e30eb6d4179ad0c857a69fac70aab82b073cf6d62d9d0b99f5207c114a431cde",
     "localized-name-overrides.json": "06fc52fc089303784795827b656400b7db0e9ca362f0b5dc241d0ab2e137dc6f",
-    "catalog-policy.json": "e190e384dee6a38ea8a0b5fbb09c797b1a3061cb5ae84fcbf58710f7f03fb740",
-    "gl/character.json": "6d58170a285488165f2f0884d7f6b58e1801df5bb60a5ca11bf8de2b4caa318d",
+    "catalog-policy.json": "8781c7505214ad8d9fe7d8d12091504c2768460951824c11d09701bc43372531",
+    "gl/character.json": "a0ae57e2fcc7e301912769b0f561bd0aeb4008058c6bcf2e9a2bfabfeb17b0d6",
     "gl/equip.json": "684db6fc0b7f25acff075198344ccbb01a86d2f9afa957869e06600c72a6bf8f",
     "gl/skin.json": "0520eaf83efb97b385749b883be5d9f59f0f0fbbcd41265d23092535f6df5d69",
-    "gl/language_zh.json": "8b44d6cd5802e3db7140aa519437f359297fba8c6fbb819c2bbd14b4e0c962af",
-    "gl/language_tw.json": "599f5ae38063f7c6eade12109f525f731cc0f76a34b2e71b3803d7a7e10dd88a",
-    "gl/language_jp.json": "c2a7a1f5f21a493e08bd406d5f5d0ed80049238228ac9b861772fb75cc3ed7ab",
-    "gl/language_kr.json": "4cbc9e3412a579a4b9a2a0b0b88cd7f76e7e4d6e7c09fe24474e208dce7309ce",
-    "gl/language_en.json": "36c739cdaccab071badd0d906dd5afbf19c66aa6fc533ab792c4a5b991aa9a28"
+    "gl/language_zh.json": "a5b0400aefb340ca821aa80defa64d8b6b5786cdb3cba4f89a759e3e51dbbd92",
+    "gl/language_tw.json": "88771acda9b99a70e54139d42326be921e6bb83de20c7aaa5d79b24304c6de49",
+    "gl/language_jp.json": "063d478c5fb0e0c261b2d571d0ff7f5b2ed9980ab5ff38403992be3d8d3f49eb",
+    "gl/language_kr.json": "c98fbffe13ca2872dc0649ca4466dd9c47339140b139ca2a3be5fa482216fbc5",
+    "gl/language_en.json": "9d36a9c70ce94587766a1807847f695c120308290f4bf7609434f64d14a47026"
   },
   "characters": [
     {
