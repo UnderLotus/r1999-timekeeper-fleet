@@ -25,8 +25,33 @@
     {
       "baseId": "3149",
       "psychubeSlots": 2,
-      "exclusivePsychubeIds": ["1571", "1572"],
+      "exclusivePsychubeIds": [
+        "1571",
+        "1572"
+      ],
       "reason": "The Twins automatically equips the paired psychube"
+    }
+  ],
+  "ignoredCnSkinStubs": [
+    {
+      "id": "300304",
+      "reason": "CN package reserves this variant ID as an empty stub without garment content (Druvis III)"
+    },
+    {
+      "id": "302302",
+      "reason": "CN package reserves this variant ID as an empty stub without garment content (Sonetto)"
+    },
+    {
+      "id": "302511",
+      "reason": "CN package reserves this variant ID as an empty stub without garment content (Regulus)"
+    },
+    {
+      "id": "302811",
+      "reason": "CN package reserves this variant ID as an empty stub without garment content (APPLe)"
+    },
+    {
+      "id": "303402",
+      "reason": "CN package reserves this variant ID as an empty stub without garment content (aliEn T)"
     }
   ]
 }

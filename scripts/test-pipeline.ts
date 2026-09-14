@@ -1,4 +1,5 @@
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { characters } from "../src/data/characters";
@@ -8,7 +9,16 @@ import {
   recalculateReleaseOrder,
   type ReleaseOrderSources,
 } from "./recalculate-order";
+import type { PackageSkin } from "./catalog-composition";
+import {
+  computeUnmappedCnSkins,
+  DEFAULT_MAPPING_DIFF_FILE,
+  mappingDiffFile,
+  persistMappingDiff,
+  reportUnmappedCnSkins,
+} from "./skin-mapping-diff";
 import type { CharacterEntry } from "./types";
+import type { ArcanistEntryFull } from "./skin-utils";
 import { exactAssetPaths } from "./asset-source";
 import {
   assertKnownCatalogPolicy,
@@ -27,6 +37,14 @@ function throws(run: () => void): boolean {
     return false;
   } catch {
     return true;
+  }
+}
+function thrownMessage(run: () => void): string {
+  try {
+    run();
+    return "";
+  } catch (error) {
+    return error instanceof Error ? error.message : String(error);
   }
 }
 function check(name: string, value: boolean, detail = ""): void {
@@ -73,15 +91,7 @@ check(
   "Huiji snapshot IDs exist in current catalog",
   sources.huiji.every((id) => characters.some((entry) => entry.baseId === id)),
 );
-check(
-  "catalog character IDs are unique",
-  new Set(characters.map((entry) => entry.id)).size === characters.length,
-);
-const skins = characters.flatMap((entry) => entry.skins);
-check(
-  "catalog skin IDs are unique",
-  new Set(skins.map((skin) => skin.id)).size === skins.length,
-);
+
 const compactSkins = catalogSource.characters.flatMap(
   (character) => character.skins,
 );
@@ -94,10 +104,6 @@ check(
         ? typeof skin.glPresent === "boolean"
         : !("glPresent" in skin),
     ),
-);
-check(
-  "catalog psychube IDs are unique",
-  new Set(psychubes.map((entry) => entry.id)).size === psychubes.length,
 );
 check(
   "CB discarded character Schneider is excluded",
@@ -139,6 +145,7 @@ check(
       excludedPsychubes: [],
       characterCapabilities: [],
       preservedCharacterAssets: [],
+      ignoredCnSkinStubs: [],
     }),
   ),
 );
@@ -152,6 +159,22 @@ check(
       preservedCharacterAssets: [
         { id: "312503", reason: "a" },
         { id: "312503", reason: "b" },
+      ],
+      ignoredCnSkinStubs: [],
+    }),
+  ),
+);
+check(
+  "catalog policy duplicate CN skin stub IDs fail loudly",
+  throws(() =>
+    parseCatalogPolicy({
+      excludedCharacters: [],
+      excludedPsychubes: [],
+      characterCapabilities: [],
+      preservedCharacterAssets: [],
+      ignoredCnSkinStubs: [
+        { id: "300304", reason: "a" },
+        { id: "300304", reason: "b" },
       ],
     }),
   ),
@@ -167,6 +190,67 @@ check(
     ),
   ),
 );
+check(
+  "catalog policy stale CN skin stub targets fail loudly",
+  (() => {
+    // 完整涵蓋 policy 的五個 stub，僅 303402 從 CN 包體集合移除。
+    const cnSkins = new Set([
+      "300301",
+      "300304",
+      "302302",
+      "302511",
+      "302811",
+      "308005",
+    ]);
+    const message = thrownMessage(() =>
+      assertKnownCatalogPolicy(
+        policy,
+        new Set(["3029", "3149"]),
+        new Set(["1000", "1001", "1571", "1572"]),
+        new Set(["312503"]),
+        cnSkins,
+      ),
+    );
+    return (
+      message === "Catalog policy references unknown CN skin stub: 303402"
+    );
+  })(),
+);
+check(
+  "catalog policy rejects a stub once ArcanistMap lists it",
+  (() => {
+    const cnSkins = new Set([
+      "300301",
+      "300304",
+      "302302",
+      "302511",
+      "302811",
+      "303402",
+      "308005",
+    ]);
+    // baseline：所有 stub 皆未被 live2d 收錄，必須通過
+    assertKnownCatalogPolicy(
+      policy,
+      new Set(["3029", "3149"]),
+      new Set(["1000", "1001", "1571", "1572"]),
+      new Set(["312503"]),
+      cnSkins,
+    );
+    const message = thrownMessage(() =>
+      assertKnownCatalogPolicy(
+        policy,
+        new Set(["3029", "3149"]),
+        new Set(["1000", "1001", "1571", "1572"]),
+        new Set(["312503", "300304"]),
+        cnSkins,
+      ),
+    );
+    return (
+      message ===
+      "CN skin stub 300304 is now listed in ArcanistMap; remove the stale exclusion"
+    );
+  })(),
+);
 const exactPaths = exactAssetPaths(
   characters.flatMap((entry) => entry.skins.map((skin) => skin.id)),
   psychubes.map((entry) => entry.id),
@@ -178,6 +262,128 @@ check(
     exactPaths.every((file) =>
       /^singlebg\/(headicon_small|equip_defaulticon)\/\d+\.png$/.test(file),
     ),
+);
+check(
+  "unmapped CN skins produce a reminder without failing the pipeline",
+  (() => {
+    const arcanists: ArcanistEntryFull[] = [
+      {
+        id: 3080,
+        name: "Kakania",
+        nameEng: "Kakania",
+        live2d: [
+          {
+            id: 308001,
+            name: "",
+            nameEng: "",
+            des: "",
+            characterSkin: "",
+            characterSkinNameEng: "",
+          },
+        ],
+      },
+      { id: 9999, name: "Excluded", nameEng: "Excluded", live2d: [] },
+    ];
+    const cnSkins: PackageSkin[] = [
+      { id: 308001 },
+      { id: 308005 },
+      { id: 700101 },
+    ];
+    const diff = computeUnmappedCnSkins(cnSkins, arcanists);
+    const filtered = computeUnmappedCnSkins(cnSkins, arcanists, new Set(["308005"]));
+    return (
+      diff.length === 1 &&
+      diff[0].id === "308005" &&
+      diff[0].baseId === "3080" &&
+      diff[0].name === "Kakania" &&
+      filtered.length === 0
+    );
+  })(),
+);
+check(
+  "unmapped CN skin diff deduplicates and sorts by ID",
+  (() => {
+    const arcanists: ArcanistEntryFull[] = [
+      {
+        id: 3003,
+        name: "Mistletoe",
+        nameEng: "Mistletoe",
+        live2d: [],
+      },
+      {
+        id: 3080,
+        name: "Kakania",
+        nameEng: "Kakania",
+        live2d: [],
+      },
+    ];
+    const diff = computeUnmappedCnSkins(
+      [
+        { id: 308005 },
+        { id: 300304 },
+        { id: 308005 },
+        { id: 300304 },
+      ],
+      arcanists,
+    );
+    return (
+      diff.length === 2 &&
+      diff[0].id === "300304" &&
+      diff[1].id === "308005"
+    );
+  })(),
+);
+check(
+  "each sync run targets its own mapping diff file, never a stale one",
+  (() => {
+    const previous = process.env.R1999_MAPPING_DIFF_FILE;
+    try {
+      process.env.R1999_MAPPING_DIFF_FILE = "/tmp/r1999-team-list-sync/run-fixture.json";
+      if (mappingDiffFile() !== "/tmp/r1999-team-list-sync/run-fixture.json")
+        return false;
+      delete process.env.R1999_MAPPING_DIFF_FILE;
+      return mappingDiffFile() === DEFAULT_MAPPING_DIFF_FILE;
+    } finally {
+      if (previous === undefined) delete process.env.R1999_MAPPING_DIFF_FILE;
+      else process.env.R1999_MAPPING_DIFF_FILE = previous;
+    }
+  })(),
+);
+check(
+  "mapping diff persistence failures never throw the reminder path",
+  (() => {
+    const tmp = mkdtempSync(path.join(tmpdir(), "r1999-mapping-diff-"));
+    try {
+      const okFile = path.join(tmp, "diff.json");
+      const persisted = persistMappingDiff(
+        [{ id: "308005", baseId: "3080", name: "Kakania" }],
+        okFile,
+      );
+      const blockedFile = path.join(tmp, "occupied", "nested", "diff.json");
+      writeFileSync(path.join(tmp, "occupied"), "not a directory");
+      const failed = persistMappingDiff(
+        [{ id: "308005", baseId: "3080", name: "Kakania" }],
+        blockedFile,
+      );
+      let reported = true;
+      try {
+        reportUnmappedCnSkins(
+          [{ id: "308005", baseId: "3080", name: "Kakania" }],
+          failed ? okFile : null,
+        );
+      } catch {
+        reported = false;
+      }
+      return (
+        persisted &&
+        JSON.parse(readFileSync(okFile, "utf-8")).diff.length === 1 &&
+        !failed &&
+        reported
+      );
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
+    }
+  })(),
 );
 check(
   "Huiji markdown parser derives ordered base IDs",

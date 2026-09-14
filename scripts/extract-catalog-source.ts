@@ -27,10 +27,17 @@ import {
 import { loadCnJSON } from "./sync-cn-data";
 import { loadGlJSON, loadGlLanguage } from "./sync-gl-data";
 import type { ArcanistEntryFull } from "./skin-utils";
+import {
+  computeUnmappedCnSkins,
+  mappingDiffFile,
+  persistMappingDiff,
+  reportUnmappedCnSkins,
+} from "./skin-mapping-diff";
 
 export { completeCatalogNames } from "./catalog-composition";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const MAPPING_DIFF_FILE = mappingDiffFile();
 const POLICY_FILE = path.join(__dirname, "data/catalog-policy.json");
 const NAME_FALLBACK_FILE = path.join(__dirname, "data/name-fallbacks.json");
 const NAME_OVERRIDES_FILE = path.join(
@@ -67,6 +74,7 @@ export function extractCatalogSource(): void {
         entry.live2d.map((skin) => String(skin.id)),
       ),
     ),
+    new Set(cnSkins.map((entry) => String(entry.id))),
   );
   const knownCharacterIds = new Set(arcanists.map((entry) => String(entry.id)));
   const nameFallbacks = loadNameFallbacks(
@@ -125,6 +133,13 @@ export function extractCatalogSource(): void {
   console.log(
     `characters: ${characters.length}; skins: ${characters.flatMap((entry) => entry.skins).length}; psychubes: ${psychubes.length}`,
   );
+  const mappingDiff = computeUnmappedCnSkins(
+    cnSkins,
+    arcanists,
+    new Set(policy.ignoredCnSkinStubs.map((entry) => entry.id)),
+  );
+  const persisted = persistMappingDiff(mappingDiff, MAPPING_DIFF_FILE);
+  reportUnmappedCnSkins(mappingDiff, persisted ? MAPPING_DIFF_FILE : null);
 }
 
 if (import.meta.url === "file://" + process.argv[1]) extractCatalogSource();

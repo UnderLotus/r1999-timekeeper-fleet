@@ -513,21 +513,34 @@ check(
   })(),
 );
 check(
-  "character and psychube reference helpers stay outside the store",
+  "reference helpers report assigned slots including coordinates and dual psychubes",
   (() => {
     let profile = emptyProfile();
     profile = apply(profile, { type: "addCharacter", id: a.id });
+    profile = apply(profile, { type: "addCharacter", id: twins.id });
     profile = apply(profile, { type: "addPsychube", id: psy.id });
+    profile = apply(profile, { type: "addPsychube", id: twinsPsy1.id });
+    profile = apply(profile, {
+      type: "assignSlot",
+      team: 1,
+      slot: 2,
+      characterId: a.id,
+      psychubeId: psy.id,
+    });
     profile = apply(profile, {
       type: "assignSlot",
       team: 0,
       slot: 0,
-      characterId: a.id,
-      psychubeId: psy.id,
+      characterId: twins.id,
+      psychubeId: twinsPsy1.id,
     });
     return (
-      characterRefs(profile, a.id).length === 1 &&
-      psychubeRefs(profile, psy.id).length === 1
+      JSON.stringify(characterRefs(profile, a.id)) ===
+        JSON.stringify([{ team: 1, slot: 2 }]) &&
+      JSON.stringify(psychubeRefs(profile, psy.id)) ===
+        JSON.stringify([{ team: 1, slot: 2 }]) &&
+      JSON.stringify(psychubeRefs(profile, twinsPsy2.id)) ===
+        JSON.stringify([{ team: 0, slot: 0 }])
     );
   })(),
 );

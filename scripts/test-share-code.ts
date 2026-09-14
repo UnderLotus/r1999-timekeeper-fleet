@@ -111,14 +111,14 @@ check(
   result?.teams.length === 4 && result.teams[2].slots[3].characterId === a.id,
 );
 check("token is base64url", /^[A-Za-z0-9_-]+$/.test(token));
+const malformedTokens: Array<[string, string]> = [
+  ["truncated token", token.slice(0, -1)],
+  ["invalid alphabet", token + "!"],
+  ["appended canonical-looking data", token + "A"],
+];
 check(
-  "truncated token rejected",
-  decodeShareToken(token.slice(0, -1)) === null,
-);
-check("invalid alphabet rejected", decodeShareToken(token + "!") === null);
-check(
-  "appended canonical-looking data rejected",
-  decodeShareToken(token + "A") === null,
+  "malformed tokens are rejected",
+  malformedTokens.every(([, candidate]) => decodeShareToken(candidate) === null),
 );
 const reencoded = result ? encodeShareToken(result) : "";
 check("canonical re-encode stable", reencoded === token);
@@ -428,6 +428,21 @@ check(
 check(
   "1024 valid psychubes fail instead of wrapping or truncating",
   encodingThrows(syntheticProfile(0, 1024)),
+);
+const maxRefIndex = 1022;
+const maxRefProfile = syntheticProfile(1023, 1023);
+maxRefProfile.teams[0].slots[0] = {
+  characterId: String(4000 + maxRefIndex),
+  psychubeId: String(6000 + maxRefIndex),
+  psychubeId2: null,
+};
+const maxRefResult = roundTrip(maxRefProfile);
+check(
+  "highest-index team references round trip at maximum collection size",
+  maxRefResult?.teams[0].slots[0].characterId ===
+    String(4000 + maxRefIndex) &&
+    maxRefResult.teams[0].slots[0].psychubeId ===
+      String(6000 + maxRefIndex),
 );
 setCatalogForTesting(fixtureCharacters, fixturePsychubes);
 

@@ -9,6 +9,8 @@ export interface CatalogPolicy {
     reason: string;
   }[];
   preservedCharacterAssets: { id: string; reason: string }[];
+  /** CN package skin IDs that are empty reserved stubs, deliberately not catalogued. */
+  ignoredCnSkinStubs: { id: string; reason: string }[];
 }
 const isId = (value: unknown): value is string =>
   typeof value === "string" && /^\d+$/.test(value);
@@ -24,10 +26,11 @@ export function parseCatalogPolicy(value: unknown): CatalogPolicy {
     !Array.isArray(raw.excludedCharacters) ||
     !Array.isArray(raw.excludedPsychubes) ||
     !Array.isArray(raw.characterCapabilities) ||
-    !Array.isArray(raw.preservedCharacterAssets)
+    !Array.isArray(raw.preservedCharacterAssets) ||
+    !Array.isArray(raw.ignoredCnSkinStubs)
   )
     throw new Error(
-      "catalog-policy requires excludedCharacters, excludedPsychubes, characterCapabilities, and preservedCharacterAssets arrays",
+      "catalog-policy requires excludedCharacters, excludedPsychubes, characterCapabilities, preservedCharacterAssets, and ignoredCnSkinStubs arrays",
     );
   const excludedCharacters = raw.excludedCharacters.map((entry, index) => {
     const row = entry as Record<string, unknown>;
@@ -101,15 +104,31 @@ export function parseCatalogPolicy(value: unknown): CatalogPolicy {
     characterCapabilities.map((entry) => entry.baseId),
     "character capability",
   );
+  const ignoredCnSkinStubs = raw.ignoredCnSkinStubs.map((entry, index) => {
+    const row = entry as Record<string, unknown>;
+    if (
+      !row ||
+      !isId(row.id) ||
+      typeof row.reason !== "string" ||
+      !row.reason.trim()
+    )
+      throw new Error(`Invalid ignoredCnSkinStubs[${index}]`);
+    return { id: row.id, reason: row.reason };
+  });
   unique(
     preservedCharacterAssets.map((entry) => entry.id),
     "preserved character asset",
+  );
+  unique(
+    ignoredCnSkinStubs.map((entry) => entry.id),
+    "ignored CN skin stub",
   );
   return {
     excludedCharacters,
     excludedPsychubes,
     characterCapabilities,
     preservedCharacterAssets,
+    ignoredCnSkinStubs,
   };
 }
 export function loadCatalogPolicy(file: string): CatalogPolicy {
@@ -131,7 +150,20 @@ export function assertKnownCatalogPolicy(
   knownCharacters: ReadonlySet<string>,
   knownPsychubes: ReadonlySet<string>,
   knownCharacterAssets: ReadonlySet<string>,
+  knownCnSkinIds?: ReadonlySet<string>,
 ): void {
+  if (knownCnSkinIds)
+    for (const entry of policy.ignoredCnSkinStubs)
+      if (!knownCnSkinIds.has(entry.id))
+        throw new Error(
+          `Catalog policy references unknown CN skin stub: ${entry.id}`,
+        );
+  if (knownCnSkinIds)
+    for (const entry of policy.ignoredCnSkinStubs)
+      if (knownCharacterAssets.has(entry.id))
+        throw new Error(
+          `CN skin stub ${entry.id} is now listed in ArcanistMap; remove the stale exclusion`,
+        );
   for (const entry of [
     ...policy.excludedCharacters,
     ...policy.characterCapabilities,

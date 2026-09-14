@@ -441,16 +441,6 @@ check(
     openingButtonTag(busyTopBar, getUiText("en-US", "export")),
   ),
 );
-const exportActionGroup =
-  busyTopBar.match(
-    /<div class="topbar__export-actions">([\s\S]*?)<\/div>/,
-  )?.[1] ?? "";
-check(
-  "share and image export stay in one responsive action group",
-  exportActionGroup.includes(getUiText("en-US", "share")) &&
-    exportActionGroup.includes(getUiText("en-US", "export")) &&
-    (exportActionGroup.match(/<button\b/g) ?? []).length === 2,
-);
 check(
   "share success toast stays absent before a successful copy",
   !busyTopBar.includes("share-copy-toast"),

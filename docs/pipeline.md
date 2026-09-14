@@ -54,6 +54,10 @@ Future Sight 只是顯示與選擇開關。關閉時不會刪除已保存的未�
 
 排序先抓 Huiji；失敗後使用 Kornblume，最後才使用中國服順序。Huiji 會重試一次；如果解析不到至少 100 個 catalog 內的角色，就直接失敗且不寫入新 snapshot。
 
+## 衣著對照差異提醒
+
+build:source 會比對 CN `skin.json` 與 `ArcanistMap.json`：CN 包體有、但對照表沒有的衣著 ID 會以提醒輸出（僅提醒，不警告也不中斷更新），清單暫存在 `/tmp/r1999-team-list-sync/`，由 `npm run sync` 結尾彙整呈現。已知例外記錄在 `catalog-policy.json` 的 `ignoredCnSkinStubs`——CN 包體預留的空殼佔位 ID，沒有實際衣著內容；這些 ID 若從包體消失或變成真實衣著，build 會失敗並要求人工重新審視。
+
 ## 圖片
 
 角色與心相的 production 圖片是 lossless WebP：
