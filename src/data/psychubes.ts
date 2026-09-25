@@ -1368,7 +1368,7 @@ export const psychubes: PsychubeDef[] = [
       "ko-KR": "빛 너머의 꿈"
     },
     "rarity": 5,
-    "released": false
+    "released": true
   },
   {
     "id": "1574",
