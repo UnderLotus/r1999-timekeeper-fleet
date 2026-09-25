@@ -1,20 +1,26 @@
 {
-  "characters": [],
+  "characters": [
+    {
+      "baseId": 3140,
+      "isReleased": false,
+      "note": "Second-half banner; Cornerstone is not released yet"
+    }
+  ],
   "skins": [
     {
       "variantId": "313903",
-      "isReleased": false,
-      "note": "GL 3.8 preload; garment is not live yet"
+      "isReleased": true,
+      "note": "User-confirmed released on Global"
     },
     {
       "variantId": "309203",
-      "isReleased": false,
-      "note": "GL 3.8 preload; garment is not live yet"
+      "isReleased": true,
+      "note": "User-confirmed released on Global"
     },
     {
       "variantId": "311604",
-      "isReleased": false,
-      "note": "GL 3.8 preload; garment is not live yet"
+      "isReleased": true,
+      "note": "User-confirmed released on Global"
     },
     {
       "variantId": "302306",
@@ -31,7 +37,7 @@
     {
       "id": "1574",
       "isReleased": false,
-      "note": "光影的栖所 is not released on Global yet"
+      "note": "Second-half banner; Cornerstone psychube is not released yet"
     },
     {
       "id": "1573",

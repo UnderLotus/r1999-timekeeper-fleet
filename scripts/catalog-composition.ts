@@ -70,7 +70,7 @@ export function completeCatalogNames(
   };
 }
 
-function isPsychube(entry: Equip, excluded: ReadonlySet<string>): boolean {
+export function isPsychube(entry: Equip, excluded: ReadonlySet<string>): boolean {
   return (
     !excluded.has(String(entry.id)) &&
     Number(entry.isExpEquip ?? 0) === 0 &&
@@ -168,23 +168,34 @@ export function composeCatalogSource(
   const globalPsychubes = input.globalEquips.filter((entry) =>
     isPsychube(entry, excludedPsychubes),
   );
-  const globalById = new Map(globalPsychubes.map((entry) => [entry.id, entry]));
-  const psychubes: SourcePsychube[] = cnPsychubes.map((cn) => {
-    const global = globalById.get(cn.id);
-    const source = global ?? cn;
-    const zh = input.languages["zh-CN"][source.name] || cn.name || source.name_en;
-    const en = input.languages["en-US"][source.name] || source.name_en || zh;
+  const cnPsychubeById = new Map(cnPsychubes.map((entry) => [entry.id, entry]));
+  const globalPsychubeById = new Map(globalPsychubes.map((entry) => [entry.id, entry]));
+  const psychubeIds = new Set([
+    ...cnPsychubeById.keys(),
+    ...globalPsychubeById.keys(),
+  ]);
+  const psychubes: SourcePsychube[] = [...psychubeIds].map((id) => {
+    const cn = cnPsychubeById.get(id);
+    const global = globalPsychubeById.get(id);
+    const source = global ?? cn!;
+    const zh =
+      input.languages["zh-CN"][source.name] || cn?.name || "";
+    const en =
+      input.languages["en-US"][source.name] ||
+      source.name_en ||
+      cn?.name_en ||
+      "";
     const translated = (lang: NameLang): string =>
       input.languages[lang][source.name] || "";
     return {
-      id: String(cn.id),
+      id: String(id),
       names: completeCatalogNames(zh, en, {
         "zh-TW": translated("zh-TW"),
         "ja-JP": translated("ja-JP"),
         "ko-KR": translated("ko-KR"),
       }),
-      rarity: source.rare ?? null,
-      glPresent: globalById.has(cn.id),
+      rarity: source.rare ?? cn?.rare ?? null,
+      glPresent: global !== undefined,
     };
   });
   return { characters, psychubes };

@@ -109,8 +109,9 @@ For data sources, the synchronization process, and individual update commands, s
 
 Characters, names, release status, and images are mainly compiled from:
 
-- [Reverse-1999-CN-Asset](https://github.com/myssal/Reverse-1999-CN-Asset) — China server character / Skin / psychube structures and original assets
-- [re1999-data-global](https://github.com/St-Pavlov-Foundation/re1999-data-global) — Global data, names in each language, and release determination
+- [re1999-data](https://github.com/St-Pavlov-Foundation/re1999-data) — Unpacked character, skin, and psychube data
+- [re1999-data-global](https://github.com/St-Pavlov-Foundation/re1999-data-global) — Global release status and localized names
+- [Reverse-1999-CN-Asset](https://github.com/myssal/Reverse-1999-CN-Asset) — Character mapping and source images
 - [Huiji Wiki](https://res1999.huijiwiki.com) — Character ordering and supplementary data
 - [Kornblume](https://github.com/windbow27/kornblume) — Ordering / name fallback
 - [wikiru](https://reverse1999.wikiru.jp) and [Reverse: 1999 Fandom Wiki](https://reverse1999.fandom.com) — Supplementary names when upstream data is missing

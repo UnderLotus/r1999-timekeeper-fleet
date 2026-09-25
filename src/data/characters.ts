@@ -7,7 +7,7 @@ export const characters: CharacterDef[] = [
     "baseId": "3157",
     "names": {
       "zh-CN": "纳西索斯",
-      "zh-TW": "Narcissus",
+      "zh-TW": "納西索斯",
       "en-US": "Narcissus",
       "ja-JP": "Narcissus",
       "ko-KR": "Narcissus"
@@ -184,7 +184,7 @@ export const characters: CharacterDef[] = [
     "rarity": 5,
     "maxInsight": 3,
     "releaseOrder": 6,
-    "released": false,
+    "released": true,
     "skins": [
       {
         "id": "314501",
@@ -397,7 +397,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "致命银弦",
         "nameEn": "Finale in Silver",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "313901"
@@ -915,7 +915,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "巫阳抚彗歌",
         "nameEn": "Verses to Heaven",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "311601"
@@ -1549,7 +1549,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "幽冥无归",
         "nameEn": "Returning Nevermore",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "309201"

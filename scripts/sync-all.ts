@@ -23,11 +23,14 @@ await withPipelineLock(async () => {
     "sync:order",
     "build:source",
     "build:characters",
-    "build:psychubes",
   ]) {
     execFileSync("npm", ["run", script], { stdio: "inherit", env });
   }
   execFileSync("npx", ["tsx", "scripts/sync-assets.ts"], {
+    stdio: "inherit",
+    env,
+  });
+  execFileSync("npm", ["run", "build:psychubes"], {
     stdio: "inherit",
     env,
   });

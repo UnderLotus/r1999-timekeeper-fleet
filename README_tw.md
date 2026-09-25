@@ -109,8 +109,9 @@ GitHub Pages 的 base path 是 `/r1999-timekeeper-fleet/`。
 
 角色、名稱、實裝狀態與圖片主要整理自：
 
-- [Reverse-1999-CN-Asset](https://github.com/myssal/Reverse-1999-CN-Asset) — 中國服角色 / Skin / 心相結構與原始素材
-- [re1999-data-global](https://github.com/St-Pavlov-Foundation/re1999-data-global) — Global 資料、各語系名稱與實裝判定
+- [re1999-data](https://github.com/St-Pavlov-Foundation/re1999-data) — 角色、Skin 與心相解包資料
+- [re1999-data-global](https://github.com/St-Pavlov-Foundation/re1999-data-global) — Global 實裝狀態與各語系名稱
+- [Reverse-1999-CN-Asset](https://github.com/myssal/Reverse-1999-CN-Asset) — 角色對照與原始圖片
 - [灰機 Wiki](https://res1999.huijiwiki.com) — 角色排序與補充資料
 - [Kornblume](https://github.com/windbow27/kornblume) — 排序 / 名稱 fallback
 - [wikiru](https://reverse1999.wikiru.jp) 與 [Reverse: 1999 Fandom Wiki](https://reverse1999.fandom.com) — 上游缺資料時的名稱補充

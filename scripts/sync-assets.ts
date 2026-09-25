@@ -12,11 +12,23 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
-import type { CharacterEntry, PsychubeEntry } from "./types";
+import type { CharacterEntry } from "./types";
 import { loadGeneratedCatalog } from "./generated-catalog";
+import { loadCatalogSource } from "./catalog-source";
+import {
+  effectivePsychubes,
+  isTrustedPsychubeName,
+  loadPsychubeImageInventory,
+  persistPsychubeImageCache,
+  psychubeImageCacheFile,
+} from "./psychube-catalog";
 import { convertPngToLosslessWebp } from "./webp-converter";
 import { withPipelineLock } from "./sync-lock";
-import { assertExactAssetWorktree, exactAssetPaths } from "./asset-source";
+import {
+  assertExactAssetWorktree,
+  exactAssetPaths,
+  numericPsychubeIconIds,
+} from "./asset-source";
 import {
   assertKnownPreservedCharacterAssets,
   loadCatalogPolicy,
@@ -29,7 +41,7 @@ const PSY_ASSET_DIR = path.join(ROOT, "public/assets/psychubes");
 const HASH_CACHE_FILE = path.join(__dirname, "data/asset-hash-cache.json");
 const POLICY_FILE = path.join(__dirname, "data/catalog-policy.json");
 const ASSET_REPO = "https://github.com/myssal/Reverse-1999-CN-Asset.git";
-const SOURCE_ROOT = path.join("/tmp", "r1999-team-asset-sync");
+const SOURCE_ROOT = path.join("/tmp", "r1999-team-list-minimal-assets");
 const CHAR_SOURCE = path.join(SOURCE_ROOT, "singlebg/headicon_small");
 const PSY_SOURCE = path.join(SOURCE_ROOT, "singlebg/equip_defaulticon");
 interface HashEntry {
@@ -54,49 +66,85 @@ function setExactSparse(paths: readonly string[]): void {
     stdio: ["pipe", "pipe", "pipe"],
   });
 }
+function assertRequestedAssets(
+  exactPaths: readonly string[],
+  psychubeIds: readonly string[],
+): void {
+  const optionalPsychubePaths = psychubeIds.map(
+    (id) => `singlebg/equip_defaulticon/${id}.png`,
+  );
+  assertExactAssetWorktree(SOURCE_ROOT, exactPaths, optionalPsychubePaths);
+}
+
+function listPsychubeIconIdsFromTree(): string[] {
+  const output = run(
+    "git",
+    ["ls-tree", "-r", "--name-only", "HEAD", "--", "singlebg/equip_defaulticon"],
+    SOURCE_ROOT,
+  );
+  const ids = numericPsychubeIconIds(output);
+  if (!ids.length)
+    throw new Error("CN Asset Git tree has no numeric equip_defaulticon PNG paths");
+  return ids;
+}
+
+function pathsForAssetIds(
+  needed: { characters: string[]; psychubes: string[] },
+  treeIconIds: readonly string[],
+): string[] {
+  const requestedPaths = exactAssetPaths(needed.characters, needed.psychubes);
+  const treeIconPaths = treeIconIds.map(
+    (id) => `singlebg/equip_defaulticon/${id}.png`,
+  );
+  return [...new Set([...requestedPaths, ...treeIconPaths])].sort();
+}
+
 function refreshAssetRepo(needed: {
   characters: string[];
   psychubes: string[];
-}): void {
-  const exactPaths = exactAssetPaths(needed.characters, needed.psychubes);
-  if (existsSync(path.join(SOURCE_ROOT, ".git"))) {
+}): string[] {
+  const requestedPaths = exactAssetPaths(needed.characters, needed.psychubes);
+  let reusedClone = existsSync(path.join(SOURCE_ROOT, ".git"));
+  if (reusedClone) {
     try {
-      // Prune a legacy directory-level sparse checkout before any pull can hydrate unrelated blobs.
-      setExactSparse(exactPaths);
+      // Trim old sparse patterns before pulling; only selected paths can hydrate blobs.
+      setExactSparse(requestedPaths);
       run("git", ["pull", "--depth", "1", "--ff-only"], SOURCE_ROOT);
-      setExactSparse(exactPaths);
-      assertExactAssetWorktree(SOURCE_ROOT, exactPaths);
-      console.log(`  ✓ exact-ID incremental pull (${exactPaths.length} files)`);
-      return;
     } catch {
-      console.warn(
-        "  exact-ID incremental pull failed; rebuilding partial clone",
-      );
+      console.warn("  exact-ID incremental pull failed; rebuilding partial clone");
       rmSync(SOURCE_ROOT, { recursive: true, force: true });
+      reusedClone = false;
     }
   }
-  run("git", [
-    "clone",
-    "--depth",
-    "1",
-    "--filter=blob:none",
-    "--no-checkout",
-    ASSET_REPO,
-    SOURCE_ROOT,
-  ]);
-  run("git", ["sparse-checkout", "init", "--no-cone"], SOURCE_ROOT);
+  if (!reusedClone) {
+    run("git", [
+      "clone",
+      "--depth",
+      "1",
+      "--filter=blob:none",
+      "--no-checkout",
+      ASSET_REPO,
+      SOURCE_ROOT,
+    ]);
+    run("git", ["sparse-checkout", "init", "--no-cone"], SOURCE_ROOT);
+  }
+
+  // ls-tree reads path metadata only; sparse checkout hydrates just this one icon directory.
+  const treeIconIds = listPsychubeIconIdsFromTree();
+  const exactPaths = pathsForAssetIds(needed, treeIconIds);
   setExactSparse(exactPaths);
-  run("git", ["checkout"], SOURCE_ROOT);
-  assertExactAssetWorktree(SOURCE_ROOT, exactPaths);
-  console.log(`  ✓ exact-ID fresh partial clone (${exactPaths.length} files)`);
+  if (!reusedClone) run("git", ["checkout"], SOURCE_ROOT);
+  assertRequestedAssets(exactPaths, needed.psychubes);
+  console.log(
+    `  ✓ exact-ID ${reusedClone ? "incremental pull" : "fresh partial clone"} (${exactPaths.length} files; ${treeIconIds.length} numeric equip icons)`,
+  );
+  return treeIconIds;
 }
 function collectNeeded(): { characters: string[]; psychubes: string[] } {
   const characters = loadGeneratedCatalog<CharacterEntry>(
     path.join(ROOT, "src/data/characters.ts"),
   );
-  const psychubes = loadGeneratedCatalog<PsychubeEntry>(
-    path.join(ROOT, "src/data/psychubes.ts"),
-  );
+  const psychubes = loadCatalogSource().psychubes;
   return {
     characters: [
       ...new Set(
@@ -161,8 +209,15 @@ async function stageKind(
       reused++;
       continue;
     }
-    const source = path.join(sourceDir, `${id}.png`);
+    const source =
+      kind === "psychube"
+        ? psychubeImageCacheFile(id)
+        : path.join(sourceDir, `${id}.png`);
     if (!existsSync(source)) {
+      if (kind === "psychube") {
+        skipped.push(id);
+        continue;
+      }
       if (!knownMissing.has(id))
         throw new Error(`Unexpected missing ${kind} source PNG: ${id}`);
       skipped.push(id);
@@ -249,13 +304,37 @@ async function install(
 }
 async function main(): Promise<void> {
   console.log("sync-assets — exact-ID source cache + hash incremental WebP\n");
-  const needed = collectNeeded();
+  const candidates = collectNeeded();
   const policy = loadCatalogPolicy(POLICY_FILE);
-  assertKnownPreservedCharacterAssets(policy, new Set(needed.characters));
+  assertKnownPreservedCharacterAssets(policy, new Set(candidates.characters));
   const preservedCharacterAssets = new Set(
     policy.preservedCharacterAssets.map((entry) => entry.id),
   );
-  refreshAssetRepo(needed);
+  const treeIconIds = refreshAssetRepo(candidates);
+  const imageCandidateIds = [...new Set([...candidates.psychubes, ...treeIconIds])];
+  const iconResult = await persistPsychubeImageCache(
+    imageCandidateIds,
+    PSY_SOURCE,
+  );
+  const imageIds = new Set(Object.keys(loadPsychubeImageInventory().images));
+  const sourcePsychubes = loadCatalogSource().psychubes;
+  const sourceById = new Map(sourcePsychubes.map((entry) => [entry.id, entry]));
+  const noName = candidates.psychubes.filter(
+    (id) => !isTrustedPsychubeName(sourceById.get(id)?.names["zh-CN"]),
+  );
+  const needed = {
+    characters: candidates.characters,
+    psychubes: effectivePsychubes(sourcePsychubes, imageIds)
+      .map((entry) => entry.id)
+      .sort(),
+  };
+  console.log(
+    `psychube image snapshots: ${iconResult.updated} updated; ${iconResult.missing.length} unavailable`,
+  );
+  if (iconResult.missing.length)
+    console.log(`  missing icon IDs: ${iconResult.missing.join(", ")}`);
+  if (noName.length)
+    console.log(`  missing trusted zh-CN name IDs: ${noName.join(", ")}`);
   const oldCache = loadHashCache();
   const knownMissing = loadMissingAssets();
   const stagingRoot = await mkdtemp(

@@ -4,8 +4,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   CATALOG_SOURCE_FILE,
+  loadCatalogSource,
   type CatalogSourceSnapshot,
 } from "./catalog-source";
+import { mergePsychubeSourceRecords } from "./psychube-catalog";
 import {
   assertKnownCatalogPolicy,
   loadCatalogPolicy,
@@ -53,6 +55,7 @@ function sha256(file: string): string {
 
 export function extractCatalogSource(): void {
   console.log("build:source — extract compact CN/GL snapshot\n");
+  const previousPsychubes = loadCatalogSource().psychubes;
   const arcanists = loadCnJSON<ArcanistEntryFull[]>("ArcanistMap.json");
   const cnCharacters = loadCnJSON<PackageCharacter[]>("character.json");
   const globalCharacters = loadGlJSON<PackageCharacter[]>("character.json");
@@ -127,7 +130,7 @@ export function extractCatalogSource(): void {
     schemaVersion: 3,
     sourceHashes,
     characters,
-    psychubes,
+    psychubes: mergePsychubeSourceRecords(previousPsychubes, psychubes),
   };
   writeFileSync(CATALOG_SOURCE_FILE, JSON.stringify(snapshot, null, 2) + "\n");
   console.log(

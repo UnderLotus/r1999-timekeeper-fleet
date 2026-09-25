@@ -1311,6 +1311,14 @@
         "zh-TW": "赫多涅",
         "en-US": "Hedone"
       }
+    },
+    {
+      "baseId": "3157",
+      "names": {
+        "zh-CN": "纳西索斯",
+        "zh-TW": "納西索斯",
+        "en-US": "Narcissus"
+      }
     }
   ]
 }

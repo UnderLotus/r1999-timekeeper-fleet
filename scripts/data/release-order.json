@@ -1,5 +1,5 @@
 {
-  "source": "live Huiji list via Jina; Kornblume fallback; CN-only newest tier",
+  "source": "direct Huiji Chrome-fingerprint list; legacy Huiji tail; Kornblume fallback; CN-only newest tier",
   "huiji": [
     "3157",
     "3156",

@@ -77,11 +77,13 @@ const cnEquips: Equip[] = [
 ];
 const globalEquips: Equip[] = [
   { id: 2001, name: "global-cube", name_en: "Global Cube", icon: "", rare: 6 },
+  { id: 2007, name: "global-only", name_en: "Global Only", icon: "", rare: 5 },
+  { id: 2008, name: "untranslated", name_en: "English Only", icon: "", rare: 5 },
 ];
 const languages: CatalogLanguageTables = {
-  "zh-CN": { "global-key": "全球一" },
+  "zh-CN": { "global-key": "全球一", "global-only": "Global 独立" },
   "zh-TW": {},
-  "en-US": { "global-key": "Global One" },
+  "en-US": { "global-key": "Global One", "global-only": "Global Only" },
   "ja-JP": {},
   "ko-KR": {},
 };
@@ -144,10 +146,17 @@ check(
     !("glPresent" in (defaultSkin ?? {})),
 );
 check(
-  "psychube composition keeps CN entries, marks Global presence, and filters invalid entries",
-  JSON.stringify(psychubeIds) === JSON.stringify(["2001", "2006"]) &&
+  "psychube metadata composes CN-only, Global-only, and joint IDs independently",
+  JSON.stringify(psychubeIds) === JSON.stringify(["2001", "2006", "2007", "2008"]) &&
     result.psychubes.find((entry) => entry.id === "2001")?.glPresent === true &&
-    result.psychubes.find((entry) => entry.id === "2006")?.glPresent === false,
+    result.psychubes.find((entry) => entry.id === "2006")?.glPresent === false &&
+    result.psychubes.find((entry) => entry.id === "2007")?.names["zh-CN"] === "Global 独立" &&
+    result.psychubes.find((entry) => entry.id === "2007")?.glPresent === true,
+);
+check(
+  "psychube English data is never substituted into the trusted Simplified Chinese field",
+  result.psychubes.find((entry) => entry.id === "2008")?.names["zh-CN"] === "" &&
+    result.psychubes.find((entry) => entry.id === "2008")?.names["en-US"] === "English Only",
 );
 check(
   "manual catalog policy exclusions are applied to characters and psychubes",

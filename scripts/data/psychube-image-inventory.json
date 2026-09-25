@@ -1,0 +1,621 @@
+{
+  "schemaVersion": 1,
+  "images": {
+    "1000": {
+      "assetPath": "singlebg/equip_defaulticon/1000.png",
+      "sha256": "18fba32c4f232ddc88808cebe5e228bd46af96d2d33edf2732fd218e70856dfd"
+    },
+    "1001": {
+      "assetPath": "singlebg/equip_defaulticon/1001.png",
+      "sha256": "4a41ecf8de275868ef59e501743a9c96d7e4d5500c26a85006ce9c22293025dd"
+    },
+    "1002": {
+      "assetPath": "singlebg/equip_defaulticon/1002.png",
+      "sha256": "ac449db8dab4aa65dcca33ec11f66b391c24df4bb7c015cc284a27ba5e2ea19a"
+    },
+    "1003": {
+      "assetPath": "singlebg/equip_defaulticon/1003.png",
+      "sha256": "59275c1d3cb609eade8b9ce8dfa10c67f7dad550bd485e979217623f6596d3ec"
+    },
+    "1004": {
+      "assetPath": "singlebg/equip_defaulticon/1004.png",
+      "sha256": "b4e2b4905af40a752673b2d4b0f70a3c28cb7c9ebfecb1c2575bb56daff67c43"
+    },
+    "1005": {
+      "assetPath": "singlebg/equip_defaulticon/1005.png",
+      "sha256": "215d3bf630605266a80fd620c9160ea4d22625c28a55812acf38eda1a384d1dd"
+    },
+    "1006": {
+      "assetPath": "singlebg/equip_defaulticon/1006.png",
+      "sha256": "2d885eecbb5398aa1d44fe8f088702f7bca274d14c7982cf8601c8bfd7c6be14"
+    },
+    "1201": {
+      "assetPath": "singlebg/equip_defaulticon/1201.png",
+      "sha256": "b7504b9de26306d7d229ef4731d949306faac9c0f06249f8014836cb0857c037"
+    },
+    "1202": {
+      "assetPath": "singlebg/equip_defaulticon/1202.png",
+      "sha256": "2d944942e26d6817b0210229773eac52f66d4eed8bd015aba8799bb2ffcad209"
+    },
+    "1203": {
+      "assetPath": "singlebg/equip_defaulticon/1203.png",
+      "sha256": "23d3745afd284ae8b79ab141da8f19ec2b9390afcfb2d04e9b754bc01b45cdc4"
+    },
+    "1204": {
+      "assetPath": "singlebg/equip_defaulticon/1204.png",
+      "sha256": "408d2bb70311b3a35e92a96cd39c302a751b02bae00839d6a31d36949516b802"
+    },
+    "1205": {
+      "assetPath": "singlebg/equip_defaulticon/1205.png",
+      "sha256": "3fb67161f451c1bc60b696b4d4f528ab485dca56939031d225ca270011e42396"
+    },
+    "1206": {
+      "assetPath": "singlebg/equip_defaulticon/1206.png",
+      "sha256": "cf60d3f84f8182497ae688654bb5d7a26eed60519c453aa888c9ac8fb97b9257"
+    },
+    "1301": {
+      "assetPath": "singlebg/equip_defaulticon/1301.png",
+      "sha256": "6f842abe728cead8791882d4a9892ea32c9e37f939c07a0c082b4b5b62ba2e50"
+    },
+    "1302": {
+      "assetPath": "singlebg/equip_defaulticon/1302.png",
+      "sha256": "56c0fad676717083c4f3cbaf14bb711e2a48ea3042d4c18726d6839e302ac06e"
+    },
+    "1303": {
+      "assetPath": "singlebg/equip_defaulticon/1303.png",
+      "sha256": "dea45f2a506c6228b7ad46fa0dfafd824fe576ed871d37a068e80dc02e48059a"
+    },
+    "1304": {
+      "assetPath": "singlebg/equip_defaulticon/1304.png",
+      "sha256": "b0e9db095516521e3e1ca6b4e1747f0d2eef4cf42b986f51818d0317e60d8bdb"
+    },
+    "1305": {
+      "assetPath": "singlebg/equip_defaulticon/1305.png",
+      "sha256": "eaea1a4b2c5ef6b0e405faba64e139978f38206108bfb56b1cc6f1aea45cd3b9"
+    },
+    "1306": {
+      "assetPath": "singlebg/equip_defaulticon/1306.png",
+      "sha256": "2cc41555f4263cfe64757fa49285cc8673301b868307b90ae48dc5d3c70707dd"
+    },
+    "1307": {
+      "assetPath": "singlebg/equip_defaulticon/1307.png",
+      "sha256": "f11acec45e739fdb44d094e8272dfbbf1efd6d0947bae3967202b64ffd99dcb5"
+    },
+    "1308": {
+      "assetPath": "singlebg/equip_defaulticon/1308.png",
+      "sha256": "d45cfff32cef635780572b1c698ff60a3313a13f7cc7ebfe4f38c2edb8aefa2f"
+    },
+    "1309": {
+      "assetPath": "singlebg/equip_defaulticon/1309.png",
+      "sha256": "970cd1a39ccc22e204d48ea51087854d13af7a4d32acbf6996c40bbf1af1dd60"
+    },
+    "1310": {
+      "assetPath": "singlebg/equip_defaulticon/1310.png",
+      "sha256": "dc912bb69a20e26f193279a2b7db4ce9017a15ce48684608833457d1f8d5dd03"
+    },
+    "1311": {
+      "assetPath": "singlebg/equip_defaulticon/1311.png",
+      "sha256": "a47c32fdbf8be4a71dd47890323e6f33a3ce95db58fdf23406bfd27f3fcfbe11"
+    },
+    "1312": {
+      "assetPath": "singlebg/equip_defaulticon/1312.png",
+      "sha256": "18dd144dda3f2fa7cbc3614db02ad6044e7abc2a783245dc12001b9304d1fa42"
+    },
+    "1313": {
+      "assetPath": "singlebg/equip_defaulticon/1313.png",
+      "sha256": "15e2c4565677f99bdcbb257942667873c5fa222c6895a5c04a5ef8c2c00605c6"
+    },
+    "1314": {
+      "assetPath": "singlebg/equip_defaulticon/1314.png",
+      "sha256": "ec704b0725af57284a6a76cd08da539efa6d0751d36c510a67570d8f52b6173e"
+    },
+    "1315": {
+      "assetPath": "singlebg/equip_defaulticon/1315.png",
+      "sha256": "7469d2aa53da90e7d4321c3d3bd6d8842351c60eb509d63cdeb67afa32391dcc"
+    },
+    "1401": {
+      "assetPath": "singlebg/equip_defaulticon/1401.png",
+      "sha256": "344f7469aad41fe3ef5aafa3450c48d047931db12a59c1cb43f05f8cb597b247"
+    },
+    "1402": {
+      "assetPath": "singlebg/equip_defaulticon/1402.png",
+      "sha256": "fcb7f4146c02d89a9b476c3bd1e161363bf72b97d5008d5694acc822d48f7dda"
+    },
+    "1403": {
+      "assetPath": "singlebg/equip_defaulticon/1403.png",
+      "sha256": "2963aac435c1e8e9d7f0aa84828f50b8c2a7055f1d6cf9ff301edfa8ea609390"
+    },
+    "1404": {
+      "assetPath": "singlebg/equip_defaulticon/1404.png",
+      "sha256": "787efe7231502577eb520eb8435fdf9678ea368825241ec0fbb170c9e489cc44"
+    },
+    "1405": {
+      "assetPath": "singlebg/equip_defaulticon/1405.png",
+      "sha256": "f6139a5f058394bbf6c116fe987d496b94fb5a33ef008c52fad2d840cbb509f7"
+    },
+    "1406": {
+      "assetPath": "singlebg/equip_defaulticon/1406.png",
+      "sha256": "095301e20df2d98d928d82c48edd4c78dfbda885d21fc6338e6cdcb14fd4fe60"
+    },
+    "1407": {
+      "assetPath": "singlebg/equip_defaulticon/1407.png",
+      "sha256": "fdb571032aeba78cb887b329d8ab08c85e04e3459981542c7003fb7e0dac376b"
+    },
+    "1408": {
+      "assetPath": "singlebg/equip_defaulticon/1408.png",
+      "sha256": "391a71e8f96bb41e20a5b7ad9fcb147c50a35e0a9b59ff790d8b7c395d52331e"
+    },
+    "1409": {
+      "assetPath": "singlebg/equip_defaulticon/1409.png",
+      "sha256": "0bf100ad83a91a3d03f62e577c8cb78dd58d029003a1537880ce98a547ee87ef"
+    },
+    "1410": {
+      "assetPath": "singlebg/equip_defaulticon/1410.png",
+      "sha256": "81d4d75b5177caa59038eb6cae4c83992b8e04d8f42b553a82dc9cda80dec501"
+    },
+    "1411": {
+      "assetPath": "singlebg/equip_defaulticon/1411.png",
+      "sha256": "f04a9bdd8f211670413f9ccc959b30f9218b27a55c0bfb84a6e061714ba28008"
+    },
+    "1412": {
+      "assetPath": "singlebg/equip_defaulticon/1412.png",
+      "sha256": "e016ff2874a69b51833465ab16e3c76d4ccb27a2a1c5f96c351dd7975b4f2aff"
+    },
+    "1413": {
+      "assetPath": "singlebg/equip_defaulticon/1413.png",
+      "sha256": "0bf100ad83a91a3d03f62e577c8cb78dd58d029003a1537880ce98a547ee87ef"
+    },
+    "1414": {
+      "assetPath": "singlebg/equip_defaulticon/1414.png",
+      "sha256": "e016ff2874a69b51833465ab16e3c76d4ccb27a2a1c5f96c351dd7975b4f2aff"
+    },
+    "1420": {
+      "assetPath": "singlebg/equip_defaulticon/1420.png",
+      "sha256": "c4a8ddad421de136070919acf1bf81b8f9dcab551e5a4b6702f7574f8bfa8f50"
+    },
+    "1421": {
+      "assetPath": "singlebg/equip_defaulticon/1421.png",
+      "sha256": "7517cf9c9020d062ad69db7f36df9565f75d6abd879273f275da0aff0c5950f2"
+    },
+    "1422": {
+      "assetPath": "singlebg/equip_defaulticon/1422.png",
+      "sha256": "81d4d75b5177caa59038eb6cae4c83992b8e04d8f42b553a82dc9cda80dec501"
+    },
+    "1423": {
+      "assetPath": "singlebg/equip_defaulticon/1423.png",
+      "sha256": "a083a982bb53d6e8ec51156ca2c93f3f6691c93ae99a8cec942df4c05ed2554b"
+    },
+    "1424": {
+      "assetPath": "singlebg/equip_defaulticon/1424.png",
+      "sha256": "ce10237c676a780ca43151e7e0da6a283c40a0bb7c690e1939435d40d1859c50"
+    },
+    "1425": {
+      "assetPath": "singlebg/equip_defaulticon/1425.png",
+      "sha256": "db2b4f20a2e1754fe14d568a7c048d4a58bb9ffb96863a4b0748b1b60f403c93"
+    },
+    "1426": {
+      "assetPath": "singlebg/equip_defaulticon/1426.png",
+      "sha256": "7dc518cc2c1d7ab18b8c77e188341e3319521453aff92b4971268a9577f9e7be"
+    },
+    "1427": {
+      "assetPath": "singlebg/equip_defaulticon/1427.png",
+      "sha256": "78d3f551a7946dff80f568094da75652005038e1ad06a3e7d26d05d2c9b89a02"
+    },
+    "1428": {
+      "assetPath": "singlebg/equip_defaulticon/1428.png",
+      "sha256": "73ec39b7413d05d5bff89d01e54a4a6b336519a127d7daeb8ba3cb5e24742817"
+    },
+    "1429": {
+      "assetPath": "singlebg/equip_defaulticon/1429.png",
+      "sha256": "391a71e8f96bb41e20a5b7ad9fcb147c50a35e0a9b59ff790d8b7c395d52331e"
+    },
+    "1430": {
+      "assetPath": "singlebg/equip_defaulticon/1430.png",
+      "sha256": "2bb8ab6e379df655acfd8b939ee0b3d16c7c5a538206013484001e08d22315d6"
+    },
+    "1431": {
+      "assetPath": "singlebg/equip_defaulticon/1431.png",
+      "sha256": "3c7fd7e49b72ef35369d6a7f27c1dfe29a1359b717d3961d5fdfc8c4d1f6b31e"
+    },
+    "1432": {
+      "assetPath": "singlebg/equip_defaulticon/1432.png",
+      "sha256": "802e47aac51fd9c5965b2462122a01cb5945dc345f6a445d9deb20a30e8a111b"
+    },
+    "1433": {
+      "assetPath": "singlebg/equip_defaulticon/1433.png",
+      "sha256": "b3f345c8562196fa46c12e477cd3873089978c84858d38d443998c180f3f04a1"
+    },
+    "1434": {
+      "assetPath": "singlebg/equip_defaulticon/1434.png",
+      "sha256": "2ba4c4bcc607a2f61ecec9ee4b9d634a44f3175a832659b3411532d2987cc43f"
+    },
+    "1435": {
+      "assetPath": "singlebg/equip_defaulticon/1435.png",
+      "sha256": "ea8deb59be25ba76c7519f09a6ed8d819a973c8f2513f3fc6a4bb088e4407a09"
+    },
+    "1436": {
+      "assetPath": "singlebg/equip_defaulticon/1436.png",
+      "sha256": "8ea9ea83a459fda86e32c953ad603297c7c78c651599cdc93a7bcb2cc8ac3f6e"
+    },
+    "1437": {
+      "assetPath": "singlebg/equip_defaulticon/1437.png",
+      "sha256": "62d75d5ccdba02ae5dada4b92d225a4d10a261d927d692da1743c2de9f6b6cd8"
+    },
+    "1438": {
+      "assetPath": "singlebg/equip_defaulticon/1438.png",
+      "sha256": "e340ad4c5daac4383537dd14ec4aa66a097d1a298073504cb2359940f3bf74b4"
+    },
+    "1439": {
+      "assetPath": "singlebg/equip_defaulticon/1439.png",
+      "sha256": "a62d15d57658f55c4cdb75473b3e0d5a57b33343c77692ae8c94960205edfa23"
+    },
+    "1440": {
+      "assetPath": "singlebg/equip_defaulticon/1440.png",
+      "sha256": "bb6f13c8515b7c20016fddebb98d7c80d443dfadf70701cb1ac7a85c00156336"
+    },
+    "1441": {
+      "assetPath": "singlebg/equip_defaulticon/1441.png",
+      "sha256": "5fc9d5a53c9e590a41de7a59f7e68cd6c662cb133b64cb44a3e07db53b15ec8b"
+    },
+    "1442": {
+      "assetPath": "singlebg/equip_defaulticon/1442.png",
+      "sha256": "67160607d9a01aa7785aa63dcbd2ccda9b24c42ee42ce2acd2554cb92d6a6acc"
+    },
+    "1443": {
+      "assetPath": "singlebg/equip_defaulticon/1443.png",
+      "sha256": "b6f74600c13182c8a51464a8afcd07c9d8143181e42eda2c00212d0ba878ee37"
+    },
+    "1444": {
+      "assetPath": "singlebg/equip_defaulticon/1444.png",
+      "sha256": "cdc615f788a5c73f866017efa4f64ae8b165555f7e623cc74704791ce14b9304"
+    },
+    "1445": {
+      "assetPath": "singlebg/equip_defaulticon/1445.png",
+      "sha256": "c8ed4c03a8e96cb96d689e4cd66b44b45ed1f859e1f3f61bba4b76f95b96958c"
+    },
+    "1446": {
+      "assetPath": "singlebg/equip_defaulticon/1446.png",
+      "sha256": "e92fccd8059ee52ecd4c67dd7ca40d1d204acb2f6657bf30459a0355fa2d29a1"
+    },
+    "1447": {
+      "assetPath": "singlebg/equip_defaulticon/1447.png",
+      "sha256": "29eaf5d864bdf5e771ff02224760ccaad6e300b1eaca3e312182f2931adf78f8"
+    },
+    "1448": {
+      "assetPath": "singlebg/equip_defaulticon/1448.png",
+      "sha256": "72eda13357b27d9f3146d39d838e10c538ee1c8d7f6a5dd6f45439157a5d1790"
+    },
+    "1449": {
+      "assetPath": "singlebg/equip_defaulticon/1449.png",
+      "sha256": "a642b4cc38fb0ea7d8822535733b57714a90dd3152675e8b5539a5dcfa1e6d40"
+    },
+    "1450": {
+      "assetPath": "singlebg/equip_defaulticon/1450.png",
+      "sha256": "274a758b6e3b2e4895d18959124f64677b7a4594f8d5540e1074e3029031b97b"
+    },
+    "1501": {
+      "assetPath": "singlebg/equip_defaulticon/1501.png",
+      "sha256": "775a6c434c811614c99c0e9afedc6a65491e0dbf11e14ccf7cd423d1669a5b4b"
+    },
+    "1502": {
+      "assetPath": "singlebg/equip_defaulticon/1502.png",
+      "sha256": "23c654445cd826d2148e1bbbf025b743b6c7a88dcfc16254f46e047837e4b6a6"
+    },
+    "1503": {
+      "assetPath": "singlebg/equip_defaulticon/1503.png",
+      "sha256": "023c3c2363994b9a112d5ef381dd116ab08a82007def5154c5684f454c646448"
+    },
+    "1504": {
+      "assetPath": "singlebg/equip_defaulticon/1504.png",
+      "sha256": "f14283d0e6b98e5ed72ff4fb88b6c96a7c2a47c130bfeb40dbc5dd892b199472"
+    },
+    "1505": {
+      "assetPath": "singlebg/equip_defaulticon/1505.png",
+      "sha256": "01a26bb9af22e44b9994f8c9c04fbdc8487d499b9244bde950228283b5ba322a"
+    },
+    "1506": {
+      "assetPath": "singlebg/equip_defaulticon/1506.png",
+      "sha256": "eacd0ecc8677ab0893a776469577b3c39cc31b4f140aa58dad59c654f12a2821"
+    },
+    "1507": {
+      "assetPath": "singlebg/equip_defaulticon/1507.png",
+      "sha256": "177406ecc285a5800e27ea948c3b9bf6834918734388f0689bd124c33b8feb60"
+    },
+    "1508": {
+      "assetPath": "singlebg/equip_defaulticon/1508.png",
+      "sha256": "4fd5dcfc702f8372070b74e3de536979237073151ea868b1ca3f6e414a3239ea"
+    },
+    "1509": {
+      "assetPath": "singlebg/equip_defaulticon/1509.png",
+      "sha256": "31b4a1f019d054e7b2c09e47352c85a97e359bf2432cd9745c9cf6b0cce10ec5"
+    },
+    "1510": {
+      "assetPath": "singlebg/equip_defaulticon/1510.png",
+      "sha256": "ed74eef2de720942bc1558a8b097b4819ea33430e200e94bbe58f8b87da74dbf"
+    },
+    "1511": {
+      "assetPath": "singlebg/equip_defaulticon/1511.png",
+      "sha256": "4033c8f0ad6395e693e13713f948edb3bde76eb0978fc1b93590521c7606fad3"
+    },
+    "1512": {
+      "assetPath": "singlebg/equip_defaulticon/1512.png",
+      "sha256": "a2e16f41a921b817d1ffd1d355b8128a712b5fa33a70ebb5f03c0e7fd6fc1a24"
+    },
+    "1513": {
+      "assetPath": "singlebg/equip_defaulticon/1513.png",
+      "sha256": "8e1765dc3e16586ac949a829161c6651c4a3d7a8e467859b0b2a38860ff2cc0e"
+    },
+    "1514": {
+      "assetPath": "singlebg/equip_defaulticon/1514.png",
+      "sha256": "01a26bb9af22e44b9994f8c9c04fbdc8487d499b9244bde950228283b5ba322a"
+    },
+    "1515": {
+      "assetPath": "singlebg/equip_defaulticon/1515.png",
+      "sha256": "db176dc0271f99c8630ad516011fa223b75f1137bbbf9ec288ed55501dc77f1f"
+    },
+    "1521": {
+      "assetPath": "singlebg/equip_defaulticon/1521.png",
+      "sha256": "54585a0bcaf16195fd3a176fbec9cf5393f56c18c801963a4442f50f09469370"
+    },
+    "1522": {
+      "assetPath": "singlebg/equip_defaulticon/1522.png",
+      "sha256": "6c7bf0310663500ea9dc6b5687c8dedce0e99583d0afeeeeed84f68d85a76739"
+    },
+    "1523": {
+      "assetPath": "singlebg/equip_defaulticon/1523.png",
+      "sha256": "be2286619683a8f3ca3a45a8b30ba14070dedf36117aecab5ed69fdddbe6d0bc"
+    },
+    "1524": {
+      "assetPath": "singlebg/equip_defaulticon/1524.png",
+      "sha256": "bc78b53e15e19ac868e52820ce575067c221dfc57af8f7b52cba81fd24c76270"
+    },
+    "1525": {
+      "assetPath": "singlebg/equip_defaulticon/1525.png",
+      "sha256": "8698db035f7abad9f8a33f5ebb305f91221005553cd0fa91b05cf0445c071732"
+    },
+    "1526": {
+      "assetPath": "singlebg/equip_defaulticon/1526.png",
+      "sha256": "5663c66db195e2ef5841c044367fbe44c7e8fff95ba429be124c659cced41a2c"
+    },
+    "1527": {
+      "assetPath": "singlebg/equip_defaulticon/1527.png",
+      "sha256": "8f880cc2055ffad5860ea41a848ed84b8da731e89c2a94273325ad93a8f9e140"
+    },
+    "1528": {
+      "assetPath": "singlebg/equip_defaulticon/1528.png",
+      "sha256": "0e3109a4b7a9cf70d6271d099c11f2c381674487ba1bf963d62f38b314aaf162"
+    },
+    "1529": {
+      "assetPath": "singlebg/equip_defaulticon/1529.png",
+      "sha256": "49bbe3bf3fc2aebba3e275faf0da8c5bc03caed011d97810933d46f166698414"
+    },
+    "1530": {
+      "assetPath": "singlebg/equip_defaulticon/1530.png",
+      "sha256": "c09c46a9cfbef5148047b7fe2bbf7d832ac3618887089266ef87f66d55029fca"
+    },
+    "1531": {
+      "assetPath": "singlebg/equip_defaulticon/1531.png",
+      "sha256": "d0a7a556b636ca102f2974ee6c9f9a3569ae3fb0bbf31f66b4c801a03f17b13c"
+    },
+    "1532": {
+      "assetPath": "singlebg/equip_defaulticon/1532.png",
+      "sha256": "712b2448dce8a56097285ac3df0620ef39112898117d7bcb7c4f177d72b10ba4"
+    },
+    "1533": {
+      "assetPath": "singlebg/equip_defaulticon/1533.png",
+      "sha256": "b4c9f213b907a54e223997a1b3515867bbf7c5a1f2c1a1f619f5cfd1bd2c8c0a"
+    },
+    "1534": {
+      "assetPath": "singlebg/equip_defaulticon/1534.png",
+      "sha256": "209576ef00af2be7d7cf92f8c8bdc7b2363f7041db8d392a6a1317fe587d488b"
+    },
+    "1535": {
+      "assetPath": "singlebg/equip_defaulticon/1535.png",
+      "sha256": "9a522db89305fbe54f787e00488c0ac57e5712a2794ac94afdf3ff599741bfb5"
+    },
+    "1536": {
+      "assetPath": "singlebg/equip_defaulticon/1536.png",
+      "sha256": "b4c5d476c73346da2c6911779fb412f1511eb26c2b5b69e6ca0e6cf483513cc3"
+    },
+    "1537": {
+      "assetPath": "singlebg/equip_defaulticon/1537.png",
+      "sha256": "367c8bb22167d35ead18929432dea2b623c3e569c7c4839651d20e19ade7fd44"
+    },
+    "1538": {
+      "assetPath": "singlebg/equip_defaulticon/1538.png",
+      "sha256": "c0d8da0e638e8836eb61255c57cd8e1b79aa7dd528d91c9d42b593f04c38bcd4"
+    },
+    "1539": {
+      "assetPath": "singlebg/equip_defaulticon/1539.png",
+      "sha256": "c709d84582f91ff5b408f4bba594fb80e1df28d7062f9ac39ad5416b555d2c3a"
+    },
+    "1540": {
+      "assetPath": "singlebg/equip_defaulticon/1540.png",
+      "sha256": "4c1ac260eac777a5e7ad341671ba16ad682516690f6bff6662530b67a480763a"
+    },
+    "1541": {
+      "assetPath": "singlebg/equip_defaulticon/1541.png",
+      "sha256": "7f4322c6aa857469a73f30ed53d834dbd811ff9018bd6418f746667c3795c43c"
+    },
+    "1542": {
+      "assetPath": "singlebg/equip_defaulticon/1542.png",
+      "sha256": "b164c4045b3b0819a63921158613c9aa2efac7c27befb4dd30be389ad88e4ee3"
+    },
+    "1543": {
+      "assetPath": "singlebg/equip_defaulticon/1543.png",
+      "sha256": "34a739bbfb79df719bfa43c754bf4387df1bdc5591eac269f63ff608701b0801"
+    },
+    "1544": {
+      "assetPath": "singlebg/equip_defaulticon/1544.png",
+      "sha256": "261193ff088732dbfb7cff2cc4526a946dbeb1aec4d40714774e2e289f01dfde"
+    },
+    "1545": {
+      "assetPath": "singlebg/equip_defaulticon/1545.png",
+      "sha256": "44cb4f49b907d0c3e15abf9433a7c5acdf3bc8554fd64b97d0d4f5cf82e4a78d"
+    },
+    "1546": {
+      "assetPath": "singlebg/equip_defaulticon/1546.png",
+      "sha256": "7408a590485b966212b842a7872204c3ad14c2817fd1701f43744b3762e53537"
+    },
+    "1547": {
+      "assetPath": "singlebg/equip_defaulticon/1547.png",
+      "sha256": "84efa6a228209fba95804da6fb276df989a75e962e67c312f2b94f80d3bc906e"
+    },
+    "1548": {
+      "assetPath": "singlebg/equip_defaulticon/1548.png",
+      "sha256": "44779ce670a3d2ee88b33cd6703e0bf427787af6f3a39991e1ad014b45c9b9df"
+    },
+    "1549": {
+      "assetPath": "singlebg/equip_defaulticon/1549.png",
+      "sha256": "406e43ca6d6babf90b6b02a545de66a1c28273d58866929d07375a329bbf7ba0"
+    },
+    "1550": {
+      "assetPath": "singlebg/equip_defaulticon/1550.png",
+      "sha256": "0421de18b26a126fbd381c6d20fd199e7f9c85ca84206bab0996fc6a01af0243"
+    },
+    "1551": {
+      "assetPath": "singlebg/equip_defaulticon/1551.png",
+      "sha256": "136fc3b3a62d9139c53f37adcf53d3b0bc9169d22a1fee9ad0f41eca39b1f9ec"
+    },
+    "1552": {
+      "assetPath": "singlebg/equip_defaulticon/1552.png",
+      "sha256": "bcd57a201e2440cda7b8473addb293fbf2cfa5225c5be4478701d0ebfbe9333f"
+    },
+    "1553": {
+      "assetPath": "singlebg/equip_defaulticon/1553.png",
+      "sha256": "9e7de782686baf971b1c40dfa663b2221a286d11d9cb094854a41ef4dcbba97e"
+    },
+    "1554": {
+      "assetPath": "singlebg/equip_defaulticon/1554.png",
+      "sha256": "dc85e825593b8956230e0731c08e4edd0ca7f3d822f0746775207911032d29c4"
+    },
+    "1555": {
+      "assetPath": "singlebg/equip_defaulticon/1555.png",
+      "sha256": "60b092e7570849c76b094084efc1c57a738fac713463cc54e3c5b8efcad0ba75"
+    },
+    "1556": {
+      "assetPath": "singlebg/equip_defaulticon/1556.png",
+      "sha256": "c56b1a41f3beec8bd06927a9704812bf6dfe42e4e13ea08347869d3580e62899"
+    },
+    "1557": {
+      "assetPath": "singlebg/equip_defaulticon/1557.png",
+      "sha256": "3baebfb3095f5a375af030f6966e93a94dbed70d39c3931e987da1750623bdf5"
+    },
+    "1558": {
+      "assetPath": "singlebg/equip_defaulticon/1558.png",
+      "sha256": "a3d5412723d548d2f39b44e6082e99712180552052dbe04b487f0622eba02212"
+    },
+    "1559": {
+      "assetPath": "singlebg/equip_defaulticon/1559.png",
+      "sha256": "d5741190abb17b0598f72f0a8c5e8ffb485a3fad89c64462335094ebb08acdcb"
+    },
+    "1560": {
+      "assetPath": "singlebg/equip_defaulticon/1560.png",
+      "sha256": "ef4444a52c8ae1ecced394f2bd67708d8cd3cf202f358f24c2e8b0cc3a1c504f"
+    },
+    "1561": {
+      "assetPath": "singlebg/equip_defaulticon/1561.png",
+      "sha256": "f716272fce312ede05ff07fa8071b9977a89ecd7a2fa90e656d4b71eca38d8eb"
+    },
+    "1562": {
+      "assetPath": "singlebg/equip_defaulticon/1562.png",
+      "sha256": "1d723163e5f341a87914f2e2363f729d2c665b33e27de160d0a9481525db66e0"
+    },
+    "1563": {
+      "assetPath": "singlebg/equip_defaulticon/1563.png",
+      "sha256": "62a3b4bf75edea16938bd946e0fe51950ef2588092a77a6b10f6f5bb917de1bd"
+    },
+    "1564": {
+      "assetPath": "singlebg/equip_defaulticon/1564.png",
+      "sha256": "5f1369f3c1d531480c0be6a61e8db3f5fbecb6781648a5c6546d53e6f2e44f34"
+    },
+    "1565": {
+      "assetPath": "singlebg/equip_defaulticon/1565.png",
+      "sha256": "14a21173d228b69c79ba7df0b9b3c9e783f5f4d07d5df3c7a0f8a32c5d0b024b"
+    },
+    "1566": {
+      "assetPath": "singlebg/equip_defaulticon/1566.png",
+      "sha256": "bd7ab84c71a6c55f1fee1754a5a1a9cd0b2dd0a3f70faa1b953013d6540fedcf"
+    },
+    "1567": {
+      "assetPath": "singlebg/equip_defaulticon/1567.png",
+      "sha256": "f2b1c1f014d4297f3473d46ebc76f31117ab226c823a2cc17b364d0cfd32d161"
+    },
+    "1568": {
+      "assetPath": "singlebg/equip_defaulticon/1568.png",
+      "sha256": "17ed470a00ed03d5ccd9fa27e2c538c3ce4e9dd6da04da3efb632410e3921f2a"
+    },
+    "1569": {
+      "assetPath": "singlebg/equip_defaulticon/1569.png",
+      "sha256": "8a41d3965dd168f71e71075e1de448c04ae1e156ca0a23fd35a2f8b4487f4586"
+    },
+    "1570": {
+      "assetPath": "singlebg/equip_defaulticon/1570.png",
+      "sha256": "575f2962031ba8d373bc74c01c84895cfa2addab7b4df3acdf6213e8532c3210"
+    },
+    "1571": {
+      "assetPath": "singlebg/equip_defaulticon/1571.png",
+      "sha256": "483946e892810c75b71a1b6ca6bed7a4c368034e54cea209bb7354e9433a7485"
+    },
+    "1572": {
+      "assetPath": "singlebg/equip_defaulticon/1572.png",
+      "sha256": "ee296de1ee8c595f4bf1e374e549e564f80b0d84bf332c5f254391e01b42ee62"
+    },
+    "1573": {
+      "assetPath": "singlebg/equip_defaulticon/1573.png",
+      "sha256": "0c122d81123714c1390575c6793fce77dd5b02a1213da7ccfd425a432c456e08"
+    },
+    "1574": {
+      "assetPath": "singlebg/equip_defaulticon/1574.png",
+      "sha256": "35794de256a761d08bcd7bd00405ab573b9c2bce9af0fd07d6b8efc2a6557dbf"
+    },
+    "1575": {
+      "assetPath": "singlebg/equip_defaulticon/1575.png",
+      "sha256": "c2efa55bef4d7d50a19c330e0be396aecf256c28a4cee8d1d0d7fc2d9399dd6a"
+    },
+    "1576": {
+      "assetPath": "singlebg/equip_defaulticon/1576.png",
+      "sha256": "18bce17c09e05f3ca455c26d318c05789b83fdb1b7a1918346a42aa33daf91ca"
+    },
+    "4101": {
+      "assetPath": "singlebg/equip_defaulticon/4101.png",
+      "sha256": "2bb8ab6e379df655acfd8b939ee0b3d16c7c5a538206013484001e08d22315d6"
+    },
+    "4102": {
+      "assetPath": "singlebg/equip_defaulticon/4102.png",
+      "sha256": "a5d5fe7adb5ca8b7e281a8598b867391302c556e55fcfcfe740f83bddce37b94"
+    },
+    "4103": {
+      "assetPath": "singlebg/equip_defaulticon/4103.png",
+      "sha256": "78af26a32199090be119d31d06a90d9794de928fa31314a207cdeac7642f8991"
+    },
+    "4104": {
+      "assetPath": "singlebg/equip_defaulticon/4104.png",
+      "sha256": "b8b06a3c1b88579659b0c1359577cdd43f04efcdfca78099e4253dbdebd55f78"
+    },
+    "5101": {
+      "assetPath": "singlebg/equip_defaulticon/5101.png",
+      "sha256": "bc138f0847ff2c9d2d80131b57b0a0da706dad0f9cd9a88d12da8925729e5625"
+    },
+    "5102": {
+      "assetPath": "singlebg/equip_defaulticon/5102.png",
+      "sha256": "dcbf25125f49589dbf3797af1c7e5e6b52f5a1602d01aff80cfb205fcae25ce9"
+    },
+    "5103": {
+      "assetPath": "singlebg/equip_defaulticon/5103.png",
+      "sha256": "258f5811c5ad6b6abf1c42b3e826dd4c6a1a9a14c72d8562d3ea07014da157c3"
+    },
+    "5104": {
+      "assetPath": "singlebg/equip_defaulticon/5104.png",
+      "sha256": "7d0bd75662b105ea66cfb9a46b5a54f9207e2a0bb96105b47397ebe4de5e0b2e"
+    },
+    "5105": {
+      "assetPath": "singlebg/equip_defaulticon/5105.png",
+      "sha256": "72cd627c0fee52acb9d89cc0975805fd79043a1b8638bcb5182116c81152f262"
+    },
+    "100099": {
+      "assetPath": "singlebg/equip_defaulticon/100099.png",
+      "sha256": "9f043e2319226eb72d913104ae9a8b6de6e986deb6f7d6abda014ef284b590f5"
+    }
+  }
+}

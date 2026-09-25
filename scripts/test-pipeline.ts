@@ -386,20 +386,25 @@ check(
   })(),
 );
 check(
-  "Huiji markdown parser derives ordered base IDs",
+  "direct Huiji card parser preserves order",
   JSON.stringify(
     parseHuijiCards(
-      '[![Image: Headicon large-315601.png](x)](https://res1999.huijiwiki.com/wiki/a "A")\n[![Image: Headicon large-314901.png](x)](https://res1999.huijiwiki.com/wiki/b "B")',
+      JSON.stringify([
+        { id: 315601, baseId: "3156", name: "A", href: "https://res1999.huijiwiki.com/wiki/a" },
+        { id: 314901, baseId: "3149", name: "B", href: "https://res1999.huijiwiki.com/wiki/b" },
+      ]),
     ).map((entry) => entry.baseId),
   ) === JSON.stringify(["3156", "3149"]),
 );
 check(
-  "Huiji parser uses keep-last dedupe like roster updater",
+  "direct Huiji parser keeps the last duplicate character card",
   JSON.stringify(
     parseHuijiCards(
-      '[![Image: Headicon large-315601.png](x)](https://res1999.huijiwiki.com/wiki/a "A")\n' +
-        '[![Image: Headicon large-314901.png](x)](https://res1999.huijiwiki.com/wiki/b "B")\n' +
-        '[![Image: Headicon large-315602.png](x)](https://res1999.huijiwiki.com/wiki/a2 "A2")',
+      JSON.stringify([
+        { id: 315601, baseId: "3156", name: "A", href: "https://res1999.huijiwiki.com/wiki/a" },
+        { id: 314901, baseId: "3149", name: "B", href: "https://res1999.huijiwiki.com/wiki/b" },
+        { id: 315602, baseId: "3156", name: "A2", href: "https://res1999.huijiwiki.com/wiki/a2" },
+      ]),
     ).map((entry) => entry.baseId),
   ) === JSON.stringify(["3149", "3156"]),
 );

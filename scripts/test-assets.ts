@@ -4,6 +4,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { loadGeneratedCatalog } from "./generated-catalog";
+import { loadPsychubeImageInventory } from "./psychube-catalog";
+import type { PsychubeDef } from "../src/types/catalog";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -24,9 +26,9 @@ async function main(): Promise<void> {
   const chars = loadGeneratedCatalog(
     path.join(ROOT, "src/data/characters.ts"),
   ) as Array<{ id: string; skins: Array<{ id: string }> }>;
-  const psychubes = loadGeneratedCatalog(
+  const psychubes = loadGeneratedCatalog<PsychubeDef>(
     path.join(ROOT, "src/data/psychubes.ts"),
-  ) as Array<{ id: string }>;
+  );
 
   // 期望角色 variant 集
   const expectedChar = new Set<string>();
@@ -45,6 +47,51 @@ async function main(): Promise<void> {
     if (fail > 0) process.exit(1);
     return;
   }
+
+  const iconInventoryPath = path.join(
+    __dirname,
+    "data/psychube-image-inventory.json",
+  );
+  const iconCacheDir = path.join(__dirname, "data/psychube-image-cache");
+  const rawInventory: unknown = existsSync(iconInventoryPath)
+    ? JSON.parse(readFileSync(iconInventoryPath, "utf-8"))
+    : null;
+  const rawImages =
+    typeof rawInventory === "object" &&
+    rawInventory !== null &&
+    "images" in rawInventory &&
+    typeof rawInventory.images === "object" &&
+    rawInventory.images !== null
+      ? Object.keys(rawInventory.images)
+      : [];
+  const trustedInventory = loadPsychubeImageInventory();
+  check(
+    "psychube source icon inventory maps each ID to intact persisted bytes",
+    rawImages.length > 0 &&
+      rawImages.length === Object.keys(trustedInventory.images).length,
+  );
+  let sourcePngsValid = true;
+  for (const id of Object.keys(trustedInventory.images)) {
+    const sourceFile = path.join(iconCacheDir, `${id}.png`);
+    const metadata = await sharp(sourceFile).metadata();
+    if (metadata.format !== "png" || metadata.width !== 276 || metadata.height !== 228) {
+      sourcePngsValid = false;
+      break;
+    }
+    const decoded = await sharp(sourceFile).ensureAlpha().raw().toBuffer();
+    if (!decoded.length || !decoded.some((_, index) => index % 4 === 3 && decoded[index] !== 0)) {
+      sourcePngsValid = false;
+      break;
+    }
+  }
+  check(
+    "all mapped CN psychube source PNGs fully decode at 276×228",
+    sourcePngsValid,
+  );
+  check(
+    "runtime psychubes have trusted Simplified Chinese names",
+    psychubes.every((entry) => entry.names["zh-CN"].trim().length > 0),
+  );
 
   const charFiles = readdirSync(charDir).filter((f) => f.endsWith(".webp"));
   const psyFiles = readdirSync(psyDir).filter((f) => f.endsWith(".webp"));

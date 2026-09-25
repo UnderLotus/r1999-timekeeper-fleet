@@ -2,20 +2,20 @@
   "schemaVersion": 3,
   "sourceHashes": {
     "cn/ArcanistMap.json": "c757b84efed7231b385b63f287184e0d03870928d07ecaf4682696b431a6163b",
-    "cn/character.json": "fe00365b1239b9d274aa76d3c445ef5f9e7dd298d53309fa10ab253e77efa281",
-    "cn/equip.json": "8a1ef31511e388166fb4ce0f486554efe4ec6ac92fd919caaa6344218afd5d00",
-    "cn/skin.json": "b3c567d59f08371b5d6f5d386009c050b97babfe17acff215c20ed10bfe50884",
-    "name-fallbacks.json": "e30eb6d4179ad0c857a69fac70aab82b073cf6d62d9d0b99f5207c114a431cde",
+    "cn/character.json": "09fde1682c2631e8fdd6a19616ec1a6d32f42f6f699b001c3631106e89e4cf64",
+    "cn/equip.json": "b30f27d86540802c7c8fc44cb4cad6131a8a858ce75081469a42a48063d6fe91",
+    "cn/skin.json": "7ab2b59b3cbdc784199b1cdf2580d0044a6882a096f2e2906e1e58ade5d97e67",
+    "name-fallbacks.json": "a2a81e80093314e1fb4f6dc6cad682fd070893d3c03bdd59380e9b8ec2afa004",
     "localized-name-overrides.json": "06fc52fc089303784795827b656400b7db0e9ca362f0b5dc241d0ab2e137dc6f",
     "catalog-policy.json": "f90b6ab244b1e507afb0131eb9f89c1d13241b43de41d13d98f95558fc69ee82",
-    "gl/character.json": "a0ae57e2fcc7e301912769b0f561bd0aeb4008058c6bcf2e9a2bfabfeb17b0d6",
+    "gl/character.json": "787dc9f07341a144ff4db26c4490d4861903877213b03d1133c3130147d1a337",
     "gl/equip.json": "684db6fc0b7f25acff075198344ccbb01a86d2f9afa957869e06600c72a6bf8f",
-    "gl/skin.json": "0520eaf83efb97b385749b883be5d9f59f0f0fbbcd41265d23092535f6df5d69",
-    "gl/language_zh.json": "a5b0400aefb340ca821aa80defa64d8b6b5786cdb3cba4f89a759e3e51dbbd92",
-    "gl/language_tw.json": "88771acda9b99a70e54139d42326be921e6bb83de20c7aaa5d79b24304c6de49",
-    "gl/language_jp.json": "063d478c5fb0e0c261b2d571d0ff7f5b2ed9980ab5ff38403992be3d8d3f49eb",
-    "gl/language_kr.json": "c98fbffe13ca2872dc0649ca4466dd9c47339140b139ca2a3be5fa482216fbc5",
-    "gl/language_en.json": "9d36a9c70ce94587766a1807847f695c120308290f4bf7609434f64d14a47026"
+    "gl/skin.json": "71230bb53f668f8aabab5651d26ff621e3ca2c63ecb8a23ce3d5f23f74d93ce4",
+    "gl/language_zh.json": "9afe8e921d97cc79bbe13972c89bc09789689205a9a155f4c6d08f378559774c",
+    "gl/language_tw.json": "a76e2f7a04cd637b495e77befadc4b926f4db7bed2bf2000fd97e02f7dd36086",
+    "gl/language_jp.json": "5616822741701e0445ec2f5ab0c28d2a4a4b35a2ae7964be62f5ee3da8b50991",
+    "gl/language_kr.json": "255a666eb1c2b4d7032c86e17b243a9bb88e4b46626a9252465b5072ebbca35e",
+    "gl/language_en.json": "57d39b8ae8ca98233c46967fc3650d2944f7550b3f57b86d1cbd3fa21f7794dd"
   },
   "characters": [
     {
@@ -4437,7 +4437,7 @@
       "rarity": 5,
       "maxInsight": 3,
       "defaultVariant": "314501",
-      "glReleased": false,
+      "glReleased": true,
       "skins": [
         {
           "id": "314501",
@@ -4464,7 +4464,7 @@
       "rarity": 5,
       "maxInsight": 3,
       "defaultVariant": "314001",
-      "glReleased": false,
+      "glReleased": true,
       "skins": [
         {
           "id": "314001",
@@ -4571,7 +4571,7 @@
       "baseId": "3157",
       "names": {
         "zh-CN": "纳西索斯",
-        "zh-TW": "Narcissus",
+        "zh-TW": "納西索斯",
         "en-US": "Narcissus",
         "ja-JP": "Narcissus",
         "ko-KR": "Narcissus"
@@ -5955,10 +5955,10 @@
       "id": "1573",
       "names": {
         "zh-CN": "光之外的梦",
-        "zh-TW": "A Dream Beyond Light",
+        "zh-TW": "光之外的夢",
         "en-US": "A Dream Beyond Light",
         "ja-JP": "光の彼方にある夢",
-        "ko-KR": "A Dream Beyond Light"
+        "ko-KR": "빛 너머의 꿈"
       },
       "rarity": 5,
       "glPresent": true
@@ -5967,10 +5967,10 @@
       "id": "1574",
       "names": {
         "zh-CN": "光影的栖所",
-        "zh-TW": "Where Light and Shadows Rest",
+        "zh-TW": "光影的棲所",
         "en-US": "Where Light and Shadows Rest",
         "ja-JP": "光と影の棲家",
-        "ko-KR": "Where Light and Shadows Rest"
+        "ko-KR": "빛과 그림자의 거처"
       },
       "rarity": 5,
       "glPresent": true
@@ -5979,10 +5979,10 @@
       "id": "1449",
       "names": {
         "zh-CN": "暂别旧夜",
-        "zh-TW": "Farewell to the Old Night",
+        "zh-TW": "暫別舊夜",
         "en-US": "Farewell to the Old Night",
         "ja-JP": "古き夜に別れを",
-        "ko-KR": "Farewell to the Old Night"
+        "ko-KR": "다시 만날 지난밤과의 작별"
       },
       "rarity": 4,
       "glPresent": true
@@ -6043,6 +6043,54 @@
         "en-US": "Tides Held Within",
         "ja-JP": "Tides Held Within",
         "ko-KR": "Tides Held Within"
+      },
+      "rarity": 5,
+      "glPresent": false
+    },
+    {
+      "id": "1451",
+      "names": {
+        "zh-CN": "当下之喜",
+        "zh-TW": "Living in the Moment",
+        "en-US": "Living in the Moment",
+        "ja-JP": "Living in the Moment",
+        "ko-KR": "Living in the Moment"
+      },
+      "rarity": 4,
+      "glPresent": false
+    },
+    {
+      "id": "1577",
+      "names": {
+        "zh-CN": "立于风暴脊",
+        "zh-TW": "Atop the Tempest",
+        "en-US": "Atop the Tempest",
+        "ja-JP": "Atop the Tempest",
+        "ko-KR": "Atop the Tempest"
+      },
+      "rarity": 5,
+      "glPresent": false
+    },
+    {
+      "id": "1578",
+      "names": {
+        "zh-CN": "宿命之向背",
+        "zh-TW": "To Choose Against Fate",
+        "en-US": "To Choose Against Fate",
+        "ja-JP": "To Choose Against Fate",
+        "ko-KR": "To Choose Against Fate"
+      },
+      "rarity": 5,
+      "glPresent": false
+    },
+    {
+      "id": "1579",
+      "names": {
+        "zh-CN": "灵知当齐一",
+        "zh-TW": "Flows in All Things Alike",
+        "en-US": "Flows in All Things Alike",
+        "ja-JP": "Flows in All Things Alike",
+        "ko-KR": "Flows in All Things Alike"
       },
       "rarity": 5,
       "glPresent": false
