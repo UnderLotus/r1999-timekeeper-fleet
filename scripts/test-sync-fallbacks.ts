@@ -9,7 +9,6 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { synchronizeCnDirectory } from "./sync-cn-data";
 import { synchronizeGlDirectory } from "./sync-gl-data";
 import {
@@ -19,8 +18,48 @@ import {
 } from "./sync-name-fallbacks";
 import { UpstreamRefreshError } from "./sync-refresh";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const root = mkdtempSync(path.join(tmpdir(), "r1999-sync-fallbacks-"));
+
+function numberedRows(count: number, sentinel: number): Array<{ id: number }> {
+  return Array.from({ length: count }, (_, index) => ({
+    id: index === 0 ? sentinel : sentinel + index,
+  }));
+}
+
+function languageRows(count: number): Array<{ key: string; content: string }> {
+  return Array.from({ length: count }, (_, index) => ({
+    key: `fixture-key-${index}`,
+    content: `fixture content ${index}`,
+  }));
+}
+
+function writeFixture(directory: string, name: string, value: unknown[]): void {
+  mkdirSync(directory, { recursive: true });
+  writeFileSync(path.join(directory, name), JSON.stringify(value));
+}
+
+function makeGlFixture(directory: string): string {
+  writeFixture(directory, "character.json", numberedRows(100, 3003));
+  writeFixture(directory, "equip.json", numberedRows(100, 1201));
+  writeFixture(directory, "skin.json", numberedRows(300, 300301));
+  for (const name of [
+    "language_zh.json",
+    "language_tw.json",
+    "language_jp.json",
+    "language_kr.json",
+    "language_en.json",
+  ])
+    writeFixture(directory, name, languageRows(10_000));
+  return directory;
+}
+
+function makeCnFixture(directory: string): string {
+  writeFixture(directory, "ArcanistMap.json", numberedRows(100, 3003));
+  writeFixture(directory, "character.json", numberedRows(100, 3003));
+  writeFixture(directory, "equip.json", numberedRows(100, 1201));
+  writeFixture(directory, "skin.json", numberedRows(300, 300301));
+  return directory;
+}
 
 function copyFixture(sourceDir: string, output: string): void {
   mkdirSync(path.dirname(output), { recursive: true });
@@ -42,12 +81,14 @@ function fixtureFetch(sourceDir: string, mode: "upstream" | "invalid-json" | "pr
 }
 
 try {
+  const glFixture = makeGlFixture(path.join(root, "gl-fixture"));
+  const cnFixture = makeCnFixture(path.join(root, "cn-fixture"));
   const glData = path.join(root, "gl-data");
-  copyFixture(path.join(ROOT, "scripts/data/gl"), path.join(glData, "gl"));
+  copyFixture(glFixture, path.join(glData, "gl"));
   const priorGlCharacter = readFileSync(path.join(glData, "gl/character.json"));
   await synchronizeGlDirectory(
     glData,
-    fixtureFetch(path.join(ROOT, "scripts/data/gl"), "invalid-json"),
+    fixtureFetch(glFixture, "invalid-json"),
   );
   assert.deepEqual(
     readFileSync(path.join(glData, "gl/character.json")),
@@ -58,7 +99,7 @@ try {
     () =>
       synchronizeGlDirectory(
         path.join(root, "missing-gl"),
-        fixtureFetch(path.join(ROOT, "scripts/data/gl"), "upstream"),
+        fixtureFetch(glFixture, "upstream"),
       ),
     /GL data missing.*character\.json/,
     "GL upstream failure without prior input is fatal",
@@ -67,30 +108,30 @@ try {
     () =>
       synchronizeGlDirectory(
         glData,
-        fixtureFetch(path.join(ROOT, "scripts/data/gl"), "programming"),
+        fixtureFetch(glFixture, "programming"),
       ),
     /fixture programming failure/,
     "GL arbitrary callback errors are not classified as remote",
   );
   const invalidGlData = path.join(root, "invalid-gl-data");
-  copyFixture(path.join(ROOT, "scripts/data/gl"), path.join(invalidGlData, "gl"));
+  copyFixture(glFixture, path.join(invalidGlData, "gl"));
   writeFileSync(path.join(invalidGlData, "gl/character.json"), "[]");
   await assert.rejects(
     () =>
       synchronizeGlDirectory(
         invalidGlData,
-        fixtureFetch(path.join(ROOT, "scripts/data/gl"), "upstream"),
+        fixtureFetch(glFixture, "upstream"),
       ),
     /minimum\/sentinel/,
     "GL invalid prior input is fatal",
   );
 
   const cnData = path.join(root, "cn-data");
-  copyFixture(path.join(ROOT, "scripts/data/cn"), path.join(cnData, "cn"));
+  copyFixture(cnFixture, path.join(cnData, "cn"));
   const priorCnCharacter = readFileSync(path.join(cnData, "cn/character.json"));
   await synchronizeCnDirectory(
     cnData,
-    fixtureFetch(path.join(ROOT, "scripts/data/cn"), "upstream"),
+    fixtureFetch(cnFixture, "upstream"),
   );
   assert.deepEqual(
     readFileSync(path.join(cnData, "cn/character.json")),
@@ -101,19 +142,19 @@ try {
     () =>
       synchronizeCnDirectory(
         path.join(root, "missing-cn"),
-        fixtureFetch(path.join(ROOT, "scripts/data/cn"), "upstream"),
+        fixtureFetch(cnFixture, "upstream"),
       ),
     /CN data missing.*character\.json/,
     "CN upstream failure without prior input is fatal",
   );
   const invalidCnData = path.join(root, "invalid-cn-data");
-  copyFixture(path.join(ROOT, "scripts/data/cn"), path.join(invalidCnData, "cn"));
+  copyFixture(cnFixture, path.join(invalidCnData, "cn"));
   writeFileSync(path.join(invalidCnData, "cn/character.json"), "[]");
   await assert.rejects(
     () =>
       synchronizeCnDirectory(
         invalidCnData,
-        fixtureFetch(path.join(ROOT, "scripts/data/cn"), "upstream"),
+        fixtureFetch(cnFixture, "upstream"),
       ),
     /minimum\/sentinel/,
     "CN invalid prior input is fatal",

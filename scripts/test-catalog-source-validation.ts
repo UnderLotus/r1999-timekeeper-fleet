@@ -146,7 +146,7 @@ function priorCharacter(baseId: string, marker: string): SourceCharacter {
 }
 
 const rows: ArcanistEntryFull[] = [
-  arcanist(9001, "", "Blank English", [
+  arcanist(9001, "Fresh Candidate", "Fresh Candidate English", [
     skin(900101),
     skin(900102),
     skin(900103, { characterSkin: "Skin", characterSkinNameEng: "Skin" }),
@@ -178,15 +178,17 @@ const cnCharacters: PackageCharacter[] = rows.map((entry) => ({
   rare: 5,
 }));
 const cnSkins = rows.flatMap((entry) =>
-  entry.live2d.map((variant) => ({
-    id: Number(variant.id),
-    characterId: Number(entry.id),
-  })),
+  entry.live2d
+    .filter((variant) => !(entry.id === 9001 && variant.id === 900101))
+    .map((variant) => ({
+      id: Number(variant.id),
+      characterId: Number(entry.id),
+    })),
 );
 const languages: CatalogLanguageTables = {
-  "zh-CN": {},
+  "zh-CN": { "unaffected-key": "Fresh Global Name" },
   "zh-TW": {},
-  "en-US": {},
+  "en-US": { "unaffected-key": "Fresh Global" },
   "ja-JP": {},
   "ko-KR": {},
 };
@@ -197,10 +199,19 @@ const policy: CatalogPolicy = {
   preservedCharacterAssets: [],
   ignoredCnSkinStubs: [],
 };
+const absentPrior = priorCharacter("9005", "Prior absent");
 const result = composeCatalogSource({
   arcanists: rows,
   cnCharacters,
-  globalCharacters: [],
+  globalCharacters: [
+    {
+      id: 9004,
+      name: "unaffected-key",
+      nameEng: "Fresh Global",
+      rare: 6,
+      isOnline: 1,
+    },
+  ],
   cnSkins,
   globalSkins: [],
   cnEquips: [{ id: 9901, name: "equip", name_en: "Equip", icon: "", rare: 5 }],
@@ -210,12 +221,16 @@ const result = composeCatalogSource({
   nameOverrides: new Map(),
   policy,
   releaseClock: new Date("2026-01-01T00:00:00.000Z"),
-  previousCharacters: [priorCharacter("9001", "Prior blank"), priorCharacter("9002", "Prior malformed")],
+  previousCharacters: [
+    priorCharacter("9001", "Prior complete"),
+    priorCharacter("9002", "Prior malformed"),
+    absentPrior,
+  ],
 });
 assert.deepEqual(
   result.characters.find((entry) => entry.baseId === "9001"),
-  priorCharacter("9001", "Prior blank"),
-  "invalid blank-name candidate retains the complete prior row",
+  priorCharacter("9001", "Prior complete"),
+  "missing-default structural candidate retains the complete prior row",
 );
 assert.deepEqual(
   result.characters.find((entry) => entry.baseId === "9002"),
@@ -228,14 +243,25 @@ assert.equal(
   "invalid duplicate-Variant new candidate is omitted",
 );
 const unaffected = result.characters.find((entry) => entry.baseId === "9004");
-assert.equal(unaffected?.names["zh-CN"], "Unaffected");
-assert.equal(unaffected?.names["en-US"], "Unaffected English");
+assert.equal(unaffected?.names["zh-CN"], "Fresh Global Name");
+assert.equal(unaffected?.names["en-US"], "Fresh Global");
+assert.equal(unaffected?.glReleased, true);
 assert.deepEqual(
   result.psychubes.map((entry) => entry.id),
   ["9901"],
   "unaffected catalog updates continue",
 );
-assert.ok(result.warnings.some((warning) => warning.includes("9001") && warning.includes("retaining")));
+assert.deepEqual(
+  result.characters.find((entry) => entry.baseId === "9005"),
+  absentPrior,
+  "a transiently absent prior row is retained",
+);
+assert.ok(
+  result.warnings.includes(
+    "Character 9001 candidate invalid; retaining the previous complete SourceCharacter row: Character 9001 must emit exactly one default Variant; found 0",
+  ),
+  "missing-default structural candidate emits retaining warning",
+);
 assert.ok(result.warnings.some((warning) => warning.includes("9002") && warning.includes("retaining")));
 assert.ok(result.warnings.some((warning) => warning.includes("9003") && warning.includes("omitting")));
 

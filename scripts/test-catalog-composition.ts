@@ -5,7 +5,6 @@ import {
   type PackageCharacter,
 } from "./catalog-composition";
 import type { CatalogPolicy } from "./catalog-policy";
-import type { SourceCharacter } from "./catalog-source";
 import { buildSkins, type ArcanistEntryFull } from "./skin-utils";
 
 let pass = 0;
@@ -295,107 +294,5 @@ for (const [baseId, variantId] of [["3066", "30660001"], ["3088", "30880001"]]) 
       character.skins.some((skin) => skin.id === character.defaultVariant),
   );
 }
-
-
-function priorCharacter(baseId: string, marker: string): SourceCharacter {
-  return {
-    id: baseId,
-    baseId,
-    names: {
-      "zh-CN": marker,
-      "zh-TW": marker,
-      "en-US": marker,
-      "ja-JP": marker,
-      "ko-KR": marker,
-    },
-    rarity: 4,
-    maxInsight: 2,
-    defaultVariant: `${baseId}01`,
-    glReleased: false,
-    skins: [
-      { id: `${baseId}01`, type: "default" },
-      {
-        id: `${baseId}02`,
-        type: "insight",
-        name: `${marker} insight`,
-        nameEn: `${marker} insight`,
-      },
-      {
-        id: `${baseId}03`,
-        type: "skin",
-        name: `${marker} skin`,
-        nameEn: `${marker} skin`,
-        glPresent: false,
-      },
-    ],
-  };
-}
-const retainedPrior = priorCharacter("1001", "previous generation");
-const absentPrior = priorCharacter("1004", "transiently absent");
-const retentionResult = composeCatalogSource({
-  arcanists: [
-    arcanist(1001, "Broken One", "Broken One", [100102]),
-    arcanist(1002, "Fresh Two", "Fresh Two", [100201, 100202]),
-    arcanist(1003, "Broken New", "Broken New", [100302]),
-  ],
-  cnCharacters: [
-    { id: 1001, name: "Broken One", nameEng: "Broken One", rare: 4 },
-    { id: 1002, name: "Fresh Two", nameEng: "Fresh Two", rare: 5 },
-    { id: 1003, name: "Broken New", nameEng: "Broken New", rare: 5 },
-  ],
-  globalCharacters: [
-    { id: 1001, name: "retained-key", nameEng: "Fresh Broken One", isOnline: 1 },
-    { id: 1002, name: "fresh-key", nameEng: "Fresh Global Two", isOnline: 1 },
-  ],
-  cnSkins: [
-    { id: 100102, characterId: 1001 },
-    { id: 100201, characterId: 1002 },
-    { id: 100202, characterId: 1002 },
-    { id: 100302, characterId: 1003 },
-  ],
-  globalSkins: [],
-  cnEquips: [
-    { id: 2001, name: "fresh-equip", name_en: "Fresh Psychube", icon: "", rare: 5 },
-  ],
-  globalEquips: [],
-  languages: {
-    "zh-CN": { "retained-key": "current broken name", "fresh-key": "fresh global name", "fresh-equip": "新心相" },
-    "zh-TW": {},
-    "en-US": { "retained-key": "Current Broken", "fresh-key": "Fresh Global", "fresh-equip": "Fresh Psychube" },
-    "ja-JP": {},
-    "ko-KR": {},
-  },
-  nameFallbacks: new Map(),
-  nameOverrides: new Map(),
-  policy: {
-    excludedCharacters: [],
-    excludedPsychubes: [],
-    characterCapabilities: [],
-    preservedCharacterAssets: [],
-    ignoredCnSkinStubs: [],
-  },
-  releaseClock: new Date("2026-01-01T00:00:00.000Z"),
-  previousCharacters: [retainedPrior, absentPrior],
-});
-const retained = retentionResult.characters.find((entry) => entry.baseId === "1001");
-const fresh = retentionResult.characters.find((entry) => entry.baseId === "1002");
-check(
-  "invalid existing character retains one complete prior generation without Global field merging",
-  JSON.stringify(retained) === JSON.stringify(retainedPrior) &&
-    !retentionResult.warnings.some((warning) => warning.includes("current broken name")),
-);
-check(
-  "invalid new character is omitted while a transiently absent prior row remains",
-  !retentionResult.characters.some((entry) => entry.baseId === "1003") &&
-    retentionResult.characters.some((entry) => entry.baseId === "1004") &&
-    retentionResult.warnings.some((warning) => warning.includes("1003") && warning.includes("omitting")),
-);
-check(
-  "unaffected character receives fresh Global i18n and release data and psychubes continue",
-  fresh?.names["zh-CN"] === "fresh global name" &&
-    fresh?.names["en-US"] === "Fresh Global" &&
-    fresh.glReleased === true &&
-    retentionResult.psychubes.some((entry) => entry.id === "2001"),
-);
 console.log(`\ncatalog composition tests: ${pass} passed, ${fail} failed`);
 if (fail) process.exit(1);
