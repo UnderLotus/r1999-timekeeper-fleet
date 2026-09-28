@@ -31,6 +31,16 @@
       "variantId": "304504",
       "isReleased": false,
       "note": "GL 3.8 preload; garment is not live yet"
+    },
+    {
+      "variantId": "314503",
+      "isReleased": false,
+      "note": "CN 4.0 Skin; not released on Global yet"
+    },
+    {
+      "variantId": "314003",
+      "isReleased": false,
+      "note": "CN 4.0 Skin; not released on Global yet"
     }
   ],
   "psychubes": [

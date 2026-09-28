@@ -22,11 +22,14 @@ await withPipelineLock(async () => {
     "sync:names",
     "sync:order",
     "build:source",
-    "build:characters",
   ]) {
     execFileSync("npm", ["run", script], { stdio: "inherit", env });
   }
   execFileSync("npx", ["tsx", "scripts/sync-assets.ts"], {
+    stdio: "inherit",
+    env,
+  });
+  execFileSync("npm", ["run", "build:characters"], {
     stdio: "inherit",
     env,
   });

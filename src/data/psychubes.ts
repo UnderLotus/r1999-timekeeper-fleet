@@ -1453,5 +1453,53 @@ export const psychubes: PsychubeDef[] = [
     },
     "rarity": 5,
     "released": false
+  },
+  {
+    "id": "1451",
+    "names": {
+      "zh-CN": "当下之喜",
+      "zh-TW": "Living in the Moment",
+      "en-US": "Living in the Moment",
+      "ja-JP": "Living in the Moment",
+      "ko-KR": "Living in the Moment"
+    },
+    "rarity": 4,
+    "released": false
+  },
+  {
+    "id": "1577",
+    "names": {
+      "zh-CN": "立于风暴脊",
+      "zh-TW": "Atop the Tempest",
+      "en-US": "Atop the Tempest",
+      "ja-JP": "Atop the Tempest",
+      "ko-KR": "Atop the Tempest"
+    },
+    "rarity": 5,
+    "released": false
+  },
+  {
+    "id": "1578",
+    "names": {
+      "zh-CN": "宿命之向背",
+      "zh-TW": "To Choose Against Fate",
+      "en-US": "To Choose Against Fate",
+      "ja-JP": "To Choose Against Fate",
+      "ko-KR": "To Choose Against Fate"
+    },
+    "rarity": 5,
+    "released": false
+  },
+  {
+    "id": "1579",
+    "names": {
+      "zh-CN": "灵知当齐一",
+      "zh-TW": "Flows in All Things Alike",
+      "en-US": "Flows in All Things Alike",
+      "ja-JP": "Flows in All Things Alike",
+      "ko-KR": "Flows in All Things Alike"
+    },
+    "rarity": 5,
+    "released": false
   }
 ];

@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCatalogSource } from "./catalog-source";
@@ -14,13 +14,28 @@ import {
   resolveSkinRelease,
 } from "./release-status";
 import type { CharacterEntry } from "./types";
+import { filterRuntimeCharacterSkins } from "./character-assets";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const OUT_FILE = path.join(ROOT, "src/data/characters.ts");
+const CHAR_ASSET_DIR = path.join(ROOT, "public/assets/characters");
 const OVERRIDES_FILE = path.join(__dirname, "data/released-overrides.json");
 const RELEASE_ORDER = path.join(__dirname, "data/release-order.json");
 const POLICY_FILE = path.join(__dirname, "data/catalog-policy.json");
-export function buildCharacters(): void {
+export function loadInstalledCharacterAssetIds(
+  directory = CHAR_ASSET_DIR,
+): Set<string> {
+  if (!existsSync(directory)) return new Set();
+  return new Set(
+    readdirSync(directory)
+      .filter((file) => file.endsWith(".webp"))
+      .map((file) => file.slice(0, -".webp".length)),
+  );
+}
+
+export function buildCharacters(
+  installedAssetIds = loadInstalledCharacterAssetIds(),
+): void {
   console.log("build-characters — compact source + manual overrides\n");
   const source = loadCatalogSource();
   const overrides = loadReleaseOverrides(OVERRIDES_FILE);
@@ -45,37 +60,43 @@ export function buildCharacters(): void {
     psychubes: new Set(source.psychubes.map((entry) => entry.id)),
   });
   const entries: CharacterEntry[] = source.characters.map(
-    ({ glReleased, skins, defaultVariant, ...entry }) => ({
-      ...entry,
-      releaseOrder: 0,
-      released: resolveCharacterRelease(
-        glReleased,
-        index.characters.get(entry.baseId)?.isReleased,
-      ),
-      skins: skins.map((skin) => {
-        const glPresent = skin.type === "skin" ? skin.glPresent : undefined;
-        const { glPresent: _pipelineOnly, ...runtimeSkin } =
-          skin as typeof skin & {
-            glPresent?: boolean;
+    ({ glReleased, skins, defaultVariant, ...entry }) => {
+      const runtimeSkins = filterRuntimeCharacterSkins(
+        skins,
+        installedAssetIds,
+      );
+      return {
+        ...entry,
+        releaseOrder: 0,
+        released: resolveCharacterRelease(
+          glReleased,
+          index.characters.get(entry.baseId)?.isReleased,
+        ),
+        skins: runtimeSkins.map((skin) => {
+          const glPresent = skin.type === "skin" ? skin.glPresent : undefined;
+          const { glPresent: _pipelineOnly, ...runtimeSkin } =
+            skin as typeof skin & {
+              glPresent?: boolean;
+            };
+          return {
+            ...runtimeSkin,
+            released: resolveSkinRelease(
+              skin.type,
+              glPresent,
+              index.skins.get(skin.id)?.isReleased,
+            ),
           };
-        return {
-          ...runtimeSkin,
-          released: resolveSkinRelease(
-            skin.type,
-            glPresent,
-            index.skins.get(skin.id)?.isReleased,
-          ),
-        };
-      }),
-      defaultVariant,
-      ...(capabilities.has(entry.baseId)
-        ? {
-            psychubeSlots: capabilities.get(entry.baseId)!.psychubeSlots,
-            exclusivePsychubeIds: capabilities.get(entry.baseId)!
-              .exclusivePsychubeIds,
-          }
-        : {}),
-    }),
+        }),
+        defaultVariant,
+        ...(capabilities.has(entry.baseId)
+          ? {
+              psychubeSlots: capabilities.get(entry.baseId)!.psychubeSlots,
+              exclusivePsychubeIds: capabilities.get(entry.baseId)!
+                .exclusivePsychubeIds,
+            }
+          : {}),
+      };
+    },
   );
   const ordered = recalculateReleaseOrder(
     entries,

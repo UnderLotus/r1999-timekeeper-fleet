@@ -148,8 +148,112 @@ check(
     fixedV4.profile.teams[1].slots[0].psychubeId === twinsPsy1.id &&
     fixedV4.profile.teams[1].slots[0].psychubeId2 === twinsPsy2.id,
 );
+const fixedV5Token =
+  "UAi7vrG8HABD6IZzVtvyx9lyXUpzxMQwAAAAAAAAAAAAAA";
+const fixedV5 = decodeShareToken(fixedV5Token);
 check(
-  "empty v5 round trips with zero-width local references",
+  "fixed historical v5 token decodes its complete profile unchanged",
+  fixedV5?.sourceVersion === 5 &&
+    fixedV5.profile.characters[a.id]?.insight === 2 &&
+    fixedV5.profile.characters[a.id]?.level === 45 &&
+    fixedV5.profile.characters[a.id]?.portray === 3 &&
+    fixedV5.profile.characters[a.id]?.resonance === 7 &&
+    fixedV5.profile.characters[a.id]?.activeVariant === "300303" &&
+    fixedV5.profile.characters[b.id]?.insight === 0 &&
+    fixedV5.profile.characters[b.id]?.level === 1 &&
+    fixedV5.profile.characters[b.id]?.activeVariant === null &&
+    fixedV5.profile.psychubes[psy.id] === 2 &&
+    fixedV5.profile.teams[0].name === "歷史五版" &&
+    fixedV5.profile.teams[0].slots[0].characterId === a.id &&
+    fixedV5.profile.teams[0].slots[0].psychubeId === psy.id &&
+    fixedV5.profile.teams[0].slots[0].psychubeId2 === null,
+);
+
+const longCharacters: CharacterDef[] = [
+  {
+    ...a,
+    id: "3066",
+    baseId: "3066",
+    defaultVariant: "306601",
+    skins: [
+      { id: "306601", type: "default", released: true },
+      { id: "306602", type: "insight", released: true },
+      { id: "30660001", type: "skin", released: false },
+    ],
+  },
+  {
+    ...a,
+    id: "3088",
+    baseId: "3088",
+    defaultVariant: "308801",
+    skins: [
+      { id: "308801", type: "default", released: true },
+      { id: "308802", type: "insight", released: true },
+      { id: "30880001", type: "skin", released: false },
+    ],
+  },
+];
+setCatalogForTesting([...fixtureCharacters, ...longCharacters], fixturePsychubes);
+const longProfile = emptyProfile();
+longProfile.characters["3066"] = {
+  insight: 2,
+  level: 45,
+  portray: 1,
+  resonance: 7,
+  activeVariant: "30660001",
+};
+longProfile.characters["3088"] = {
+  insight: 2,
+  level: 45,
+  portray: 1,
+  resonance: 7,
+  activeVariant: "30880001",
+};
+const longDecoded = decodeShareToken(encodeShareToken(longProfile));
+check(
+  "v6 round trips complete eight-digit Variant IDs for both owners",
+  longDecoded?.sourceVersion === 6 &&
+    longDecoded.profile.characters["3066"]?.activeVariant === "30660001" &&
+    longDecoded.profile.characters["3088"]?.activeVariant === "30880001",
+);
+const wrongOwnerProfile = emptyProfile();
+wrongOwnerProfile.characters["3066"] = {
+  ...longProfile.characters["3066"],
+};
+const wrongOwnerToken = encodeShareToken(wrongOwnerProfile);
+const wrongOwnerDecoded = decodeShareToken(
+  overwriteBits(wrongOwnerToken, 46, 27, 30880001),
+);
+check(
+  "v6 wrong-owner Variant IDs clear only activeVariant and retain the Profile",
+  wrongOwnerDecoded?.sourceVersion === 6 &&
+    wrongOwnerDecoded.profile.characters["3066"]?.level === 45 &&
+    wrongOwnerDecoded.profile.characters["3066"]?.activeVariant === null,
+);
+const wireOverflowCharacter: CharacterDef = {
+  ...longCharacters[0],
+  skins: [
+    ...longCharacters[0].skins,
+    { id: "134217728", type: "skin", released: false },
+  ],
+};
+setCatalogForTesting([wireOverflowCharacter], fixturePsychubes);
+const wireOverflowProfile = emptyProfile();
+wireOverflowProfile.characters[wireOverflowCharacter.id] = {
+  ...longProfile.characters["3066"],
+  activeVariant: "134217728",
+};
+let wireOverflowThrows = false;
+try {
+  encodeShareToken(wireOverflowProfile);
+} catch (error) {
+  wireOverflowThrows = error instanceof RangeError &&
+    String(error).includes("134217728");
+}
+check("owned Variant IDs outside the v6 wire range fail clearly", wireOverflowThrows);
+setCatalogForTesting(fixtureCharacters, fixturePsychubes);
+check(
+  "empty v6 round trips with zero-width local references",
   !!roundTrip(emptyProfile()),
 );
 const ownedOnlyWithSkin = emptyProfile();
@@ -181,7 +285,7 @@ try {
   Object.assign(ADD_DEFAULT, originalAddDefault);
 }
 check(
-  "v5 preset semantics do not depend on mutable add defaults",
+  "v6 preset semantics do not depend on mutable add defaults",
   literalPresetResult?.profile.characters[a.id]?.insight === 0 &&
     literalPresetResult.profile.characters[a.id].level === 1 &&
     literalPresetResult.profile.characters[a.id].portray === 0 &&
@@ -298,14 +402,14 @@ check(
   "local references beyond the encoded collection count are rejected",
   decodeShareToken(overwriteBits(twoCloseIdsToken, 49, 2, 3)) === null,
 );
-// A present skin suffix is constrained to the literal wire range 1..127.
+// A present complete Variant ID is constrained to the literal v6 wire range.
 check(
-  "a present zero skin suffix is rejected",
-  decodeShareToken(overwriteBits(literalPresetToken, 30, 7, 0)) === null,
+  "a present zero Variant ID is rejected",
+  decodeShareToken(overwriteBits(literalPresetToken, 30, 27, 0)) === null,
 );
 check(
   "unsupported future share versions are rejected",
-  decodeShareToken(overwriteBits(token, 0, 4, 6)) === null,
+  decodeShareToken(overwriteBits(token, 0, 4, 7)) === null,
 );
 const variedDeltas = emptyProfile();
 for (const item of fixtureCharacters)

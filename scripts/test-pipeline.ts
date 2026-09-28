@@ -9,7 +9,7 @@ import {
   recalculateReleaseOrder,
   type ReleaseOrderSources,
 } from "./recalculate-order";
-import type { PackageSkin } from "./catalog-composition";
+import type { CnPackageSkin } from "./catalog-composition";
 import {
   computeUnmappedCnSkins,
   DEFAULT_MAPPING_DIFF_FILE,
@@ -284,10 +284,10 @@ check(
       },
       { id: 9999, name: "Excluded", nameEng: "Excluded", live2d: [] },
     ];
-    const cnSkins: PackageSkin[] = [
-      { id: 308001 },
-      { id: 308005 },
-      { id: 700101 },
+    const cnSkins: CnPackageSkin[] = [
+      { id: 308001, characterId: 3080 },
+      { id: 308005, characterId: 3080 },
+      { id: 700101, characterId: 0 },
     ];
     const diff = computeUnmappedCnSkins(cnSkins, arcanists);
     const filtered = computeUnmappedCnSkins(cnSkins, arcanists, new Set(["308005"]));
@@ -298,6 +298,19 @@ check(
       diff[0].name === "Kakania" &&
       filtered.length === 0
     );
+  })(),
+);
+check(
+  "CN characterId, not Variant width, identifies a new unmapped owner",
+  (() => {
+    const arcanists: ArcanistEntryFull[] = [
+      { id: 3066, name: "37", nameEng: "Thirty-seven", live2d: [] },
+    ];
+    const diff = computeUnmappedCnSkins(
+      [{ id: 30660001, characterId: 3066 }],
+      arcanists,
+    );
+    return diff.length === 1 && diff[0].baseId === "3066";
   })(),
 );
 check(
@@ -319,10 +332,10 @@ check(
     ];
     const diff = computeUnmappedCnSkins(
       [
-        { id: 308005 },
-        { id: 300304 },
-        { id: 308005 },
-        { id: 300304 },
+        { id: 308005, characterId: 3080 },
+        { id: 300304, characterId: 3003 },
+        { id: 308005, characterId: 3080 },
+        { id: 300304, characterId: 3003 },
       ],
       arcanists,
     );

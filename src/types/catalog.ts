@@ -5,7 +5,7 @@ export type InsightIndex = 0 | 1 | 2 | 3;
 export type SkinType = "default" | "insight" | "skin";
 
 export interface SkinVariant {
-  /** 6 位 headicon id，如 300301 */
+  /** Opaque catalog Variant ID; its width is not semantically meaningful. */
   id: string;
   type: SkinType;
   /** 本地化 skin 名稱（zh；若有可信來源） */

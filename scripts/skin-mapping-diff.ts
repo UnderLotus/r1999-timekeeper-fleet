@@ -1,8 +1,8 @@
-/** Diff CN package skins against the ArcanistMap listing used to build the catalog. */
+/** Diff CN package Skins against the ArcanistMap listing used to build the catalog. */
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { PackageSkin } from "./catalog-composition";
+import type { CnPackageSkin } from "./catalog-composition";
 import type { ArcanistEntryFull } from "./skin-utils";
 
 export const DEFAULT_MAPPING_DIFF_FILE = path.join(
@@ -27,15 +27,13 @@ export interface UnmappedCnSkin {
 }
 
 /**
- * Report CN package skins that belong to a known character but never appear in
- * that character's live2d list. The upstream mapping file can lag behind the
- * game package, which would silently drop garments from the catalog snapshot.
- * Skins of unknown bases are ignored: they either belong to excluded entries
- * or to characters the catalog does not track yet.
+ * Report CN package Skins that belong to a known character but never appear in
+ * that character's live2d list. The CN package's nonzero characterId is the
+ * owner; Variant width and digit slicing are never used to infer ownership.
  */
 export function computeUnmappedCnSkins(
-  cnSkins: PackageSkin[],
-  arcanists: ArcanistEntryFull[],
+  cnSkins: readonly CnPackageSkin[],
+  arcanists: readonly ArcanistEntryFull[],
   ignoredIds: ReadonlySet<string> = new Set(),
 ): UnmappedCnSkin[] {
   const mapped = new Set(
@@ -48,8 +46,9 @@ export function computeUnmappedCnSkins(
   const unmapped = new Map<string, UnmappedCnSkin>();
   for (const skin of cnSkins) {
     const id = String(skin.id);
-    if (id.length < 3 || mapped.has(id)) continue;
-    const baseId = id.slice(0, -2);
+    if (mapped.has(id)) continue;
+    if (!Number.isFinite(skin.characterId) || skin.characterId === 0) continue;
+    const baseId = String(skin.characterId);
     const name = names.get(baseId);
     if (!name) continue;
     unmapped.set(id, { id, baseId, name });

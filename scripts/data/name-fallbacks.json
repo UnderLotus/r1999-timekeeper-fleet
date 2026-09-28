@@ -1305,6 +1305,14 @@
       }
     },
     {
+      "baseId": "3155",
+      "names": {
+        "zh-CN": "狩勋女巫红弩箭",
+        "zh-TW": "狩勛女巫紅弩箭",
+        "en-US": "Huntsworn Lilya"
+      }
+    },
+    {
       "baseId": "3156",
       "names": {
         "zh-CN": "赫多涅",
@@ -1318,6 +1326,14 @@
         "zh-CN": "纳西索斯",
         "zh-TW": "納西索斯",
         "en-US": "Narcissus"
+      }
+    },
+    {
+      "baseId": "3163",
+      "names": {
+        "zh-CN": "格林杜尔",
+        "zh-TW": "格林杜爾",
+        "en-US": "Glyndŵr"
       }
     }
   ]

@@ -6,6 +6,14 @@ import { loadCatalogPolicy } from "./catalog-policy";
 import { loadCnJSON } from "./sync-cn-data";
 import { parseReleaseOrderSources, type ReleaseOrderSources } from "./recalculate-order";
 import { withPipelineLock } from "./sync-lock";
+import {
+  fetchRemoteText,
+  isUpstreamRefreshError,
+  parseRemoteJson,
+  upstreamResponseFailure,
+  UpstreamRefreshError,
+} from "./sync-refresh";
+import type { ArcanistEntryFull } from "./skin-utils";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -38,6 +46,21 @@ export interface KornblumeData {
   characters: KornblumeCharacter[];
 }
 
+export type VariantOwnership = ReadonlyMap<string, string>;
+
+/** Build the exact Variant-to-parent mapping from current ArcanistMap live2d data. */
+export function buildVariantOwnershipMap(
+  arcanists: readonly ArcanistEntryFull[],
+): Map<string, string> {
+  const ownership = new Map<string, string>();
+  for (const arcanist of arcanists) {
+    const baseId = String(arcanist.id);
+    for (const variant of arcanist.live2d)
+      ownership.set(String(variant.id), baseId);
+  }
+  return ownership;
+}
+
 function parseJson(value: string, label: string): unknown {
   try {
     return JSON.parse(value) as unknown;
@@ -46,8 +69,15 @@ function parseJson(value: string, label: string): unknown {
   }
 }
 
-/** Parse the direct fetch helper output and keep the last Huiji card per character. */
-export function parseHuijiCards(value: string): HuijiCard[] {
+/**
+ * Parse the direct fetch helper output and keep the last Huiji card per
+ * character. Current ArcanistMap ownership is authoritative; only unmapped
+ * historical six-digit cards retain the legacy /100 fallback.
+ */
+export function parseHuijiCards(
+  value: string,
+  ownership: VariantOwnership = new Map(),
+): HuijiCard[] {
   const raw = parseJson(value, "Huiji");
   if (!Array.isArray(raw)) throw new Error("Huiji response must be an array");
   const deduped = new Map<string, { sequence: number; card: HuijiCard }>();
@@ -64,8 +94,17 @@ export function parseHuijiCards(value: string): HuijiCard[] {
       !row.href.startsWith("https://res1999.huijiwiki.com/wiki/")
     )
       throw new Error(`Huiji card ${sequence} has invalid ID, name, or URL`);
-    const baseId = String(Math.floor(row.id / 100));
-    if (row.baseId !== undefined && row.baseId !== baseId)
+    const variantId = String(row.id);
+    const mappedBaseId = ownership.get(variantId);
+    const baseId = mappedBaseId ??
+      (variantId.length === 6 ? String(Math.floor(row.id / 100)) : null);
+    if (!baseId)
+      throw new Error(`Huiji card ${sequence} Variant ${variantId} has no current ArcanistMap owner`);
+    if (
+      mappedBaseId === undefined &&
+      row.baseId !== undefined &&
+      row.baseId !== baseId
+    )
       throw new Error(`Huiji card ${sequence} has inconsistent base ID`);
     deduped.set(baseId, {
       sequence,
@@ -150,10 +189,13 @@ export function createReleaseOrderSnapshot(
 }
 
 function fetchText(url: string): string {
-  return execFileSync("curl", ["-fsSL", "-m", "180", "--retry", "2", url], {
-    encoding: "utf-8",
-    maxBuffer: 20 * 1024 * 1024,
-  });
+  return fetchRemoteText(url, 180, 20 * 1024 * 1024, 2);
+}
+
+function childExitCode(error: unknown): number | undefined {
+  if (typeof error !== "object" || error === null) return undefined;
+  const status = (error as { status?: unknown }).status;
+  return typeof status === "number" ? status : undefined;
 }
 
 function fetchHuiji(): string {
@@ -161,32 +203,40 @@ function fetchHuiji(): string {
     throw new Error(
       `Huiji direct transport is unavailable: create .venv and install requirements-huiji.txt (${PYTHON})`,
     );
-  return execFileSync(PYTHON, [HUJI_FETCHER], {
-    cwd: ROOT,
-    encoding: "utf-8",
-    maxBuffer: 20 * 1024 * 1024,
-  });
+  try {
+    return execFileSync(PYTHON, [HUJI_FETCHER], {
+      cwd: ROOT,
+      encoding: "utf-8",
+      maxBuffer: 20 * 1024 * 1024,
+    });
+  } catch (error) {
+    // fetch-huiji-list.py reserves exit 3 for HTTP/challenge/coverage failures.
+    // Missing dependencies and unhandled Python errors retain their fatal exits.
+    if (childExitCode(error) === 3)
+      throw new UpstreamRefreshError("Huiji remote acquisition failed", { cause: error });
+    throw error;
+  }
 }
 
 function fetchKornblume(): KornblumeData {
-  const names = parseJson(
+  const names = parseRemoteJson(
     fetchText(`${KB_BASE}/lang/static/arcanists/zh-CN.json`),
     "Kornblume names",
   );
-  const characters = parseJson(
+  const characters = parseRemoteJson(
     fetchText(`${KB_BASE}/public/data/arcanists.json`),
     "Kornblume character metadata",
   );
   if (typeof names !== "object" || names === null || Array.isArray(names))
-    throw new Error("Kornblume Chinese names must be an object");
+    throw upstreamResponseFailure("Kornblume Chinese names must be an object");
   if (
     Object.values(names).some((name) => typeof name !== "string") ||
     !Array.isArray(characters)
   )
-    throw new Error("Kornblume response failed shape validation");
+    throw upstreamResponseFailure("Kornblume response failed shape validation");
   const parsedCharacters = characters.map((entry, index) => {
     if (typeof entry !== "object" || entry === null || Array.isArray(entry))
-      throw new Error(`Kornblume character ${index} must be an object`);
+      throw upstreamResponseFailure(`Kornblume character ${index} must be an object`);
     const row = entry as Record<string, unknown>;
     if (
       !Number.isSafeInteger(row.Id) ||
@@ -194,11 +244,14 @@ function fetchKornblume(): KornblumeData {
       typeof row.Rarity !== "number" ||
       !Number.isFinite(row.Rarity)
     )
-      throw new Error(`Kornblume character ${index} is invalid`);
+      throw upstreamResponseFailure(`Kornblume character ${index} is invalid`);
     return { Id: row.Id as number, Name: row.Name, Rarity: row.Rarity };
   });
+  if (Object.keys(names).length < 100 || parsedCharacters.length < 100)
+    throw upstreamResponseFailure("Kornblume response failed coverage validation");
   return { names: names as Record<string, string>, characters: parsedCharacters };
 }
+
 
 function writeReleaseOrder(file: string, value: ReleaseOrderSources): void {
   const temporary = `${file}.tmp-${process.pid}`;
@@ -216,44 +269,78 @@ export async function synchronizeReleaseOrderFile(
   knownCharacters: readonly ReleaseOrderCharacter[],
   acquireHuiji: () => Promise<string>,
   acquireKornblume: () => Promise<KornblumeData>,
+  ownership: VariantOwnership = new Map(),
 ): Promise<ReleaseOrderSources> {
+  // Local snapshot read/parse stays outside the remote warning boundary: a
+  // corrupt or unreadable local source is fatal and must not be hidden.
   const previous = parseReleaseOrderSources(
     JSON.parse(readFileSync(file, "utf-8")) as unknown,
   );
-  const cards = parseHuijiCards(await acquireHuiji());
-  const knownIds = new Set(knownCharacters.map((entry) => String(entry.id)));
-  const knownCardCount = cards.filter((entry) => knownIds.has(entry.baseId)).length;
-  if (knownCardCount < 100)
-    throw new Error(`Huiji parser returned only ${knownCardCount} known characters`);
-  const fallback = await acquireKornblume();
+
+  let cards: HuijiCard[];
+  try {
+    const raw = await acquireHuiji();
+    try {
+      cards = parseHuijiCards(raw, ownership);
+    } catch (error) {
+      throw upstreamResponseFailure("Huiji response failed JSON/card validation", error);
+    }
+    const knownIds = new Set(knownCharacters.map((entry) => String(entry.id)));
+    const knownCardCount = cards.filter((entry) => knownIds.has(entry.baseId)).length;
+    if (knownCardCount < 100)
+      throw upstreamResponseFailure(
+        `Huiji parser returned only ${knownCardCount} known characters`,
+      );
+  } catch (error) {
+    if (!isUpstreamRefreshError(error)) throw error;
+    console.warn(
+      `sync:order warning — Huiji refresh failed; retaining release-order.json: ${error.message}`,
+    );
+    return previous;
+  }
+
+  let fallback: KornblumeData;
+  try {
+    fallback = await acquireKornblume();
+  } catch (error) {
+    if (!isUpstreamRefreshError(error)) throw error;
+    console.warn(
+      `sync:order warning — Kornblume refresh failed; retaining release-order.json: ${error.message}`,
+    );
+    return previous;
+  }
+
   const snapshot = createReleaseOrderSnapshot(
     knownCharacters,
     cards,
     previous.huiji,
     fallback,
   );
+  // Local writes remain fatal so callers can detect an incomplete refresh.
   writeReleaseOrder(file, snapshot);
   return snapshot;
 }
+
 
 async function main(): Promise<void> {
   console.log("sync:order — direct Huiji; legacy, Kornblume and CN fallback tiers\n");
   const policy = loadCatalogPolicy(path.join(__dirname, "data/catalog-policy.json"));
   const excluded = new Set(policy.excludedCharacters.map((entry) => entry.baseId));
   const cnCharacters = loadCnJSON<ReleaseOrderCharacter[]>("character.json");
-  const cnById = new Map(cnCharacters.map((entry) => [entry.id, entry]));
-  const known = loadCnJSON<Array<ReleaseOrderCharacter & { name: string }>>("ArcanistMap.json")
-    .flatMap((entry) => {
-      const metadata = cnById.get(entry.id);
-      return metadata && !entry.name.includes("???") && !excluded.has(String(entry.id))
-        ? [{ ...metadata, name: entry.name, nameEng: entry.nameEng ?? metadata.nameEng }]
-        : [];
-    });
+  const cnById = new Map(cnCharacters.map((entry) => [String(entry.id), entry]));
+  const arcanists = loadCnJSON<Array<ArcanistEntryFull>>("ArcanistMap.json");
+  const known = arcanists.flatMap((entry) => {
+    const metadata = cnById.get(String(entry.id));
+    return metadata && !entry.name.includes("???") && !excluded.has(String(entry.id))
+      ? [{ ...metadata, name: entry.name, nameEng: entry.nameEng ?? metadata.nameEng }]
+      : [];
+  });
   const snapshot = await synchronizeReleaseOrderFile(
     RELEASE_ORDER_FILE,
     known,
     async () => fetchHuiji(),
     async () => fetchKornblume(),
+    buildVariantOwnershipMap(arcanists),
   );
   const knownIds = new Set(known.map((entry) => String(entry.id)));
   console.log(

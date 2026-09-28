@@ -13,7 +13,8 @@ import { sanitizeProfile } from "./profile-sanitize";
 
 const LEGACY_SHARE_VERSION = 3;
 const PREVIOUS_SHARE_VERSION = 4;
-export const SHARE_VERSION = 5;
+const V5_SHARE_VERSION = 5;
+export const SHARE_VERSION = 6;
 const VERSION_BITS = 4;
 const COLLECTION_COUNT_BITS = 10;
 const LEGACY_COLLECTION_COUNT_BITS = 8;
@@ -131,12 +132,6 @@ function numericId(id: string): number | null {
   if (!/^\d+$/.test(id)) return null;
   const value = Number(id);
   return value > 0 && value <= MAX_OFFICIAL_ID ? value : null;
-}
-
-function suffixFor(baseId: string, variant: string | null): number | null {
-  if (!variant || !variant.startsWith(baseId)) return null;
-  const suffix = Number(variant.slice(baseId.length));
-  return Number.isInteger(suffix) && suffix > 0 && suffix < 128 ? suffix : null;
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -266,28 +261,60 @@ function getV5Build(
   };
 }
 
-function putV5Variant(
-  writer: BitWriter,
-  id: string,
-  build: CharacterBuild,
-): void {
-  const def = getCharacter(id);
-  const suffix = suffixFor(
-    id,
-    def && build.activeVariant && build.activeVariant !== def.defaultVariant
-      ? build.activeVariant
-      : null,
-  );
-  writer.put(suffix === null ? 0 : 1, 1);
-  if (suffix !== null) writer.put(suffix, 7);
-}
-
 function getV5Variant(reader: BitReader): number | null | undefined {
   const hasVariant = reader.get(1);
   if (hasVariant === null) return undefined;
   if (!hasVariant) return null;
   const suffix = reader.get(7);
   return suffix === null || suffix === 0 ? undefined : suffix;
+}
+
+const VARIANT_ID_BITS = 27;
+const MAX_VARIANT_ID = (1 << VARIANT_ID_BITS) - 1;
+
+/** v6 writes an exact owned Variant ID, not a base-relative suffix. */
+function putV6Variant(
+  writer: BitWriter,
+  id: string,
+  build: CharacterBuild,
+): void {
+  const def = getCharacter(id);
+  const activeVariant =
+    def &&
+    build.activeVariant &&
+    build.activeVariant !== def.defaultVariant &&
+    def.skins.some((skin) => skin.id === build.activeVariant)
+      ? build.activeVariant
+      : null;
+  if (activeVariant === null) {
+    writer.put(0, 1);
+    return;
+  }
+  if (!/^\d+$/.test(activeVariant))
+    throw new RangeError(
+      `Owned Variant ID ${activeVariant} is not numeric and cannot be encoded in v6`,
+    );
+  const numericVariant = Number(activeVariant);
+  if (
+    !Number.isSafeInteger(numericVariant) ||
+    numericVariant <= 0 ||
+    numericVariant > MAX_VARIANT_ID
+  )
+    throw new RangeError(
+      `Owned Variant ID ${activeVariant} exceeds the v6 ${VARIANT_ID_BITS}-bit wire range`,
+    );
+  writer.put(1, 1);
+  writer.put(numericVariant, VARIANT_ID_BITS);
+}
+
+function getV6Variant(reader: BitReader): string | null | undefined {
+  const hasVariant = reader.get(1);
+  if (hasVariant === null) return undefined;
+  if (!hasVariant) return null;
+  const numericVariant = reader.get(VARIANT_ID_BITS);
+  return numericVariant === null || numericVariant === 0
+    ? undefined
+    : String(numericVariant);
 }
 
 function putV5Imprint(writer: BitWriter, imprint: number): void {
@@ -323,7 +350,7 @@ export function encodeShareToken(profile: Profile): string {
     putOwnedId(writer, idNumber, previousId);
     previousId = idNumber;
     putV5Build(writer, build);
-    putV5Variant(writer, id, build);
+    putV6Variant(writer, id, build);
     characterReferences.set(id, index + 1);
   }
 
@@ -546,6 +573,97 @@ function decodeV5Body(reader: BitReader): Profile | null {
   return profile;
 }
 
+function decodeV6Body(reader: BitReader): Profile | null {
+  const profile = emptyProfile();
+  const characterCount = reader.get(COLLECTION_COUNT_BITS);
+  if (characterCount === null) return null;
+  const wireCharacterIds: Array<string | null> = [];
+  let previousId: number | null = null;
+  for (let index = 0; index < characterCount; index++) {
+    const idNumber = getOwnedId(reader, previousId);
+    if (idNumber === null) return null;
+    previousId = idNumber;
+    const build = getV5Build(reader),
+      variantId = getV6Variant(reader);
+    if (!build || variantId === undefined) return null;
+    const id = String(idNumber),
+      def = getCharacter(id);
+    wireCharacterIds.push(def ? id : null);
+    if (!def) continue;
+    const activeVariant =
+      variantId && def.skins.some((skin) => skin.id === variantId)
+        ? variantId
+        : null;
+    const cleanInsight = Math.min(
+      def.maxInsight,
+      build.insight,
+    ) as InsightIndex;
+    profile.characters[id] = {
+      insight: cleanInsight,
+      level: clamp(build.level, 1, LEVEL_CAPS[cleanInsight]),
+      portray: clamp(build.portray, 0, 5),
+      resonance: clamp(build.resonance, 0, 15),
+      activeVariant,
+    };
+  }
+
+  const psychubeCount = reader.get(COLLECTION_COUNT_BITS);
+  if (psychubeCount === null) return null;
+  const wirePsychubeIds: Array<string | null> = [];
+  previousId = null;
+  for (let index = 0; index < psychubeCount; index++) {
+    const idNumber = getOwnedId(reader, previousId);
+    if (idNumber === null) return null;
+    previousId = idNumber;
+    const imprint = getV5Imprint(reader);
+    if (imprint === null) return null;
+    const id = String(idNumber),
+      known = !!getPsychube(id);
+    wirePsychubeIds.push(known ? id : null);
+    if (known) profile.psychubes[id] = imprint;
+  }
+
+  const characterReferenceWidth = referenceWidth(characterCount),
+    psychubeReferenceWidth = referenceWidth(psychubeCount);
+  for (let teamIndex = 0; teamIndex < TEAM_COUNT; teamIndex++) {
+    const name = getTeamName(reader);
+    if (name === null) return null;
+    profile.teams[teamIndex].name = name;
+    for (let slotIndex = 0; slotIndex < SLOTS_PER_TEAM; slotIndex++) {
+      const characterReference = reader.get(characterReferenceWidth),
+        psychubeReference = reader.get(psychubeReferenceWidth),
+        secondPsychubeReference = reader.get(psychubeReferenceWidth);
+      if (
+        characterReference === null ||
+        psychubeReference === null ||
+        secondPsychubeReference === null
+      )
+        return null;
+      const characterId = resolveReference(
+          characterReference,
+          wireCharacterIds,
+        ),
+        psychubeId = resolveReference(psychubeReference, wirePsychubeIds),
+        psychubeId2 = resolveReference(
+          secondPsychubeReference,
+          wirePsychubeIds,
+        );
+      if (
+        characterId === undefined ||
+        psychubeId === undefined ||
+        psychubeId2 === undefined
+      )
+        return null;
+      profile.teams[teamIndex].slots[slotIndex] = {
+        characterId,
+        psychubeId,
+        psychubeId2,
+      };
+    }
+  }
+  return profile;
+}
+
 export function decodeShareToken(token: string): DecodedShareToken | null {
   const bytes = fromBase64Url(token);
   if (!bytes) return null;
@@ -554,12 +672,14 @@ export function decodeShareToken(token: string): DecodedShareToken | null {
   if (version === null) return null;
   const profile =
     version === SHARE_VERSION
-      ? decodeV5Body(reader)
-      : version === PREVIOUS_SHARE_VERSION
-        ? decodeV3V4Body(reader, COLLECTION_COUNT_BITS)
-        : version === LEGACY_SHARE_VERSION
-          ? decodeV3V4Body(reader, LEGACY_COLLECTION_COUNT_BITS)
-          : null;
+      ? decodeV6Body(reader)
+      : version === V5_SHARE_VERSION
+        ? decodeV5Body(reader)
+        : version === PREVIOUS_SHARE_VERSION
+          ? decodeV3V4Body(reader, COLLECTION_COUNT_BITS)
+          : version === LEGACY_SHARE_VERSION
+            ? decodeV3V4Body(reader, LEGACY_COLLECTION_COUNT_BITS)
+            : null;
   if (!profile || !reader.paddingIsCanonical()) return null;
   return { sourceVersion: version, profile: sanitizeProfile(profile) };
 }

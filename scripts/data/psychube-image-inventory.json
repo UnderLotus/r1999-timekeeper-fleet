@@ -293,6 +293,10 @@
       "assetPath": "singlebg/equip_defaulticon/1450.png",
       "sha256": "274a758b6e3b2e4895d18959124f64677b7a4594f8d5540e1074e3029031b97b"
     },
+    "1451": {
+      "assetPath": "singlebg/equip_defaulticon/1451.png",
+      "sha256": "d84ec00c6ffbd2caf25fd8902ea30a4bee268c2f8581926776e39ce2b5001baf"
+    },
     "1501": {
       "assetPath": "singlebg/equip_defaulticon/1501.png",
       "sha256": "775a6c434c811614c99c0e9afedc6a65491e0dbf11e14ccf7cd423d1669a5b4b"
@@ -576,6 +580,18 @@
     "1576": {
       "assetPath": "singlebg/equip_defaulticon/1576.png",
       "sha256": "18bce17c09e05f3ca455c26d318c05789b83fdb1b7a1918346a42aa33daf91ca"
+    },
+    "1577": {
+      "assetPath": "singlebg/equip_defaulticon/1577.png",
+      "sha256": "f0164e25c5e28f3c3a9ffe5cc3bdf1278eb411de29e55104428bad371bc15bac"
+    },
+    "1578": {
+      "assetPath": "singlebg/equip_defaulticon/1578.png",
+      "sha256": "f919363077de43b711872379232d881a536687849a6507480f7a5dab83367310"
+    },
+    "1579": {
+      "assetPath": "singlebg/equip_defaulticon/1579.png",
+      "sha256": "94cb90f34b5b14a59583707ae6357e5b12c5220426765603fec295bfe8b29590"
     },
     "4101": {
       "assetPath": "singlebg/equip_defaulticon/4101.png",

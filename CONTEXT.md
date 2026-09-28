@@ -56,6 +56,10 @@ _Avoid_: Future-content deletion
 The known characters, Skins, psychubes, localized names, and release classification available to the planner.
 _Avoid_: Profile, Pool
 
+**Variant ID**:
+An opaque catalog identifier for one Character Variant; ownership comes from that Character's `ArcanistMap.live2d` entry, not from ID width or digit prefixes.
+_Avoid_: Skin number, inferred owner
+
 **Future content**:
 A Catalog entry not yet released on the tracked Global version.
 _Avoid_: Missing content, invalid content

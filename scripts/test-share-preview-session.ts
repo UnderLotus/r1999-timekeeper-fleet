@@ -189,7 +189,7 @@ valid.setHash(`p=${tokenFor(profileWithCharacter(b.id))}`);
 const validEvents: string[] = [];
 valid.session.start((event) => validEvents.push(event.kind));
 check(
-  "valid v5 share enters isolated Preview without overwriting Local",
+  "valid v6 share enters isolated Preview without overwriting Local",
   valid.state().previewProfile !== null &&
     JSON.stringify(valid.state().profile) === localBefore &&
     !!valid.state().previewProfile?.characters[b.id] &&
@@ -323,11 +323,13 @@ const legacyV3Token =
   "MBLuymCAQ-hk9ERFdFnD80tMl3YfQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const fixedV4Token =
   "QAy7usbwZd4AARiaAAQBh9CGIyMSEzpm6jluZXoiJ7lj7Au7D6AAAu8AAAAAAAAAAAAAAAAAAAAxNGIxiQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAu7D6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const emptyV5Token = tokenFor(emptyProfile());
+const fixedV5Token =
+  "UAi7vrG8HABD6IZzVtvyx9lyXUpzxMQwAAAAAAAAAAAAAA";
 for (const [version, token] of [
   [3, legacyV3Token],
   [4, fixedV4Token],
-  [5, emptyV5Token],
+  [5, fixedV5Token],
+  [6, tokenFor(emptyProfile())],
 ] as const) {
   const historical = createHarness();
   historical.setHash(`p=${token}`);

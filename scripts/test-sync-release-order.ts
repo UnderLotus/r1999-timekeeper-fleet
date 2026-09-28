@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
+import { UpstreamRefreshError } from "./sync-refresh";
 import {
+  buildVariantOwnershipMap,
   createReleaseOrderSnapshot,
   parseHuijiCards,
   synchronizeReleaseOrderFile,
@@ -27,6 +29,49 @@ assert.deepEqual(
   parser.map((entry) => [entry.baseId, entry.name]),
   [["3001", "3001"], ["3000", "last"]],
   "Huiji cards preserve order while keeping the last duplicate base ID",
+);
+const mappedVariants = parseHuijiCards(
+  JSON.stringify([
+    { id: 30660001, baseId: "306600", name: "37 past", href: "https://res1999.huijiwiki.com/wiki/30660001" },
+    { id: 30880001, name: "Semmelweis past", href: "https://res1999.huijiwiki.com/wiki/30880001" },
+  ]),
+  buildVariantOwnershipMap([
+    {
+      id: 3066,
+      name: "37",
+      nameEng: "Thirty-seven",
+      live2d: [
+        {
+          id: 30660001,
+          name: "",
+          nameEng: "",
+          des: "",
+          characterSkin: "",
+          characterSkinNameEng: "",
+        },
+      ],
+    },
+    {
+      id: 3088,
+      name: "Semmelweis",
+      nameEng: "Semmelweis",
+      live2d: [
+        {
+          id: 30880001,
+          name: "",
+          nameEng: "",
+          des: "",
+          characterSkin: "",
+          characterSkinNameEng: "",
+        },
+      ],
+    },
+  ]),
+);
+assert.deepEqual(
+  mappedVariants.map((entry) => entry.baseId),
+  ["3066", "3088"],
+  "current ArcanistMap ownership wins over Variant width and supplied baseId",
 );
 
 const known: ReleaseOrderCharacter[] = Array.from({ length: 105 }, (_, index) => {
@@ -77,37 +122,47 @@ try {
   const prior = JSON.stringify({ huiji: ["3000"], kornblume: [] }, null, 2) + "\n";
   writeFileSync(target, prior);
   let fallbackFetched = false;
-  await assert.rejects(
-    synchronizeReleaseOrderFile(
-      target,
-      known,
-      async () => {
-        throw new Error("Cloudflare challenge");
-      },
-      async () => {
-        fallbackFetched = true;
-        return kb;
-      },
-    ),
-    /Cloudflare challenge/,
+  const failedRemote = await synchronizeReleaseOrderFile(
+    target,
+    known,
+    async () => {
+      throw new UpstreamRefreshError("Cloudflare challenge");
+    },
+    async () => {
+      fallbackFetched = true;
+      return kb;
+    },
   );
+  assert.deepEqual(failedRemote, { huiji: ["3000"], kornblume: [] });
   assert.equal(readFileSync(target, "utf-8"), prior, "failure must not write a KB-only snapshot");
   assert.equal(fallbackFetched, false, "KB is not used after direct Huiji failure");
 
   const insufficient = JSON.stringify(firstFresh.slice(0, 99));
-  await assert.rejects(
-    synchronizeReleaseOrderFile(
-      target,
-      known,
-      async () => insufficient,
-      async () => {
-        fallbackFetched = true;
-        return kb;
-      },
-    ),
-    /only 99 known characters/,
+  const failedCoverage = await synchronizeReleaseOrderFile(
+    target,
+    known,
+    async () => insufficient,
+    async () => {
+      fallbackFetched = true;
+      return kb;
+    },
   );
+  assert.deepEqual(failedCoverage, { huiji: ["3000"], kornblume: [] });
   assert.equal(readFileSync(target, "utf-8"), prior, "insufficient Huiji results leave the previous snapshot intact");
+
+  await assert.rejects(
+    () =>
+      synchronizeReleaseOrderFile(
+        target,
+        known,
+        async () => {
+          throw new Error("programming failure");
+        },
+        async () => kb,
+      ),
+    /programming failure/,
+    "arbitrary Huiji callback errors remain fatal",
+  );
 } finally {
   rmSync(temp, { recursive: true, force: true });
 }

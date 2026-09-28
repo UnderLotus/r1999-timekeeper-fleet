@@ -1,17 +1,12 @@
-/** skin variant helpers（沿用 r1999-roster skin-utils.ts） */
+/** Skin Variant helpers. Ownership comes from the parent ArcanistMap entry. */
 
 import type { SkinEntry } from "./types";
 
-/** 尾碼判定：1=default、2=insight、其他=skin */
-export function skinTypeFromId(variantId: string): SkinEntry["type"] {
-  const suffix = Number(variantId) % 100;
-  if (suffix === 1) return "default";
-  if (suffix === 2) return "insight";
-  return "skin";
-}
+const INITIAL_DESCRIPTION = "初始皮肤";
+const INSIGHT_DESCRIPTION = "进阶皮肤";
 
 export interface ArcanistSkinFull {
-  id: number;
+  id: number | string;
   name: string;
   nameEng: string;
   des: string;
@@ -20,24 +15,38 @@ export interface ArcanistSkinFull {
 }
 
 export interface ArcanistEntryFull {
-  id: number;
+  id: number | string;
   name: string;
   nameEng: string;
   live2d: ArcanistSkinFull[];
 }
 
-/** 由 ArcanistMap live2d[] 建立 skins[]（released 先預設 true，sync-fandom 再標記） */
+/** Classify a Variant using metadata first, then exact legacy IDs. */
+export function skinTypeFromId(
+  baseId: string,
+  variant: Pick<ArcanistSkinFull, "id" | "des">,
+): SkinEntry["type"] {
+  const variantId = String(variant.id);
+  if (variant.des === INITIAL_DESCRIPTION) return "default";
+  if (variant.des === INSIGHT_DESCRIPTION) return "insight";
+  if (variantId === `${baseId}01`) return "default";
+  if (variantId === `${baseId}02`) return "insight";
+  return "skin";
+}
+
+/** Build owned Skins from the parent ArcanistMap live2d list. */
 export function buildSkins(entry: ArcanistEntryFull): SkinEntry[] {
-  return entry.live2d.map((s) => ({
-    id: String(s.id),
-    type: skinTypeFromId(String(s.id)),
-    name: s.characterSkin || undefined,
-    nameEn: s.characterSkinNameEng || undefined,
+  const baseId = String(entry.id);
+  return entry.live2d.map((skin) => ({
+    id: String(skin.id),
+    type: skinTypeFromId(baseId, skin),
+    name: skin.characterSkin || undefined,
+    nameEn: skin.characterSkinNameEng || undefined,
     released: true,
   }));
 }
 
-/** 預設 variant（base + 01） */
+/** Legacy default Variant ID used when no classified mapping overrides it. */
 export function defaultVariantId(baseId: string): string {
   return baseId + "01";
 }

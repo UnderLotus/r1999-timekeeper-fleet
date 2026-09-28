@@ -227,5 +227,36 @@ check(
     index.skins.get("302306")?.isReleased === false &&
     sonettoGuidebookSkin?.released === false,
 );
+const cn40SkinFixtures = [
+  ["314503", "3145", "为魂灵歌"],
+  ["314003", "3140", "生命之屋"],
+] as const;
+for (const [variantId, baseId, name] of cn40SkinFixtures) {
+  const sourceCharacter = source.characters.find(
+    (entry) => entry.baseId === baseId,
+  );
+  const sourceSkin = sourceSkins.get(variantId);
+  const runtimeCharacter = characters.find(
+    (entry) => entry.baseId === baseId,
+  );
+  const runtimeSkin = runtimeCharacter?.skins.find(
+    (skin) => skin.id === variantId,
+  );
+  const manualOverride = index.skins.get(variantId);
+  check(
+    `CN 4.0 Skin ${variantId} remains source-backed and unreleased on Global`,
+    sourceCharacter?.baseId === baseId &&
+      sourceSkin?.type === "skin" &&
+      sourceSkin.glPresent === true &&
+      sourceSkin.name === name &&
+      manualOverride?.isReleased === false &&
+      manualOverride?.note?.includes("CN 4.0 Skin") === true &&
+      manualOverride.note.includes("not released on Global yet") &&
+      runtimeCharacter?.baseId === baseId &&
+      runtimeSkin?.type === "skin" &&
+      runtimeSkin.name === name &&
+      runtimeSkin.released === false,
+  );
+}
 console.log(`\nrelease tests: ${pass} passed, ${fail} failed`);
 if (fail) process.exit(1);

@@ -1,11 +1,11 @@
 {
   "schemaVersion": 3,
   "sourceHashes": {
-    "cn/ArcanistMap.json": "c757b84efed7231b385b63f287184e0d03870928d07ecaf4682696b431a6163b",
+    "cn/ArcanistMap.json": "3e26a2c8fcc265c36bb04622054917a46b3a5ffdefcea97083bdf577cf29024e",
     "cn/character.json": "09fde1682c2631e8fdd6a19616ec1a6d32f42f6f699b001c3631106e89e4cf64",
     "cn/equip.json": "b30f27d86540802c7c8fc44cb4cad6131a8a858ce75081469a42a48063d6fe91",
     "cn/skin.json": "7ab2b59b3cbdc784199b1cdf2580d0044a6882a096f2e2906e1e58ade5d97e67",
-    "name-fallbacks.json": "a2a81e80093314e1fb4f6dc6cad682fd070893d3c03bdd59380e9b8ec2afa004",
+    "name-fallbacks.json": "83477bef524209459ca1c9a85c3b358829e63db9d14ff52e7bc0cb085ca56cf7",
     "localized-name-overrides.json": "06fc52fc089303784795827b656400b7db0e9ca362f0b5dc241d0ab2e137dc6f",
     "catalog-policy.json": "f90b6ab244b1e507afb0131eb9f89c1d13241b43de41d13d98f95558fc69ee82",
     "gl/character.json": "787dc9f07341a144ff4db26c4490d4861903877213b03d1133c3130147d1a337",
@@ -738,6 +738,13 @@
           "name": "启航！向明日",
           "nameEn": "Take Off! To the Future",
           "glPresent": true
+        },
+        {
+          "id": "302507",
+          "type": "skin",
+          "name": "最强音",
+          "nameEn": "The Greatest Chord",
+          "glPresent": false
         }
       ]
     },
@@ -1474,6 +1481,13 @@
           "name": "群星齐唱时",
           "nameEn": "Choir of the Stars",
           "glPresent": true
+        },
+        {
+          "id": "304805",
+          "type": "skin",
+          "name": "当宇宙潮涌",
+          "nameEn": "With the Surge of the Cosmic Tide",
+          "glPresent": false
         }
       ]
     },
@@ -2170,6 +2184,13 @@
           "name": "完美的流体",
           "nameEn": "A Gift of Nourishment",
           "glPresent": true
+        },
+        {
+          "id": "30660001",
+          "type": "skin",
+          "name": "37的往日",
+          "nameEn": "Portrait of the Past",
+          "glPresent": false
         }
       ]
     },
@@ -2729,6 +2750,13 @@
           "name": "心之盈亏",
           "nameEn": "The Wax and Wane of the Heart",
           "glPresent": true
+        },
+        {
+          "id": "30880001",
+          "type": "skin",
+          "name": "塞梅尔维斯的往日",
+          "nameEn": "Portrait of the Past",
+          "glPresent": false
         }
       ]
     },
@@ -2770,6 +2798,13 @@
           "name": "时代病陪护",
           "nameEn": "Guardian of the Broken",
           "glPresent": true
+        },
+        {
+          "id": "308005",
+          "type": "skin",
+          "name": "镜中上校",
+          "nameEn": "The Gourmet Counselor",
+          "glPresent": false
         }
       ]
     },
@@ -2797,6 +2832,13 @@
           "type": "insight",
           "name": "应祝祷之时",
           "nameEn": "Time to Pray"
+        },
+        {
+          "id": "309103",
+          "type": "skin",
+          "name": "礁骨回响",
+          "nameEn": "Song of the Skeletal Reefs",
+          "glPresent": false
         }
       ]
     },
@@ -3573,6 +3615,13 @@
           "name": "玻璃乌托邦",
           "nameEn": "A Utopia in Painted Glass",
           "glPresent": true
+        },
+        {
+          "id": "311705",
+          "type": "skin",
+          "name": "牧于晚星",
+          "nameEn": "Star Shepherdess",
+          "glPresent": false
         }
       ]
     },
@@ -3994,6 +4043,13 @@
           "type": "insight",
           "name": "水上浮光",
           "nameEn": "The Flowing Stream's Luster"
+        },
+        {
+          "id": "313403",
+          "type": "skin",
+          "name": "释命运以弦音",
+          "nameEn": "Plucking the Strings of Fate",
+          "glPresent": false
         }
       ]
     },
@@ -4448,6 +4504,13 @@
           "type": "insight",
           "name": "静谧与光明",
           "nameEn": "Silence and Light"
+        },
+        {
+          "id": "314503",
+          "type": "skin",
+          "name": "为魂灵歌",
+          "nameEn": "A Lullaby for the Spirits",
+          "glPresent": true
         }
       ]
     },
@@ -4475,6 +4538,13 @@
           "type": "insight",
           "name": "基桩嵌于构想",
           "nameEn": "Grounded in Imagination"
+        },
+        {
+          "id": "314003",
+          "type": "skin",
+          "name": "生命之屋",
+          "nameEn": "The Cabinet of Vivification",
+          "glPresent": true
         }
       ]
     },
@@ -4590,6 +4660,94 @@
           "type": "insight",
           "name": "涟漪的裙裾",
           "nameEn": "Ripples Yet to Bloom"
+        }
+      ]
+    },
+    {
+      "id": "3155",
+      "baseId": "3155",
+      "names": {
+        "zh-CN": "狩勋女巫红弩箭",
+        "zh-TW": "狩勛女巫紅弩箭",
+        "en-US": "Huntsworn Lilya",
+        "ja-JP": "Huntsworn Lilya",
+        "ko-KR": "Huntsworn Lilya"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "315501",
+      "glReleased": false,
+      "skins": [
+        {
+          "id": "315501",
+          "type": "default"
+        },
+        {
+          "id": "315502",
+          "type": "insight",
+          "name": "越过雨幕的飞梭",
+          "nameEn": "The Arrow That Sunders the Tempest"
+        },
+        {
+          "id": "315503",
+          "type": "skin",
+          "name": "虹色冠冕",
+          "nameEn": "Rainbow-Colored Crown",
+          "glPresent": false
+        }
+      ]
+    },
+    {
+      "id": "3158",
+      "baseId": "3158",
+      "names": {
+        "zh-CN": "德雷克",
+        "zh-TW": "Drake",
+        "en-US": "Drake",
+        "ja-JP": "Drake",
+        "ko-KR": "Drake"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "315801",
+      "glReleased": false,
+      "skins": [
+        {
+          "id": "315801",
+          "type": "default"
+        },
+        {
+          "id": "315802",
+          "type": "insight",
+          "name": "骑士的叙事诗",
+          "nameEn": "Idylls of the Knight"
+        }
+      ]
+    },
+    {
+      "id": "3163",
+      "baseId": "3163",
+      "names": {
+        "zh-CN": "格林杜尔",
+        "zh-TW": "格林杜爾",
+        "en-US": "Glyndŵr",
+        "ja-JP": "Glyndŵr",
+        "ko-KR": "Glyndŵr"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "316301",
+      "glReleased": false,
+      "skins": [
+        {
+          "id": "316301",
+          "type": "default"
+        },
+        {
+          "id": "316302",
+          "type": "insight",
+          "name": "当风声停滞",
+          "nameEn": "Till the Wind Ceases"
         }
       ]
     }

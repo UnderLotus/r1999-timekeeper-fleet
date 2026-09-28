@@ -3,6 +3,36 @@ import type { CharacterDef } from "../types/catalog";
 
 export const characters: CharacterDef[] = [
   {
+    "id": "3158",
+    "baseId": "3158",
+    "names": {
+      "zh-CN": "德雷克",
+      "zh-TW": "Drake",
+      "en-US": "Drake",
+      "ja-JP": "Drake",
+      "ko-KR": "Drake"
+    },
+    "rarity": 5,
+    "maxInsight": 3,
+    "releaseOrder": 1,
+    "released": false,
+    "skins": [
+      {
+        "id": "315801",
+        "type": "default",
+        "released": true
+      },
+      {
+        "id": "315802",
+        "type": "insight",
+        "name": "骑士的叙事诗",
+        "nameEn": "Idylls of the Knight",
+        "released": true
+      }
+    ],
+    "defaultVariant": "315801"
+  },
+  {
     "id": "3157",
     "baseId": "3157",
     "names": {
@@ -14,7 +44,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 1,
+    "releaseOrder": 2,
     "released": false,
     "skins": [
       {
@@ -44,7 +74,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 2,
+    "releaseOrder": 3,
     "released": false,
     "skins": [
       {
@@ -63,6 +93,43 @@ export const characters: CharacterDef[] = [
     "defaultVariant": "315601"
   },
   {
+    "id": "3155",
+    "baseId": "3155",
+    "names": {
+      "zh-CN": "狩勋女巫红弩箭",
+      "zh-TW": "狩勛女巫紅弩箭",
+      "en-US": "Huntsworn Lilya",
+      "ja-JP": "Huntsworn Lilya",
+      "ko-KR": "Huntsworn Lilya"
+    },
+    "rarity": 5,
+    "maxInsight": 3,
+    "releaseOrder": 4,
+    "released": false,
+    "skins": [
+      {
+        "id": "315501",
+        "type": "default",
+        "released": true
+      },
+      {
+        "id": "315502",
+        "type": "insight",
+        "name": "越过雨幕的飞梭",
+        "nameEn": "The Arrow That Sunders the Tempest",
+        "released": true
+      },
+      {
+        "id": "315503",
+        "type": "skin",
+        "name": "虹色冠冕",
+        "nameEn": "Rainbow-Colored Crown",
+        "released": false
+      }
+    ],
+    "defaultVariant": "315501"
+  },
+  {
     "id": "3149",
     "baseId": "3149",
     "names": {
@@ -74,7 +141,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 3,
+    "releaseOrder": 5,
     "released": true,
     "skins": [
       {
@@ -116,7 +183,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 4,
+    "releaseOrder": 6,
     "released": true,
     "skins": [
       {
@@ -153,7 +220,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 5,
+    "releaseOrder": 7,
     "released": true,
     "skins": [
       {
@@ -183,7 +250,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 6,
+    "releaseOrder": 8,
     "released": true,
     "skins": [
       {
@@ -197,6 +264,13 @@ export const characters: CharacterDef[] = [
         "name": "静谧与光明",
         "nameEn": "Silence and Light",
         "released": true
+      },
+      {
+        "id": "314503",
+        "type": "skin",
+        "name": "为魂灵歌",
+        "nameEn": "A Lullaby for the Spirits",
+        "released": false
       }
     ],
     "defaultVariant": "314501"
@@ -213,7 +287,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 7,
+    "releaseOrder": 9,
     "released": true,
     "skins": [
       {
@@ -250,7 +324,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 8,
+    "releaseOrder": 10,
     "released": true,
     "skins": [
       {
@@ -287,7 +361,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 9,
+    "releaseOrder": 11,
     "released": true,
     "skins": [
       {
@@ -317,7 +391,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 10,
+    "releaseOrder": 12,
     "released": true,
     "skins": [
       {
@@ -347,7 +421,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 11,
+    "releaseOrder": 13,
     "released": false,
     "skins": [
       {
@@ -361,6 +435,13 @@ export const characters: CharacterDef[] = [
         "name": "基桩嵌于构想",
         "nameEn": "Grounded in Imagination",
         "released": true
+      },
+      {
+        "id": "314003",
+        "type": "skin",
+        "name": "生命之屋",
+        "nameEn": "The Cabinet of Vivification",
+        "released": false
       }
     ],
     "defaultVariant": "314001"
@@ -377,7 +458,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 12,
+    "releaseOrder": 14,
     "released": true,
     "skins": [
       {
@@ -414,7 +495,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 13,
+    "releaseOrder": 15,
     "released": true,
     "skins": [
       {
@@ -444,7 +525,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 14,
+    "releaseOrder": 16,
     "released": true,
     "skins": [
       {
@@ -481,7 +562,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 15,
+    "releaseOrder": 17,
     "released": true,
     "skins": [
       {
@@ -495,6 +576,13 @@ export const characters: CharacterDef[] = [
         "name": "水上浮光",
         "nameEn": "The Flowing Stream's Luster",
         "released": true
+      },
+      {
+        "id": "313403",
+        "type": "skin",
+        "name": "释命运以弦音",
+        "nameEn": "Plucking the Strings of Fate",
+        "released": false
       }
     ],
     "defaultVariant": "313401"
@@ -511,7 +599,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 16,
+    "releaseOrder": 18,
     "released": true,
     "skins": [
       {
@@ -548,7 +636,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 17,
+    "releaseOrder": 19,
     "released": true,
     "skins": [
       {
@@ -585,7 +673,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 18,
+    "releaseOrder": 20,
     "released": true,
     "skins": [
       {
@@ -622,7 +710,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 19,
+    "releaseOrder": 21,
     "released": true,
     "skins": [
       {
@@ -666,7 +754,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 20,
+    "releaseOrder": 22,
     "released": true,
     "skins": [
       {
@@ -703,7 +791,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 21,
+    "releaseOrder": 23,
     "released": true,
     "skins": [
       {
@@ -733,7 +821,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 22,
+    "releaseOrder": 24,
     "released": true,
     "skins": [
       {
@@ -763,7 +851,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 23,
+    "releaseOrder": 25,
     "released": true,
     "skins": [
       {
@@ -807,7 +895,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 24,
+    "releaseOrder": 26,
     "released": true,
     "skins": [
       {
@@ -844,7 +932,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 25,
+    "releaseOrder": 27,
     "released": true,
     "skins": [
       {
@@ -872,6 +960,13 @@ export const characters: CharacterDef[] = [
         "name": "玻璃乌托邦",
         "nameEn": "A Utopia in Painted Glass",
         "released": true
+      },
+      {
+        "id": "311705",
+        "type": "skin",
+        "name": "牧于晚星",
+        "nameEn": "Star Shepherdess",
+        "released": false
       }
     ],
     "defaultVariant": "311701"
@@ -888,7 +983,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 26,
+    "releaseOrder": 28,
     "released": true,
     "skins": [
       {
@@ -932,7 +1027,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 27,
+    "releaseOrder": 29,
     "released": true,
     "skins": [
       {
@@ -976,7 +1071,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 28,
+    "releaseOrder": 30,
     "released": true,
     "skins": [
       {
@@ -1013,7 +1108,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 29,
+    "releaseOrder": 31,
     "released": true,
     "skins": [
       {
@@ -1050,7 +1145,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 30,
+    "releaseOrder": 32,
     "released": true,
     "skins": [
       {
@@ -1087,7 +1182,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 31,
+    "releaseOrder": 33,
     "released": true,
     "skins": [
       {
@@ -1131,7 +1226,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 32,
+    "releaseOrder": 34,
     "released": true,
     "skins": [
       {
@@ -1168,7 +1263,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 33,
+    "releaseOrder": 35,
     "released": true,
     "skins": [
       {
@@ -1205,7 +1300,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 34,
+    "releaseOrder": 36,
     "released": true,
     "skins": [
       {
@@ -1249,7 +1344,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 35,
+    "releaseOrder": 37,
     "released": true,
     "skins": [
       {
@@ -1293,7 +1388,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 36,
+    "releaseOrder": 38,
     "released": true,
     "skins": [
       {
@@ -1330,7 +1425,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 37,
+    "releaseOrder": 39,
     "released": true,
     "skins": [
       {
@@ -1367,7 +1462,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 38,
+    "releaseOrder": 40,
     "released": true,
     "skins": [
       {
@@ -1411,7 +1506,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 39,
+    "releaseOrder": 41,
     "released": true,
     "skins": [
       {
@@ -1448,7 +1543,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 40,
+    "releaseOrder": 42,
     "released": true,
     "skins": [
       {
@@ -1492,7 +1587,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 41,
+    "releaseOrder": 43,
     "released": true,
     "skins": [
       {
@@ -1529,7 +1624,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 42,
+    "releaseOrder": 44,
     "released": true,
     "skins": [
       {
@@ -1566,7 +1661,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 43,
+    "releaseOrder": 45,
     "released": true,
     "skins": [
       {
@@ -1610,7 +1705,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 44,
+    "releaseOrder": 46,
     "released": true,
     "skins": [
       {
@@ -1654,7 +1749,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 45,
+    "releaseOrder": 47,
     "released": true,
     "skins": [
       {
@@ -1691,7 +1786,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 46,
+    "releaseOrder": 48,
     "released": true,
     "skins": [
       {
@@ -1728,7 +1823,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 47,
+    "releaseOrder": 49,
     "released": true,
     "skins": [
       {
@@ -1765,7 +1860,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 48,
+    "releaseOrder": 50,
     "released": true,
     "skins": [
       {
@@ -1809,7 +1904,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 49,
+    "releaseOrder": 51,
     "released": true,
     "skins": [
       {
@@ -1837,6 +1932,13 @@ export const characters: CharacterDef[] = [
         "name": "时代病陪护",
         "nameEn": "Guardian of the Broken",
         "released": true
+      },
+      {
+        "id": "308005",
+        "type": "skin",
+        "name": "镜中上校",
+        "nameEn": "The Gourmet Counselor",
+        "released": false
       }
     ],
     "defaultVariant": "308001"
@@ -1853,7 +1955,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 50,
+    "releaseOrder": 52,
     "released": true,
     "skins": [
       {
@@ -1904,7 +2006,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 51,
+    "releaseOrder": 53,
     "released": true,
     "skins": [
       {
@@ -1955,7 +2057,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 52,
+    "releaseOrder": 54,
     "released": true,
     "skins": [
       {
@@ -1992,7 +2094,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 53,
+    "releaseOrder": 55,
     "released": true,
     "skins": [
       {
@@ -2036,7 +2138,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 54,
+    "releaseOrder": 56,
     "released": true,
     "skins": [
       {
@@ -2073,7 +2175,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 55,
+    "releaseOrder": 57,
     "released": true,
     "skins": [
       {
@@ -2117,7 +2219,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 56,
+    "releaseOrder": 58,
     "released": true,
     "skins": [
       {
@@ -2168,7 +2270,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 57,
+    "releaseOrder": 59,
     "released": true,
     "skins": [
       {
@@ -2212,7 +2314,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 58,
+    "releaseOrder": 60,
     "released": true,
     "skins": [
       {
@@ -2249,7 +2351,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 59,
+    "releaseOrder": 61,
     "released": true,
     "skins": [
       {
@@ -2293,7 +2395,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 60,
+    "releaseOrder": 62,
     "released": true,
     "skins": [
       {
@@ -2337,7 +2439,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 61,
+    "releaseOrder": 63,
     "released": true,
     "skins": [
       {
@@ -2388,7 +2490,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 62,
+    "releaseOrder": 64,
     "released": true,
     "skins": [
       {
@@ -2425,7 +2527,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 63,
+    "releaseOrder": 65,
     "released": true,
     "skins": [
       {
@@ -2469,7 +2571,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 64,
+    "releaseOrder": 66,
     "released": true,
     "skins": [
       {
@@ -2497,6 +2599,13 @@ export const characters: CharacterDef[] = [
         "name": "群星齐唱时",
         "nameEn": "Choir of the Stars",
         "released": true
+      },
+      {
+        "id": "304805",
+        "type": "skin",
+        "name": "当宇宙潮涌",
+        "nameEn": "With the Surge of the Cosmic Tide",
+        "released": false
       }
     ],
     "defaultVariant": "304801"
@@ -2513,7 +2622,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 65,
+    "releaseOrder": 67,
     "released": true,
     "skins": [
       {
@@ -2557,7 +2666,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 66,
+    "releaseOrder": 68,
     "released": true,
     "skins": [
       {
@@ -2601,7 +2710,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 67,
+    "releaseOrder": 69,
     "released": true,
     "skins": [
       {
@@ -2638,7 +2747,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 68,
+    "releaseOrder": 70,
     "released": true,
     "skins": [
       {
@@ -2666,6 +2775,13 @@ export const characters: CharacterDef[] = [
         "name": "启航！向明日",
         "nameEn": "Take Off! To the Future",
         "released": true
+      },
+      {
+        "id": "302507",
+        "type": "skin",
+        "name": "最强音",
+        "nameEn": "The Greatest Chord",
+        "released": false
       }
     ],
     "defaultVariant": "302501"
@@ -2682,7 +2798,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 69,
+    "releaseOrder": 71,
     "released": true,
     "skins": [
       {
@@ -2726,7 +2842,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 70,
+    "releaseOrder": 72,
     "released": true,
     "skins": [
       {
@@ -2770,7 +2886,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 71,
+    "releaseOrder": 73,
     "released": true,
     "skins": [
       {
@@ -2814,7 +2930,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 72,
+    "releaseOrder": 74,
     "released": true,
     "skins": [
       {
@@ -2858,7 +2974,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 73,
+    "releaseOrder": 75,
     "released": true,
     "skins": [
       {
@@ -2888,7 +3004,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 74,
+    "releaseOrder": 76,
     "released": true,
     "skins": [
       {
@@ -2918,7 +3034,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 75,
+    "releaseOrder": 77,
     "released": true,
     "skins": [
       {
@@ -2955,7 +3071,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 76,
+    "releaseOrder": 78,
     "released": true,
     "skins": [
       {
@@ -2985,7 +3101,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 77,
+    "releaseOrder": 79,
     "released": true,
     "skins": [
       {
@@ -3015,7 +3131,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 78,
+    "releaseOrder": 80,
     "released": true,
     "skins": [
       {
@@ -3052,7 +3168,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 79,
+    "releaseOrder": 81,
     "released": true,
     "skins": [
       {
@@ -3082,7 +3198,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 80,
+    "releaseOrder": 82,
     "released": true,
     "skins": [
       {
@@ -3112,7 +3228,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 81,
+    "releaseOrder": 83,
     "released": true,
     "skins": [
       {
@@ -3126,6 +3242,13 @@ export const characters: CharacterDef[] = [
         "name": "应祝祷之时",
         "nameEn": "Time to Pray",
         "released": true
+      },
+      {
+        "id": "309103",
+        "type": "skin",
+        "name": "礁骨回响",
+        "nameEn": "Song of the Skeletal Reefs",
+        "released": false
       }
     ],
     "defaultVariant": "309101"
@@ -3142,7 +3265,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 82,
+    "releaseOrder": 84,
     "released": true,
     "skins": [
       {
@@ -3179,7 +3302,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 83,
+    "releaseOrder": 85,
     "released": true,
     "skins": [
       {
@@ -3209,7 +3332,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 84,
+    "releaseOrder": 86,
     "released": true,
     "skins": [
       {
@@ -3239,7 +3362,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 85,
+    "releaseOrder": 87,
     "released": true,
     "skins": [
       {
@@ -3276,7 +3399,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 86,
+    "releaseOrder": 88,
     "released": true,
     "skins": [
       {
@@ -3313,7 +3436,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 87,
+    "releaseOrder": 89,
     "released": true,
     "skins": [
       {
@@ -3350,7 +3473,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 88,
+    "releaseOrder": 90,
     "released": true,
     "skins": [
       {
@@ -3387,7 +3510,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 89,
+    "releaseOrder": 91,
     "released": true,
     "skins": [
       {
@@ -3424,7 +3547,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 90,
+    "releaseOrder": 92,
     "released": true,
     "skins": [
       {
@@ -3454,7 +3577,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 91,
+    "releaseOrder": 93,
     "released": true,
     "skins": [
       {
@@ -3498,7 +3621,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 92,
+    "releaseOrder": 94,
     "released": true,
     "skins": [
       {
@@ -3542,7 +3665,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 93,
+    "releaseOrder": 95,
     "released": true,
     "skins": [
       {
@@ -3579,7 +3702,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 94,
+    "releaseOrder": 96,
     "released": true,
     "skins": [
       {
@@ -3616,7 +3739,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 95,
+    "releaseOrder": 97,
     "released": true,
     "skins": [
       {
@@ -3653,7 +3776,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 96,
+    "releaseOrder": 98,
     "released": true,
     "skins": [
       {
@@ -3697,7 +3820,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 97,
+    "releaseOrder": 99,
     "released": true,
     "skins": [
       {
@@ -3734,7 +3857,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 98,
+    "releaseOrder": 100,
     "released": true,
     "skins": [
       {
@@ -3771,7 +3894,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 99,
+    "releaseOrder": 101,
     "released": true,
     "skins": [
       {
@@ -3808,7 +3931,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 100,
+    "releaseOrder": 102,
     "released": true,
     "skins": [
       {
@@ -3845,7 +3968,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 101,
+    "releaseOrder": 103,
     "released": true,
     "skins": [
       {
@@ -3882,7 +4005,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 4,
     "maxInsight": 3,
-    "releaseOrder": 102,
+    "releaseOrder": 104,
     "released": true,
     "skins": [
       {
@@ -3908,6 +4031,36 @@ export const characters: CharacterDef[] = [
     "defaultVariant": "301001"
   },
   {
+    "id": "3163",
+    "baseId": "3163",
+    "names": {
+      "zh-CN": "格林杜尔",
+      "zh-TW": "格林杜爾",
+      "en-US": "Glyndŵr",
+      "ja-JP": "Glyndŵr",
+      "ko-KR": "Glyndŵr"
+    },
+    "rarity": 3,
+    "maxInsight": 2,
+    "releaseOrder": 105,
+    "released": false,
+    "skins": [
+      {
+        "id": "316301",
+        "type": "default",
+        "released": true
+      },
+      {
+        "id": "316302",
+        "type": "insight",
+        "name": "当风声停滞",
+        "nameEn": "Till the Wind Ceases",
+        "released": true
+      }
+    ],
+    "defaultVariant": "316301"
+  },
+  {
     "id": "3151",
     "baseId": "3151",
     "names": {
@@ -3919,7 +4072,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 103,
+    "releaseOrder": 106,
     "released": true,
     "skins": [
       {
@@ -3949,7 +4102,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 104,
+    "releaseOrder": 107,
     "released": true,
     "skins": [
       {
@@ -3979,7 +4132,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 105,
+    "releaseOrder": 108,
     "released": true,
     "skins": [
       {
@@ -4009,7 +4162,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 106,
+    "releaseOrder": 109,
     "released": true,
     "skins": [
       {
@@ -4046,7 +4199,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 107,
+    "releaseOrder": 110,
     "released": true,
     "skins": [
       {
@@ -4083,7 +4236,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 108,
+    "releaseOrder": 111,
     "released": true,
     "skins": [
       {
@@ -4120,7 +4273,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 109,
+    "releaseOrder": 112,
     "released": true,
     "skins": [
       {
@@ -4157,7 +4310,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 110,
+    "releaseOrder": 113,
     "released": true,
     "skins": [
       {
@@ -4194,7 +4347,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 111,
+    "releaseOrder": 114,
     "released": true,
     "skins": [
       {
@@ -4231,7 +4384,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 112,
+    "releaseOrder": 115,
     "released": true,
     "skins": [
       {
@@ -4268,7 +4421,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 113,
+    "releaseOrder": 116,
     "released": true,
     "skins": [
       {
@@ -4305,7 +4458,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 114,
+    "releaseOrder": 117,
     "released": true,
     "skins": [
       {
@@ -4349,7 +4502,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 115,
+    "releaseOrder": 118,
     "released": true,
     "skins": [
       {
@@ -4386,7 +4539,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 116,
+    "releaseOrder": 119,
     "released": true,
     "skins": [
       {
@@ -4423,7 +4576,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 117,
+    "releaseOrder": 120,
     "released": true,
     "skins": [
       {
@@ -4460,7 +4613,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 118,
+    "releaseOrder": 121,
     "released": true,
     "skins": [
       {
@@ -4497,7 +4650,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 119,
+    "releaseOrder": 122,
     "released": true,
     "skins": [
       {
@@ -4534,7 +4687,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 120,
+    "releaseOrder": 123,
     "released": true,
     "skins": [
       {
@@ -4578,7 +4731,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 3,
     "maxInsight": 2,
-    "releaseOrder": 121,
+    "releaseOrder": 124,
     "released": true,
     "skins": [
       {
@@ -4615,7 +4768,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 122,
+    "releaseOrder": 125,
     "released": true,
     "skins": [
       {
@@ -4645,7 +4798,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 123,
+    "releaseOrder": 126,
     "released": true,
     "skins": [
       {
@@ -4675,7 +4828,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 124,
+    "releaseOrder": 127,
     "released": true,
     "skins": [
       {
@@ -4705,7 +4858,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 125,
+    "releaseOrder": 128,
     "released": true,
     "skins": [
       {
@@ -4735,7 +4888,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 126,
+    "releaseOrder": 129,
     "released": true,
     "skins": [
       {
@@ -4765,7 +4918,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 127,
+    "releaseOrder": 130,
     "released": true,
     "skins": [
       {
@@ -4795,7 +4948,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 128,
+    "releaseOrder": 131,
     "released": true,
     "skins": [
       {
@@ -4825,7 +4978,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 129,
+    "releaseOrder": 132,
     "released": true,
     "skins": [
       {
@@ -4855,7 +5008,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 130,
+    "releaseOrder": 133,
     "released": true,
     "skins": [
       {
@@ -4878,7 +5031,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 131,
+    "releaseOrder": 134,
     "released": true,
     "skins": [
       {
@@ -4908,7 +5061,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 2,
     "maxInsight": 2,
-    "releaseOrder": 132,
+    "releaseOrder": 135,
     "released": true,
     "skins": [
       {
@@ -4938,7 +5091,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 1,
     "maxInsight": 2,
-    "releaseOrder": 133,
+    "releaseOrder": 136,
     "released": true,
     "skins": [
       {
@@ -4961,7 +5114,7 @@ export const characters: CharacterDef[] = [
     },
     "rarity": 1,
     "maxInsight": 2,
-    "releaseOrder": 134,
+    "releaseOrder": 137,
     "released": true,
     "skins": [
       {

@@ -16,6 +16,7 @@ import {
   composeCatalogSource,
   type Equip,
   type PackageCharacter,
+  type CnPackageSkin,
   type PackageSkin,
 } from "./catalog-composition";
 import {
@@ -55,12 +56,12 @@ function sha256(file: string): string {
 
 export function extractCatalogSource(): void {
   console.log("build:source — extract compact CN/GL snapshot\n");
-  const previousPsychubes = loadCatalogSource().psychubes;
+  const previousSource = loadCatalogSource();
   const arcanists = loadCnJSON<ArcanistEntryFull[]>("ArcanistMap.json");
   const cnCharacters = loadCnJSON<PackageCharacter[]>("character.json");
   const globalCharacters = loadGlJSON<PackageCharacter[]>("character.json");
   const releaseClock = new Date();
-  const cnSkins = loadCnJSON<PackageSkin[]>("skin.json");
+  const cnSkins = loadCnJSON<CnPackageSkin[]>("skin.json");
   const globalSkins = loadGlJSON<PackageSkin[]>("skin.json");
   const globalSkinIds = new Set(globalSkins.map((entry) => String(entry.id)));
   if (globalSkinIds.size !== globalSkins.length)
@@ -91,7 +92,7 @@ export function extractCatalogSource(): void {
   const languages = Object.fromEntries(
     NAME_LANGS.map((lang) => [lang, loadGlLanguage(lang)]),
   ) as Record<Lang, Record<string, string>>;
-  const { characters, psychubes } = composeCatalogSource({
+  const { characters, psychubes, warnings } = composeCatalogSource({
     arcanists,
     cnCharacters,
     globalCharacters,
@@ -105,7 +106,9 @@ export function extractCatalogSource(): void {
     policy,
     releaseClock,
     globalUtcOffsetMinutes: GLOBAL_SERVER_UTC_OFFSET_MINUTES,
+    previousCharacters: previousSource.characters,
   });
+  for (const warning of warnings) console.warn(`build:source warning — ${warning}`);
   const files = [
     "cn/ArcanistMap.json",
     "cn/character.json",
@@ -130,7 +133,7 @@ export function extractCatalogSource(): void {
     schemaVersion: 3,
     sourceHashes,
     characters,
-    psychubes: mergePsychubeSourceRecords(previousPsychubes, psychubes),
+    psychubes: mergePsychubeSourceRecords(previousSource.psychubes, psychubes),
   };
   writeFileSync(CATALOG_SOURCE_FILE, JSON.stringify(snapshot, null, 2) + "\n");
   console.log(

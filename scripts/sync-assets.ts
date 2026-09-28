@@ -12,9 +12,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
-import type { CharacterEntry } from "./types";
-import { loadGeneratedCatalog } from "./generated-catalog";
-import { loadCatalogSource } from "./catalog-source";
+import { loadCatalogSource, type CatalogSourceSnapshot } from "./catalog-source";
+import {
+  classifyMissingCharacterAsset,
+  collectCharacterAssetCandidates,
+  type CharacterAssetCandidate,
+} from "./character-assets";
 import {
   effectivePsychubes,
   isTrustedPsychubeName,
@@ -44,11 +47,11 @@ const ASSET_REPO = "https://github.com/myssal/Reverse-1999-CN-Asset.git";
 const SOURCE_ROOT = path.join("/tmp", "r1999-team-list-minimal-assets");
 const CHAR_SOURCE = path.join(SOURCE_ROOT, "singlebg/headicon_small");
 const PSY_SOURCE = path.join(SOURCE_ROOT, "singlebg/equip_defaulticon");
-interface HashEntry {
+export interface HashEntry {
   png: string;
   webp: string;
 }
-type HashCache = Record<string, HashEntry>;
+export type HashCache = Record<string, HashEntry>;
 
 function run(command: string, args: string[], cwd?: string): string {
   return execFileSync(command, args, {
@@ -68,12 +71,19 @@ function setExactSparse(paths: readonly string[]): void {
 }
 function assertRequestedAssets(
   exactPaths: readonly string[],
+  characterCandidates: readonly CharacterAssetCandidate[],
   psychubeIds: readonly string[],
 ): void {
+  const optionalCharacterPaths = characterCandidates
+    .filter((candidate) => candidate.type === "skin")
+    .map((candidate) => `singlebg/headicon_small/${candidate.id}.png`);
   const optionalPsychubePaths = psychubeIds.map(
     (id) => `singlebg/equip_defaulticon/${id}.png`,
   );
-  assertExactAssetWorktree(SOURCE_ROOT, exactPaths, optionalPsychubePaths);
+  assertExactAssetWorktree(SOURCE_ROOT, exactPaths, [
+    ...optionalCharacterPaths,
+    ...optionalPsychubePaths,
+  ]);
 }
 
 function listPsychubeIconIdsFromTree(): string[] {
@@ -89,10 +99,16 @@ function listPsychubeIconIdsFromTree(): string[] {
 }
 
 function pathsForAssetIds(
-  needed: { characters: string[]; psychubes: string[] },
+  needed: {
+    characters: readonly CharacterAssetCandidate[];
+    psychubes: readonly string[];
+  },
   treeIconIds: readonly string[],
 ): string[] {
-  const requestedPaths = exactAssetPaths(needed.characters, needed.psychubes);
+  const requestedPaths = exactAssetPaths(
+    needed.characters.map((candidate) => candidate.id),
+    needed.psychubes,
+  );
   const treeIconPaths = treeIconIds.map(
     (id) => `singlebg/equip_defaulticon/${id}.png`,
   );
@@ -100,10 +116,13 @@ function pathsForAssetIds(
 }
 
 function refreshAssetRepo(needed: {
-  characters: string[];
-  psychubes: string[];
+  characters: readonly CharacterAssetCandidate[];
+  psychubes: readonly string[];
 }): string[] {
-  const requestedPaths = exactAssetPaths(needed.characters, needed.psychubes);
+  const requestedPaths = exactAssetPaths(
+    needed.characters.map((candidate) => candidate.id),
+    needed.psychubes,
+  );
   let reusedClone = existsSync(path.join(SOURCE_ROOT, ".git"));
   if (reusedClone) {
     try {
@@ -134,54 +153,97 @@ function refreshAssetRepo(needed: {
   const exactPaths = pathsForAssetIds(needed, treeIconIds);
   setExactSparse(exactPaths);
   if (!reusedClone) run("git", ["checkout"], SOURCE_ROOT);
-  assertRequestedAssets(exactPaths, needed.psychubes);
+  assertRequestedAssets(exactPaths, needed.characters, needed.psychubes);
   console.log(
     `  ✓ exact-ID ${reusedClone ? "incremental pull" : "fresh partial clone"} (${exactPaths.length} files; ${treeIconIds.length} numeric equip icons)`,
   );
   return treeIconIds;
 }
-function collectNeeded(): { characters: string[]; psychubes: string[] } {
-  const characters = loadGeneratedCatalog<CharacterEntry>(
-    path.join(ROOT, "src/data/characters.ts"),
-  );
-  const psychubes = loadCatalogSource().psychubes;
+export function collectNeeded(
+  source: CatalogSourceSnapshot = loadCatalogSource(),
+): { characters: CharacterAssetCandidate[]; psychubes: string[] } {
   return {
-    characters: [
-      ...new Set(
-        characters.flatMap((entry) => entry.skins.map((skin) => skin.id)),
-      ),
-    ].sort(),
-    psychubes: [...new Set(psychubes.map((entry) => entry.id))].sort(),
+    characters: collectCharacterAssetCandidates(source.characters),
+    psychubes: [...new Set(source.psychubes.map((entry) => entry.id))].sort(),
   };
 }
 function sha256(file: string): string {
   return createHash("sha256").update(readFileSync(file)).digest("hex");
 }
-function loadHashCache(): HashCache {
-  if (!existsSync(HASH_CACHE_FILE)) return {};
+async function trustedProductionCache(
+  kind: "character" | "psychube",
+  file: string,
+  cached: HashEntry | undefined,
+): Promise<HashEntry | undefined> {
+  if (!existsSync(file)) return undefined;
+  const webpHash = sha256(file);
+  if (cached) return cached.webp === webpHash ? cached : undefined;
+  let metadata;
   try {
-    return JSON.parse(readFileSync(HASH_CACHE_FILE, "utf-8")) as HashCache;
+    metadata = await sharp(file).metadata();
   } catch {
-    return {};
+    return undefined;
   }
+  const valid =
+    metadata.format === "webp" &&
+    (kind === "character"
+      ? metadata.width !== undefined &&
+        metadata.width >= 136 &&
+        metadata.width <= 144 &&
+        metadata.height === metadata.width
+      : metadata.width === 276 && metadata.height === 228);
+  return valid ? { png: "retained", webp: webpHash } : undefined;
 }
-function loadMissingAssets(): Set<string> {
-  const file = path.join(__dirname, "data/missing-assets.json");
-  if (!existsSync(file)) return new Set();
-  const raw: unknown = JSON.parse(readFileSync(file, "utf-8"));
-  if (
-    !Array.isArray(raw) ||
-    raw.some((id) => typeof id !== "string" || !/^\d+$/.test(id))
-  )
-    throw new Error("missing-assets.json must be a numeric-string array");
-  return new Set(raw);
+const SHA256_HEX = /^[a-f0-9]{64}$/;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/** Parse the persisted asset hash cache without performing any I/O. */
+export function parseHashCache(value: unknown): HashCache {
+  if (!isRecord(value))
+    throw new Error("asset-hash-cache.json must contain an object root");
+  const cache: HashCache = {};
+  for (const [id, raw] of Object.entries(value)) {
+    if (!/^\d+$/.test(id))
+      throw new Error(`Invalid asset hash cache ID: ${id}`);
+    if (
+      !isRecord(raw) ||
+      typeof raw.png !== "string" ||
+      (!SHA256_HEX.test(raw.png) &&
+        raw.png !== "preserved" &&
+        raw.png !== "retained") ||
+      typeof raw.webp !== "string" ||
+      raw.webp.length === 0
+    )
+      throw new Error(`Invalid asset hash cache entry: ${id}`);
+    cache[id] = { png: raw.png, webp: raw.webp };
+  }
+  return cache;
+}
+
+export function loadHashCache(file: string = HASH_CACHE_FILE): HashCache {
+  let contents: string;
+  try {
+    contents = readFileSync(file, "utf-8");
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "ENOENT"
+    )
+      return {};
+    throw error;
+  }
+  return parseHashCache(JSON.parse(contents) as unknown);
 }
 async function stageKind(
   kind: "character" | "psychube",
-  ids: readonly string[],
+  items: readonly (string | CharacterAssetCandidate)[],
   staging: string,
   oldCache: HashCache,
-  knownMissing: ReadonlySet<string>,
   preservedCharacterAssets: ReadonlySet<string>,
 ): Promise<{
   cache: HashCache;
@@ -196,16 +258,19 @@ async function stageKind(
   const skipped: string[] = [];
   let reused = 0;
   let converted = 0;
-  for (const id of ids) {
+  for (const item of items) {
+    const candidate = typeof item === "string" ? undefined : item;
+    const id = typeof item === "string" ? item : item.id;
     const output = path.join(staging, `${id}.webp`);
     const production = path.join(productionDir, `${id}.webp`);
-    const cacheKey = id;
+    if (kind === "character" && !candidate)
+      throw new Error(`Character asset candidate metadata missing: ${id}`);
     if (kind === "character" && preservedCharacterAssets.has(id)) {
       if (!existsSync(production))
         throw new Error(`Preserved character asset is missing: ${id}`);
       await copyFile(production, output);
       const webpHash = sha256(production);
-      nextCache[cacheKey] = { png: "preserved", webp: webpHash };
+      nextCache[id] = { png: "preserved", webp: webpHash };
       reused++;
       continue;
     }
@@ -213,25 +278,47 @@ async function stageKind(
       kind === "psychube"
         ? psychubeImageCacheFile(id)
         : path.join(sourceDir, `${id}.png`);
-    if (!existsSync(source)) {
+    const sourceAvailable = existsSync(source);
+    const cached = oldCache[id];
+    const trustedPrior =
+      kind === "character"
+        ? await trustedProductionCache(kind, production, cached)
+        : undefined;
+    if (!sourceAvailable) {
       if (kind === "psychube") {
         skipped.push(id);
         continue;
       }
-      if (!knownMissing.has(id))
-        throw new Error(`Unexpected missing ${kind} source PNG: ${id}`);
-      skipped.push(id);
-      continue;
+      const action = classifyMissingCharacterAsset(
+        candidate!,
+        false,
+        Boolean(trustedPrior),
+      );
+      if (action === "retain") {
+        await copyFile(production, output);
+        nextCache[id] = trustedPrior!;
+        reused++;
+        continue;
+      }
+      if (action === "skip") {
+        console.warn(
+          `  warning: skipping Skin Variant ${id} for Character ${candidate!.baseId}: no small source PNG and no trusted prior production WebP`,
+        );
+        skipped.push(id);
+        continue;
+      }
+      throw new Error(
+        `Unexpected missing ${candidate!.type} source PNG: ${id}`,
+      );
     }
     const pngHash = sha256(source);
-    const cached = oldCache[id];
     if (
       cached?.png === pngHash &&
       existsSync(production) &&
       sha256(production) === cached.webp
     ) {
       await copyFile(production, output);
-      nextCache[cacheKey] = cached;
+      nextCache[id] = cached;
       reused++;
     } else {
       await convertPngToLosslessWebp(source, output);
@@ -247,12 +334,15 @@ async function stageKind(
         throw new Error(
           `Invalid ${kind} dimensions for ${id}: ${metadata.width}x${metadata.height}`,
         );
-      nextCache[cacheKey] = { png: pngHash, webp: sha256(output) };
+      nextCache[id] = { png: pngHash, webp: sha256(output) };
       converted++;
     }
   }
   const expectedFiles = new Set(
-    ids.filter((id) => !skipped.includes(id)).map((id) => `${id}.webp`),
+    items
+      .map((item) => (typeof item === "string" ? item : item.id))
+      .filter((id) => !skipped.includes(id))
+      .map((id) => `${id}.webp`),
   );
   const stagedFiles = readdirSync(staging);
   if (
@@ -306,7 +396,10 @@ async function main(): Promise<void> {
   console.log("sync-assets — exact-ID source cache + hash incremental WebP\n");
   const candidates = collectNeeded();
   const policy = loadCatalogPolicy(POLICY_FILE);
-  assertKnownPreservedCharacterAssets(policy, new Set(candidates.characters));
+  assertKnownPreservedCharacterAssets(
+    policy,
+    new Set(candidates.characters.map((candidate) => candidate.id)),
+  );
   const preservedCharacterAssets = new Set(
     policy.preservedCharacterAssets.map((entry) => entry.id),
   );
@@ -336,7 +429,6 @@ async function main(): Promise<void> {
   if (noName.length)
     console.log(`  missing trusted zh-CN name IDs: ${noName.join(", ")}`);
   const oldCache = loadHashCache();
-  const knownMissing = loadMissingAssets();
   const stagingRoot = await mkdtemp(
     path.join(ROOT, "public/assets/.webp-staging-"),
   );
@@ -350,7 +442,6 @@ async function main(): Promise<void> {
         needed.characters,
         chars,
         oldCache,
-        knownMissing,
         preservedCharacterAssets,
       ),
       stageKind(
@@ -358,7 +449,6 @@ async function main(): Promise<void> {
         needed.psychubes,
         psychubes,
         oldCache,
-        knownMissing,
         preservedCharacterAssets,
       ),
     ]);
@@ -376,7 +466,12 @@ async function main(): Promise<void> {
     await rm(stagingRoot, { recursive: true, force: true });
   }
 }
-void withPipelineLock(main).catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+export async function syncAssets(): Promise<void> {
+  await withPipelineLock(main);
+}
+if (import.meta.url === "file://" + process.argv[1]) {
+  void syncAssets().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}
