@@ -2,8 +2,8 @@
   "characters": [
     {
       "baseId": 3140,
-      "isReleased": false,
-      "note": "Second-half banner; Cornerstone is not released yet"
+      "isReleased": true,
+      "note": "User-confirmed released on Global"
     }
   ],
   "skins": [
@@ -46,8 +46,8 @@
   "psychubes": [
     {
       "id": "1574",
-      "isReleased": false,
-      "note": "Second-half banner; Cornerstone psychube is not released yet"
+      "isReleased": true,
+      "note": "User-confirmed released on Global with Cornerstone"
     },
     {
       "id": "1573",

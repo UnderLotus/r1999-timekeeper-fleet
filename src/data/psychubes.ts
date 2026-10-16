@@ -1380,7 +1380,7 @@ export const psychubes: PsychubeDef[] = [
       "ko-KR": "빛과 그림자의 거처"
     },
     "rarity": 5,
-    "released": false
+    "released": true
   },
   {
     "id": "1449",

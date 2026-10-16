@@ -422,7 +422,7 @@ export const characters: CharacterDef[] = [
     "rarity": 5,
     "maxInsight": 3,
     "releaseOrder": 13,
-    "released": false,
+    "released": true,
     "skins": [
       {
         "id": "314001",
