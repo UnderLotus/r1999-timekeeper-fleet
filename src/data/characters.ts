@@ -4901,7 +4901,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "人生填色格",
         "nameEn": "A Life in Frames",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "304501"
