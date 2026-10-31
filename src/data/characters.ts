@@ -270,7 +270,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "为魂灵歌",
         "nameEn": "A Lullaby for the Spirits",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "314501"
@@ -441,7 +441,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "生命之屋",
         "nameEn": "The Cabinet of Vivification",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "314001"

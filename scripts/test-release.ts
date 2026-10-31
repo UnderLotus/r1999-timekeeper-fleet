@@ -227,27 +227,5 @@ check(
     index.skins.get("302306")?.isReleased === false &&
     sonettoGuidebookSkin?.released === false,
 );
-const cn40SkinFixtures = [
-  ["314503", "3145"],
-  ["314003", "3140"],
-] as const;
-for (const [variantId, baseId] of cn40SkinFixtures) {
-  const sourceSkin = sourceSkins.get(variantId);
-  const runtimeCharacter = characters.find(
-    (entry) => entry.baseId === baseId,
-  );
-  const manualOverride = index.skins.get(variantId);
-  const runtimeSkin = runtimeCharacter?.skins.find(
-    (skin) => skin.id === variantId,
-  );
-  check(
-    `CN 4.0 Skin ${variantId} has an authoritative unreleased override`,
-    sourceSkin?.type === "skin" &&
-      manualOverride !== undefined &&
-      manualOverride.isReleased === false &&
-      runtimeCharacter?.baseId === baseId &&
-      runtimeSkin?.released === false,
-  );
-}
 console.log(`\nrelease tests: ${pass} passed, ${fail} failed`);
 if (fail) process.exit(1);
