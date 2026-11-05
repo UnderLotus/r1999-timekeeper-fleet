@@ -1317,7 +1317,8 @@
       "names": {
         "zh-CN": "赫多涅",
         "zh-TW": "赫多涅",
-        "en-US": "Hedone"
+        "en-US": "Hedone",
+        "ko-KR": "헤도네"
       }
     },
     {
@@ -1325,7 +1326,16 @@
       "names": {
         "zh-CN": "纳西索斯",
         "zh-TW": "納西索斯",
-        "en-US": "Narcissus"
+        "en-US": "Narcissus",
+        "ko-KR": "나르키소스"
+      }
+    },
+    {
+      "baseId": "3158",
+      "names": {
+        "zh-CN": "德雷克",
+        "zh-TW": "德雷克",
+        "en-US": "Drake"
       }
     },
     {

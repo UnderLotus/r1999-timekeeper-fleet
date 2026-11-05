@@ -1440,7 +1440,7 @@ export const psychubes: PsychubeDef[] = [
       "ko-KR": "Arrow of Verdict"
     },
     "rarity": 5,
-    "released": false
+    "released": true
   },
   {
     "id": "1576",

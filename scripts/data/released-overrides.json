@@ -4,6 +4,11 @@
       "baseId": 3140,
       "isReleased": true,
       "note": "User-confirmed released on Global"
+    },
+    {
+      "baseId": 3156,
+      "isReleased": true,
+      "note": "User-confirmed released on Global"
     }
   ],
   "skins": [
@@ -26,6 +31,26 @@
       "variantId": "302306",
       "isReleased": false,
       "note": "CN artbook-exclusive garment; unavailable on Global"
+    },
+    {
+      "variantId": "313503",
+      "isReleased": true,
+      "note": "User-confirmed released on Global"
+    },
+    {
+      "variantId": "314303",
+      "isReleased": true,
+      "note": "User-confirmed released on Global"
+    },
+    {
+      "variantId": "314704",
+      "isReleased": true,
+      "note": "User-confirmed released on Global"
+    },
+    {
+      "variantId": "312104",
+      "isReleased": true,
+      "note": "User-confirmed released on Global"
     }
   ],
   "psychubes": [
@@ -43,6 +68,11 @@
       "id": "1449",
       "isReleased": false,
       "note": "暂别旧夜 is not released on Global yet"
+    },
+    {
+      "id": "1575",
+      "isReleased": true,
+      "note": "User-confirmed released on Global with Hedone"
     }
   ]
 }

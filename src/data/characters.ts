@@ -7,7 +7,7 @@ export const characters: CharacterDef[] = [
     "baseId": "3158",
     "names": {
       "zh-CN": "德雷克",
-      "zh-TW": "Drake",
+      "zh-TW": "德雷克",
       "en-US": "Drake",
       "ja-JP": "Drake",
       "ko-KR": "Drake"
@@ -40,7 +40,7 @@ export const characters: CharacterDef[] = [
       "zh-TW": "納西索斯",
       "en-US": "Narcissus",
       "ja-JP": "Narcissus",
-      "ko-KR": "Narcissus"
+      "ko-KR": "나르키소스"
     },
     "rarity": 5,
     "maxInsight": 3,
@@ -70,12 +70,12 @@ export const characters: CharacterDef[] = [
       "zh-TW": "赫多涅",
       "en-US": "Hedone",
       "ja-JP": "Hedone",
-      "ko-KR": "Hedone"
+      "ko-KR": "헤도네"
     },
     "rarity": 5,
     "maxInsight": 3,
     "releaseOrder": 3,
-    "released": false,
+    "released": true,
     "skins": [
       {
         "id": "315601",
@@ -203,7 +203,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "沉影探戈",
         "nameEn": "Waltz of the Depths",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "314701"
@@ -344,7 +344,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "泅与问",
         "nameEn": "To Fathom the Depths",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "314301"
@@ -545,7 +545,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "海盐急速",
         "nameEn": "Full Quack Ahead",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "313501"
@@ -878,7 +878,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "玫瑰午睡时",
         "nameEn": "Repose Amidst the Roses",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "312101"

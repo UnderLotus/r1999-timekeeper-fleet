@@ -2,20 +2,20 @@
   "schemaVersion": 3,
   "sourceHashes": {
     "cn/ArcanistMap.json": "3e26a2c8fcc265c36bb04622054917a46b3a5ffdefcea97083bdf577cf29024e",
-    "cn/character.json": "09fde1682c2631e8fdd6a19616ec1a6d32f42f6f699b001c3631106e89e4cf64",
-    "cn/equip.json": "b30f27d86540802c7c8fc44cb4cad6131a8a858ce75081469a42a48063d6fe91",
-    "cn/skin.json": "7ab2b59b3cbdc784199b1cdf2580d0044a6882a096f2e2906e1e58ade5d97e67",
-    "name-fallbacks.json": "83477bef524209459ca1c9a85c3b358829e63db9d14ff52e7bc0cb085ca56cf7",
+    "cn/character.json": "654e42848f0d754cb63e3959267609975b01bade42f909222cfa5fbfa42be3b8",
+    "cn/equip.json": "5473ec5fb80b5e821e46cf0fd8089c24b3f3f4073349b4ec27fd4f05300c522e",
+    "cn/skin.json": "d1260701fca17d2ada82f78e7afbfba95d5ab61967aea0a2d138b168aaedef4d",
+    "name-fallbacks.json": "6874ce42643b67991ba51b8d23a2b69238e6c69558c84a91023227dd713de46c",
     "localized-name-overrides.json": "06fc52fc089303784795827b656400b7db0e9ca362f0b5dc241d0ab2e137dc6f",
     "catalog-policy.json": "f90b6ab244b1e507afb0131eb9f89c1d13241b43de41d13d98f95558fc69ee82",
     "gl/character.json": "787dc9f07341a144ff4db26c4490d4861903877213b03d1133c3130147d1a337",
     "gl/equip.json": "684db6fc0b7f25acff075198344ccbb01a86d2f9afa957869e06600c72a6bf8f",
     "gl/skin.json": "71230bb53f668f8aabab5651d26ff621e3ca2c63ecb8a23ce3d5f23f74d93ce4",
-    "gl/language_zh.json": "9afe8e921d97cc79bbe13972c89bc09789689205a9a155f4c6d08f378559774c",
-    "gl/language_tw.json": "a76e2f7a04cd637b495e77befadc4b926f4db7bed2bf2000fd97e02f7dd36086",
-    "gl/language_jp.json": "5616822741701e0445ec2f5ab0c28d2a4a4b35a2ae7964be62f5ee3da8b50991",
-    "gl/language_kr.json": "255a666eb1c2b4d7032c86e17b243a9bb88e4b46626a9252465b5072ebbca35e",
-    "gl/language_en.json": "57d39b8ae8ca98233c46967fc3650d2944f7550b3f57b86d1cbd3fa21f7794dd"
+    "gl/language_zh.json": "7c62352aa3a603d977d06a0c08526e3f86c98b00744317b865bc4f5c527c5f52",
+    "gl/language_tw.json": "3bff170cb8bd713ff5cc55723399d35725c7930777cea2644707155fe0cddd31",
+    "gl/language_jp.json": "cf163f50708466c9703d0d9d6562f3c96c26f743dc3b40a25c7903eb0a6e65fc",
+    "gl/language_kr.json": "681f6ef47c5bbdf61ce86c2ae82961debaa180aec3631a7e09233e7050f949ec",
+    "gl/language_en.json": "d2482b385e02732c717c180ac72b692c927eb790ce7fe01638a372abe4f76eda"
   },
   "characters": [
     {
@@ -4617,7 +4617,7 @@
         "zh-TW": "赫多涅",
         "en-US": "Hedone",
         "ja-JP": "Hedone",
-        "ko-KR": "Hedone"
+        "ko-KR": "헤도네"
       },
       "rarity": 5,
       "maxInsight": 3,
@@ -4644,7 +4644,7 @@
         "zh-TW": "納西索斯",
         "en-US": "Narcissus",
         "ja-JP": "Narcissus",
-        "ko-KR": "Narcissus"
+        "ko-KR": "나르키소스"
       },
       "rarity": 5,
       "maxInsight": 3,
@@ -4702,7 +4702,7 @@
       "baseId": "3158",
       "names": {
         "zh-CN": "德雷克",
-        "zh-TW": "Drake",
+        "zh-TW": "德雷克",
         "en-US": "Drake",
         "ja-JP": "Drake",
         "ko-KR": "Drake"
@@ -6249,6 +6249,42 @@
         "en-US": "Flows in All Things Alike",
         "ja-JP": "Flows in All Things Alike",
         "ko-KR": "Flows in All Things Alike"
+      },
+      "rarity": 5,
+      "glPresent": false
+    },
+    {
+      "id": "1452",
+      "names": {
+        "zh-CN": "完满之路",
+        "zh-TW": "The Path to Perfection",
+        "en-US": "The Path to Perfection",
+        "ja-JP": "The Path to Perfection",
+        "ko-KR": "The Path to Perfection"
+      },
+      "rarity": 4,
+      "glPresent": false
+    },
+    {
+      "id": "1580",
+      "names": {
+        "zh-CN": "纯洁的棺床",
+        "zh-TW": "The Coffin of Purity",
+        "en-US": "The Coffin of Purity",
+        "ja-JP": "The Coffin of Purity",
+        "ko-KR": "The Coffin of Purity"
+      },
+      "rarity": 5,
+      "glPresent": false
+    },
+    {
+      "id": "1581",
+      "names": {
+        "zh-CN": "可食用谜题",
+        "zh-TW": "An Edible Puzzle",
+        "en-US": "An Edible Puzzle",
+        "ja-JP": "An Edible Puzzle",
+        "ko-KR": "An Edible Puzzle"
       },
       "rarity": 5,
       "glPresent": false
