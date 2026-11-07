@@ -75,6 +75,26 @@ assert.equal(
   "source-only Skin is optional",
 );
 assert.equal(
+  classifyMissingCharacterAsset({ type: "default" }, false, false, true),
+  "install-supplement",
+  "a validated supplemental headicon fills a missing required Variant",
+);
+assert.equal(
+  classifyMissingCharacterAsset({ type: "skin" }, false, false, true),
+  "install-supplement",
+  "a validated supplemental headicon fills a missing Skin",
+);
+assert.equal(
+  classifyMissingCharacterAsset({ type: "default" }, true, false, true),
+  "convert",
+  "a primary PNG stays the preferred source over the supplemental headicon",
+);
+assert.equal(
+  classifyMissingCharacterAsset({ type: "default" }, false, true, true),
+  "retain",
+  "an installed trusted WebP is never replaced by the supplemental headicon",
+);
+assert.equal(
   classifyMissingCharacterAsset({ type: "skin" }, false, true),
   "retain",
   "a trusted prior Skin WebP is retained",

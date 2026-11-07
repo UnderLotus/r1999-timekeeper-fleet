@@ -1,19 +1,29 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import {
+  copyFileSync,
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import sharp from "sharp";
 import { numericPsychubeIconIds } from "./asset-source";
 import { completeCatalogNames } from "./catalog-composition";
 import type { SourcePsychube } from "./catalog-source";
+import { loadCatalogSource } from "./catalog-source";
 import {
   effectivePsychubes,
   loadPsychubeImageInventory,
   mergePsychubeSourceRecords,
   parsePsychubeImageInventory,
   persistPsychubeImageCache,
+  supplementPsychubeIcons,
+  supplementPsychubeIds,
 } from "./psychube-catalog";
+import { UpstreamRefreshError } from "./sync-refresh";
 
 function psychube(
   id: string,
@@ -49,6 +59,16 @@ assert.equal(retained[0]?.names["en-US"], "Trusted English");
 assert.equal(retained[0]?.rarity, 5);
 assert.equal(retained[0]?.glPresent, false, "Global presence is independent of retained names and icon state");
 assert.deepEqual(mergePsychubeSourceRecords([old], []), [old], "source absence retains the last trusted record");
+
+const staleTranslation = psychube("1207", "旧简中", "Old English", 5, true);
+staleTranslation.names["zh-TW"] = "舊繁中";
+const explicitSameAsEnglish = psychube("1207", "新简中", "Arrow of Verdict", 5, true);
+explicitSameAsEnglish.names["zh-TW"] = "Arrow of Verdict";
+assert.equal(
+  mergePsychubeSourceRecords([staleTranslation], [explicitSameAsEnglish])[0]?.names["zh-TW"],
+  "Arrow of Verdict",
+  "a raw Global locale that explicitly repeats English outranks a previous translation",
+);
 
 const freshNameOnly = psychube("1202", "名称先到", "Name First", 4, false);
 const freshImageOnly = psychube("1203", "", "English only", 4, true);
@@ -162,6 +182,166 @@ try {
   );
 } finally {
   rmSync(fixture, { recursive: true, force: true });
+}
+
+assert.throws(
+  () =>
+    parsePsychubeImageInventory({
+      schemaVersion: 1,
+      images: {
+        "1452": {
+          assetPath: "singlebg/equip_defaulticon/1452.png",
+          sha256: digest,
+          source: "https://example.com/equipment/icon/1452.webp",
+        },
+      },
+    }),
+  /Invalid psychube image source/,
+  "only the documented supplemental icon endpoint is recorded as a source",
+);
+
+assert.deepEqual(
+  supplementPsychubeIds(["1580", "1452", "1580"], new Set(["1580"])),
+  ["1452"],
+  "only catalog psychubes without a validated icon are supplemented",
+);
+const catalogPsychubeIds = loadCatalogSource().psychubes.map((entry) => entry.id);
+assert.deepEqual(
+  supplementPsychubeIds(
+    catalogPsychubeIds,
+    new Set(),
+  ).filter((id) => ["1452", "1580", "1581"].includes(id)),
+  ["1452", "1580", "1581"],
+);
+assert.ok(
+  !supplementPsychubeIds(catalogPsychubeIds, new Set()).some((id) =>
+    ["999", "1000", "1001", "1002", "1003", "1004", "1005"].includes(id),
+  ),
+  "upgrade materials and their icon IDs never enter the supplemental icon scope",
+);
+
+const supplementFixture = mkdtempSync(
+  path.join(tmpdir(), "psychube-supplement-"),
+);
+try {
+  const staging = path.join(supplementFixture, "staging");
+  const cacheDir = path.join(supplementFixture, "cache");
+  const inventoryFile = path.join(supplementFixture, "inventory.json");
+  mkdirSync(staging, { recursive: true });
+  const writeFixture = async (
+    file: string,
+    width: number,
+    height: number,
+    lossless: boolean,
+  ): Promise<void> => {
+    await sharp({
+      create: {
+        width,
+        height,
+        channels: 4,
+        background: { r: 40, g: 80, b: 120, alpha: 1 },
+      },
+    })
+      .webp(lossless ? { lossless: true } : { quality: 80 })
+      .toFile(file);
+  };
+  const validIcon = path.join(supplementFixture, "valid.webp");
+  await writeFixture(validIcon, 276, 228, true);
+  const requested: string[] = [];
+  const filled = await supplementPsychubeIcons(
+    ["1452"],
+    staging,
+    cacheDir,
+    inventoryFile,
+    (url, output) => {
+      requested.push(url);
+      copyFileSync(validIcon, output);
+    },
+  );
+  assert.deepEqual(filled, { filled: ["1452"], unavailable: [] });
+  assert.deepEqual(
+    requested,
+    ["https://assets.merui.net/equip_defaulticon/1452.webp"],
+    "supplemental psychube icons come from equip_defaulticon, not equipment/icon",
+  );
+  const supplementedInventory = loadPsychubeImageInventory(
+    inventoryFile,
+    cacheDir,
+  );
+  assert.equal(
+    supplementedInventory.images["1452"]?.source,
+    "https://assets.merui.net/equip_defaulticon/1452.webp",
+    "the validated supplemental PNG records its real source",
+  );
+  assert.deepEqual(
+    effectivePsychubes(
+      [psychube("1452", "完满之路", "The Path to Perfection", 4, false)],
+      new Set(Object.keys(supplementedInventory.images)),
+    ).map((entry) => entry.id),
+    ["1452"],
+    "a trusted name plus the supplemental icon reaches the runtime catalog",
+  );
+
+  mkdirSync(path.join(staging, "1580.png"));
+  await assert.rejects(
+    () => supplementPsychubeIcons(
+      ["1580"],
+      staging,
+      cacheDir,
+      inventoryFile,
+      (_url, output) => copyFileSync(validIcon, output),
+    ),
+    { code: "EISDIR" },
+    "a local PNG write failure must not become an unavailable remote icon",
+  );
+  rmSync(path.join(staging, "1580.png"), { recursive: true });
+
+  const wrongSizeIcon = path.join(supplementFixture, "wrong-size.webp");
+  await writeFixture(wrongSizeIcon, 248, 248, true);
+  assert.deepEqual(
+    await supplementPsychubeIcons(
+      ["1580"],
+      staging,
+      cacheDir,
+      inventoryFile,
+      (_url, output) => copyFileSync(wrongSizeIcon, output),
+    ),
+    { filled: [], unavailable: ["1580"] },
+    "a 248×248 equipment/icon image is not accepted as a psychube icon",
+  );
+  const lossyIcon = path.join(supplementFixture, "lossy.webp");
+  await writeFixture(lossyIcon, 276, 228, false);
+  assert.deepEqual(
+    await supplementPsychubeIcons(
+      ["1581"],
+      staging,
+      cacheDir,
+      inventoryFile,
+      (_url, output) => copyFileSync(lossyIcon, output),
+    ),
+    { filled: [], unavailable: ["1581"] },
+    "a lossy supplemental image is refused instead of re-encoded",
+  );
+  assert.deepEqual(
+    await supplementPsychubeIcons(
+      ["1581"],
+      staging,
+      cacheDir,
+      inventoryFile,
+      () => {
+        throw new UpstreamRefreshError("fixture 404");
+      },
+    ),
+    { filled: [], unavailable: ["1581"] },
+    "a missing supplemental icon leaves the existing cache untouched",
+  );
+  assert.deepEqual(
+    Object.keys(loadPsychubeImageInventory(inventoryFile, cacheDir).images),
+    ["1452"],
+    "rejected supplemental images never enter the inventory",
+  );
+} finally {
+  rmSync(supplementFixture, { recursive: true, force: true });
 }
 
 console.log("psychube snapshot and name-image intersection checks passed");

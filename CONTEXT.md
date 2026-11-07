@@ -57,8 +57,16 @@ The known characters, Skins, psychubes, localized names, and release classificat
 _Avoid_: Profile, Pool
 
 **Variant ID**:
-An opaque catalog identifier for one Character Variant; ownership comes from that Character's `ArcanistMap.live2d` entry, not from ID width or digit prefixes.
+An opaque catalog identifier for one Character Variant; ownership comes from that Character's `ArcanistMap.live2d` entry or from an admitted Supplement entry, not from ID width or digit prefixes.
 _Avoid_: Skin number, inferred owner
+
+**Supplement**:
+Validated Variant metadata and images admitted from a secondary build-time source while the primary mapping lags. A Supplement entry fills a gap the primary mapping leaves; primary metadata always wins, and nothing is admitted without its validated image.
+_Avoid_: Fallback source, mirror import
+
+**Locale name supply**:
+Translations for characters and psychubes already in the Catalog, keyed by exact ID, that only fill a missing locale. It never creates, removes, or reclassifies an entry, and it never outranks an explicit Global, manual, or already-recorded translation.
+_Avoid_: Rename source, official translation
 
 **Future content**:
 A Catalog entry not yet released on the tracked Global version.

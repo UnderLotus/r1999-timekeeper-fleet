@@ -109,8 +109,10 @@ GitHub Pages の base path は `/r1999-timekeeper-fleet/` です。
 
 キャラ、名称、実装状況、画像は主に以下の情報源をもとに整理しています。
 
-- [Reverse-1999-CN-Asset](https://github.com/myssal/Reverse-1999-CN-Asset) — 中国版のキャラ / 衣装 / 心相の構成とオリジナル素材
-- [re1999-data-global](https://github.com/St-Pavlov-Foundation/re1999-data-global) — Global データ、各言語の名称、実装状況の判定
+- [re1999-data](https://github.com/St-Pavlov-Foundation/re1999-data) — 中国版のキャラ・衣装・心相の展開データ
+- [re1999-data-global](https://github.com/St-Pavlov-Foundation/re1999-data-global) — Global の実装状況と各言語の名称
+- [Reverse-1999-CN-Asset](https://github.com/myssal/Reverse-1999-CN-Asset) — キャラの対応表とオリジナル画像
+- [UTTU](https://uttu.merui.net) — キャラ・衣装の補完データ、画像、キャラ・心相の翻訳（非公式、一部は暫定訳）
 - [灰機 Wiki](https://res1999.huijiwiki.com) — キャラの並び順と補足データ
 - [Kornblume](https://github.com/windbow27/kornblume) — 並び順 / 名称の fallback
 - [wikiru](https://reverse1999.wikiru.jp) と [Reverse: 1999 Fandom Wiki](https://reverse1999.fandom.com) — 上流データに不足がある場合の名称補足

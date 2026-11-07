@@ -8,6 +8,7 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
@@ -24,9 +25,23 @@ import {
   loadPsychubeImageInventory,
   persistPsychubeImageCache,
   psychubeImageCacheFile,
+  supplementPsychubeIcons,
+  supplementPsychubeIds,
 } from "./psychube-catalog";
 import { convertPngToLosslessWebp } from "./webp-converter";
 import { withPipelineLock } from "./sync-lock";
+import {
+  cachedHeadiconIds,
+  hasValidUttuHeadicon,
+  uttuImageCacheFile,
+} from "./uttu-images";
+import {
+  assertSupplementCandidateHash,
+  assertSupplementInstalled,
+  loadUttuSupplement,
+  promoteUttuSupplement,
+  uttuSupplementCandidateFile,
+} from "./uttu-supplement";
 import {
   assertExactAssetWorktree,
   exactAssetPaths,
@@ -73,9 +88,14 @@ function assertRequestedAssets(
   exactPaths: readonly string[],
   characterCandidates: readonly CharacterAssetCandidate[],
   psychubeIds: readonly string[],
+  supplementalCharacterIds: ReadonlySet<string>,
 ): void {
   const optionalCharacterPaths = characterCandidates
-    .filter((candidate) => candidate.type === "skin")
+    .filter(
+      (candidate) =>
+        candidate.type === "skin" ||
+        supplementalCharacterIds.has(candidate.id),
+    )
     .map((candidate) => `singlebg/headicon_small/${candidate.id}.png`);
   const optionalPsychubePaths = psychubeIds.map(
     (id) => `singlebg/equip_defaulticon/${id}.png`,
@@ -115,10 +135,13 @@ function pathsForAssetIds(
   return [...new Set([...requestedPaths, ...treeIconPaths])].sort();
 }
 
-function refreshAssetRepo(needed: {
-  characters: readonly CharacterAssetCandidate[];
-  psychubes: readonly string[];
-}): string[] {
+function refreshAssetRepo(
+  needed: {
+    characters: readonly CharacterAssetCandidate[];
+    psychubes: readonly string[];
+  },
+  supplementalCharacterIds: ReadonlySet<string>,
+): string[] {
   const requestedPaths = exactAssetPaths(
     needed.characters.map((candidate) => candidate.id),
     needed.psychubes,
@@ -153,7 +176,12 @@ function refreshAssetRepo(needed: {
   const exactPaths = pathsForAssetIds(needed, treeIconIds);
   setExactSparse(exactPaths);
   if (!reusedClone) run("git", ["checkout"], SOURCE_ROOT);
-  assertRequestedAssets(exactPaths, needed.characters, needed.psychubes);
+  assertRequestedAssets(
+    exactPaths,
+    needed.characters,
+    needed.psychubes,
+    supplementalCharacterIds,
+  );
   console.log(
     `  ✓ exact-ID ${reusedClone ? "incremental pull" : "fresh partial clone"} (${exactPaths.length} files; ${treeIconIds.length} numeric equip icons)`,
   );
@@ -289,11 +317,33 @@ async function stageKind(
         skipped.push(id);
         continue;
       }
+      const supplementalFile = uttuImageCacheFile(id);
       const action = classifyMissingCharacterAsset(
         candidate!,
         false,
         Boolean(trustedPrior),
+        await hasValidUttuHeadicon(supplementalFile),
       );
+      if (action === "install-supplement") {
+        // Copy the validated supplemental bytes as-is so visible pixels stay exact.
+        // shortcut: an installed supplemental WebP is retained afterwards even if
+        // the mirror updates it; delete that WebP to take a newer image.
+        const supplementHash = sha256(supplementalFile);
+        if (
+          cached?.png === supplementHash &&
+          existsSync(production) &&
+          sha256(production) === cached.webp
+        ) {
+          await copyFile(production, output);
+          nextCache[id] = cached;
+          reused++;
+        } else {
+          await copyFile(supplementalFile, output);
+          nextCache[id] = { png: supplementHash, webp: sha256(output) };
+          converted++;
+        }
+        continue;
+      }
       if (action === "retain") {
         await copyFile(production, output);
         nextCache[id] = trustedPrior!;
@@ -302,13 +352,13 @@ async function stageKind(
       }
       if (action === "skip") {
         console.warn(
-          `  warning: skipping Skin Variant ${id} for Character ${candidate!.baseId}: no small source PNG and no trusted prior production WebP`,
+          `  warning: skipping Skin Variant ${id} for Character ${candidate!.baseId}: no small source PNG, no supplemental headicon and no trusted prior production WebP`,
         );
         skipped.push(id);
         continue;
       }
       throw new Error(
-        `Unexpected missing ${candidate!.type} source PNG: ${id}`,
+        `Unexpected missing ${candidate!.type} Variant image: ${id}`,
       );
     }
     const pngHash = sha256(source);
@@ -394,7 +444,15 @@ async function install(
 }
 async function main(): Promise<void> {
   console.log("sync-assets — exact-ID source cache + hash incremental WebP\n");
-  const candidates = collectNeeded();
+  const source = loadCatalogSource();
+  const candidates = collectNeeded(source);
+  const candidateFile = uttuSupplementCandidateFile();
+  const candidate =
+    candidateFile && existsSync(candidateFile)
+      ? loadUttuSupplement(candidateFile)
+      : undefined;
+  if (candidate && candidateFile)
+    assertSupplementCandidateHash(candidateFile, source.sourceHashes);
   const policy = loadCatalogPolicy(POLICY_FILE);
   assertKnownPreservedCharacterAssets(
     policy,
@@ -403,14 +461,42 @@ async function main(): Promise<void> {
   const preservedCharacterAssets = new Set(
     policy.preservedCharacterAssets.map((entry) => entry.id),
   );
-  const treeIconIds = refreshAssetRepo(candidates);
+  const treeIconIds = refreshAssetRepo(
+    candidates,
+    new Set(cachedHeadiconIds()),
+  );
   const imageCandidateIds = [...new Set([...candidates.psychubes, ...treeIconIds])];
   const iconResult = await persistPsychubeImageCache(
     imageCandidateIds,
     PSY_SOURCE,
   );
+  // The secondary mirror only fills catalog icons the primary source lacks.
+  const supplementIds = supplementPsychubeIds(
+    candidates.psychubes,
+    new Set(Object.keys(loadPsychubeImageInventory().images)),
+  );
+  if (supplementIds.length) {
+    const supplementRoot = await mkdtemp(
+      path.join(tmpdir(), "r1999-uttu-psychube-"),
+    );
+    try {
+      const supplemented = await supplementPsychubeIcons(
+        supplementIds,
+        supplementRoot,
+      );
+      console.log(
+        `psychube supplemental icons: ${supplemented.filled.length} installed; ${supplemented.unavailable.length} unavailable`,
+      );
+      if (supplemented.unavailable.length)
+        console.log(
+          `  unavailable supplemental icon IDs: ${supplemented.unavailable.join(", ")}`,
+        );
+    } finally {
+      await rm(supplementRoot, { recursive: true, force: true });
+    }
+  }
   const imageIds = new Set(Object.keys(loadPsychubeImageInventory().images));
-  const sourcePsychubes = loadCatalogSource().psychubes;
+  const sourcePsychubes = source.psychubes;
   const sourceById = new Map(sourcePsychubes.map((entry) => [entry.id, entry]));
   const noName = candidates.psychubes.filter(
     (id) => !isTrustedPsychubeName(sourceById.get(id)?.names["zh-CN"]),
@@ -421,11 +507,17 @@ async function main(): Promise<void> {
       .map((entry) => entry.id)
       .sort(),
   };
-  console.log(
-    `psychube image snapshots: ${iconResult.updated} updated; ${iconResult.missing.length} unavailable`,
+  const missingCatalogIcons = supplementPsychubeIds(
+    candidates.psychubes,
+    imageIds,
   );
-  if (iconResult.missing.length)
-    console.log(`  missing icon IDs: ${iconResult.missing.join(", ")}`);
+  console.log(
+    `psychube image snapshots: ${iconResult.updated} updated; ${missingCatalogIcons.length} catalog IDs still missing an icon`,
+  );
+  if (missingCatalogIcons.length)
+    console.log(
+      `  missing catalog icon IDs: ${missingCatalogIcons.join(", ")}`,
+    );
   if (noName.length)
     console.log(`  missing trusted zh-CN name IDs: ${noName.join(", ")}`);
   const oldCache = loadHashCache();
@@ -452,10 +544,14 @@ async function main(): Promise<void> {
         preservedCharacterAssets,
       ),
     ]);
+    if (candidate)
+      assertSupplementInstalled(candidate, new Set(Object.keys(charResult.cache)));
     await install(chars, psychubes, {
       ...charResult.cache,
       ...psyResult.cache,
     });
+    if (candidate && candidateFile && promoteUttuSupplement(candidateFile))
+      console.log("  ✓ UTTU supplement metadata committed after asset install");
     console.log(
       `characters: ${charResult.reused} reused, ${charResult.converted} converted, ${charResult.skipped.length} missing`,
     );

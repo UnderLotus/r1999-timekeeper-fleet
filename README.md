@@ -112,6 +112,7 @@ Characters, names, release status, and images are mainly compiled from:
 - [re1999-data](https://github.com/St-Pavlov-Foundation/re1999-data) — Unpacked character, skin, and psychube data
 - [re1999-data-global](https://github.com/St-Pavlov-Foundation/re1999-data-global) — Global release status and localized names
 - [Reverse-1999-CN-Asset](https://github.com/myssal/Reverse-1999-CN-Asset) — Character mapping and source images
+- [UTTU](https://uttu.merui.net) — Supplemental catalog data, images, and character / psychube translations; unofficial, some translations are provisional
 - [Huiji Wiki](https://res1999.huijiwiki.com) — Character ordering and supplementary data
 - [Kornblume](https://github.com/windbow27/kornblume) — Ordering / name fallback
 - [wikiru](https://reverse1999.wikiru.jp) and [Reverse: 1999 Fandom Wiki](https://reverse1999.fandom.com) — Supplementary names when upstream data is missing

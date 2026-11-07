@@ -4,22 +4,22 @@ import path from "node:path";
 import sharp from "sharp";
 
 const WEBP_OPTIONS = { lossless: true, effort: 6 } as const;
-async function decodeRgba(filePath: string) {
-  const { data, info } = await sharp(filePath)
+async function decodeRgba(source: string | Buffer, label: string) {
+  const { data, info } = await sharp(source)
     .ensureAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true });
   if (info.channels !== 4)
-    throw new Error(`Expected RGBA image data: ${filePath}`);
+    throw new Error(`Expected RGBA image data: ${label}`);
   return { data, width: info.width, height: info.height };
 }
 export async function validateImageParity(
-  sourcePath: string,
-  outputPath: string,
+  sourcePath: string | Buffer,
+  outputPath: string | Buffer,
 ): Promise<void> {
   const [source, output] = await Promise.all([
-    decodeRgba(sourcePath),
-    decodeRgba(outputPath),
+    decodeRgba(sourcePath, typeof sourcePath === "string" ? sourcePath : "source buffer"),
+    decodeRgba(outputPath, typeof outputPath === "string" ? outputPath : "output buffer"),
   ]);
   if (source.width !== output.width || source.height !== output.height)
     throw new Error(
@@ -37,6 +37,27 @@ export async function validateImageParity(
         );
   }
 }
+
+/** Lossless WebP contains a VP8L payload, including inside a VP8X container. */
+export function hasLosslessWebpChunk(buffer: Buffer): boolean {
+  if (
+    buffer.length < 20 ||
+    buffer.toString("ascii", 0, 4) !== "RIFF" ||
+    buffer.toString("ascii", 8, 12) !== "WEBP"
+  )
+    return false;
+  let offset = 12;
+  while (offset + 8 <= buffer.length) {
+    const chunkSize = buffer.readUInt32LE(offset + 4);
+    const chunkType = buffer.toString("ascii", offset, offset + 4);
+    if (chunkType === "VP8L") return true;
+    const next = offset + 8 + chunkSize + (chunkSize % 2);
+    if (next <= offset) return false;
+    offset = next;
+  }
+  return false;
+}
+
 function errorCode(error: unknown): string | undefined {
   if (typeof error !== "object" || error === null || !("code" in error))
     return undefined;
@@ -80,4 +101,19 @@ export async function convertPngToLosslessWebp(
   } finally {
     await rm(staging, { force: true });
   }
+}
+
+/**
+ * Decode a lossless WebP buffer into PNG without changing pixels, so an existing
+ * PNG cache entry can hold the image while the catalog keeps its source URL.
+ */
+export async function decodeLosslessWebpToPng(
+  input: Buffer,
+  label: string,
+): Promise<Buffer> {
+  if (!hasLosslessWebpChunk(input))
+    throw new Error(`${label} is not a lossless WebP image`);
+  const png = await sharp(input).png({ compressionLevel: 9 }).toBuffer();
+  await validateImageParity(input, png);
+  return png;
 }

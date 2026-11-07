@@ -11,6 +11,11 @@ import {
   type GlobalClock,
 } from "./release-status";
 import type { NameLang, PartialNames } from "./name-fallbacks";
+import {
+  isTrustedPsychubeName,
+  mergePsychubeSourceRecords,
+  type PsychubeSourceCandidate,
+} from "./psychube-catalog";
 import { buildSkins, type ArcanistEntryFull } from "./skin-utils";
 
 export interface PackageCharacter {
@@ -56,10 +61,16 @@ export interface CatalogCompositionInput {
   languages: CatalogLanguageTables;
   nameFallbacks: ReadonlyMap<string, PartialNames>;
   nameOverrides: ReadonlyMap<string, PartialNames>;
+  /** Admitted supplemental names: the lowest locale fallback layer. */
+  supplementNames?: ReadonlyMap<string, PartialNames>;
+  /** Exact-ID locale names from the UTTU snapshot; lookup only, never entities. */
+  uttuCharacterNames?: ReadonlyMap<string, PartialNames>;
+  uttuPsychubeNames?: ReadonlyMap<string, PartialNames>;
   policy: CatalogPolicy;
   releaseClock: GlobalClock;
   globalUtcOffsetMinutes?: number;
   previousCharacters?: readonly SourceCharacter[];
+  previousPsychubes?: readonly SourcePsychube[];
 }
 
 export interface CatalogCompositionResult {
@@ -89,6 +100,22 @@ export function isPsychube(entry: Equip, excluded: ReadonlySet<string>): boolean
     Number(entry.isExpEquip ?? 0) === 0 &&
     Number(entry.isSpRefine ?? 0) === 0 &&
     entry.name_en !== "Just Test"
+  );
+}
+
+function localeName(value: string | undefined): string | undefined {
+  return isTrustedPsychubeName(value) ? value.trim() : undefined;
+}
+
+/** A value that only repeats its own row's English or CN is not a translation. */
+function repeatsRowLanguage(
+  value: string | undefined,
+  row: PartialNames | undefined,
+): boolean {
+  return (
+    !value ||
+    value === row?.["en-US"]?.trim() ||
+    value === row?.["zh-CN"]?.trim()
   );
 }
 
@@ -150,6 +177,7 @@ function buildCharacterCandidate(
   globalByBase: ReadonlyMap<string, PackageCharacter>,
   cnById: ReadonlyMap<string, PackageCharacter>,
   offset: number,
+  previous: SourceCharacter | undefined,
 ): SourceCharacter {
   const baseId = String(arc.id);
   validateCharacterCandidateInput(arc, baseId);
@@ -157,22 +185,43 @@ function buildCharacterCandidate(
   const cn = cnById.get(baseId);
   const fallback = input.nameFallbacks.get(baseId) ?? {};
   const manualNames = input.nameOverrides.get(baseId) ?? {};
+  const supplemental = input.supplementNames?.get(baseId);
+  const uttuNames = input.uttuCharacterNames?.get(baseId);
   const globalName = (lang: NameLang): string =>
     global ? input.languages[lang][global.name] ?? "" : "";
   const zh =
     globalName("zh-CN") ||
     manualNames["zh-CN"] ||
     fallback["zh-CN"] ||
+    (supplemental ? cn?.name : "") ||
+    supplemental?.["zh-CN"] ||
     arc.name;
   const en =
     globalName("en-US") ||
     global?.nameEng ||
     manualNames["en-US"] ||
     fallback["en-US"] ||
+    (supplemental ? cn?.nameEng : "") ||
+    supplemental?.["en-US"] ||
     arc.nameEng ||
     zh;
-  const localized = (lang: NameLang): string =>
-    globalName(lang) || manualNames[lang] || fallback[lang] || "";
+  const localized = (lang: NameLang): string => {
+    const globalLocale = localeName(globalName(lang));
+    if (globalLocale) return globalLocale;
+    const manual = localeName(manualNames[lang]);
+    if (manual) return manual;
+    const thirdParty = localeName(fallback[lang]);
+    if (thirdParty && !repeatsRowLanguage(thirdParty, fallback))
+      return thirdParty;
+    const historical = localeName(previous?.names[lang]);
+    if (historical && !repeatsRowLanguage(historical, previous?.names))
+      return historical;
+    return (
+      localeName(uttuNames?.[lang]) ??
+      localeName(supplemental?.[lang]) ??
+      thirdParty ?? historical ?? ""
+    );
+  };
   const rarity = global?.rare ?? cn?.rare ?? null;
   const emittedSkins: SourceSkin[] = buildSkins(arc)
     .filter((skin) => cnSkinIds.has(skin.id))
@@ -275,6 +324,7 @@ export function composeCatalogSource(
           globalByBase,
           cnById,
           offset,
+          previousByBase.get(baseId),
         ),
       );
     } catch (error) {
@@ -314,29 +364,49 @@ export function composeCatalogSource(
     ...cnPsychubeById.keys(),
     ...globalPsychubeById.keys(),
   ]);
-  const psychubes: SourcePsychube[] = [...psychubeIds].map((id) => {
-    const cn = cnPsychubeById.get(id);
-    const global = globalPsychubeById.get(id);
-    const source = global ?? cn!;
-    const zh =
-      input.languages["zh-CN"][source.name] || cn?.name || "";
-    const en =
-      input.languages["en-US"][source.name] ||
-      source.name_en ||
-      cn?.name_en ||
-      "";
-    const translated = (lang: NameLang): string =>
-      input.languages[lang][source.name] || "";
-    return {
-      id: String(id),
-      names: completeCatalogNames(zh, en, {
-        "zh-TW": translated("zh-TW"),
-        "ja-JP": translated("ja-JP"),
-        "ko-KR": translated("ko-KR"),
-      }),
-      rarity: source.rare ?? cn?.rare ?? null,
-      glPresent: global !== undefined,
-    };
-  });
+  const previousPsychubeById = new Map(
+    (input.previousPsychubes ?? []).map((entry) => [entry.id, entry]),
+  );
+  // Locale precedence needs the raw missing-value information, so each record
+  // keeps only explicitly resolved names until the retention merge completes it.
+  const psychubeCandidates: PsychubeSourceCandidate[] = [...psychubeIds].map(
+    (id) => {
+      const cn = cnPsychubeById.get(id);
+      const global = globalPsychubeById.get(id);
+      const source = global ?? cn!;
+      const previous = previousPsychubeById.get(String(id));
+      const uttuNames = input.uttuPsychubeNames?.get(String(id));
+      const zh = input.languages["zh-CN"][source.name] || cn?.name || "";
+      const en =
+        input.languages["en-US"][source.name] ||
+        source.name_en ||
+        cn?.name_en ||
+        "";
+      const names: PartialNames = {};
+      if (zh) names["zh-CN"] = zh;
+      if (en) names["en-US"] = en;
+      for (const lang of ["zh-TW", "ja-JP", "ko-KR"] as const) {
+        const globalLocale = localeName(input.languages[lang][source.name]);
+        const historical = localeName(previous?.names[lang]);
+        const resolved = globalLocale ||
+          (historical && !repeatsRowLanguage(historical, previous?.names)
+            ? historical
+            : undefined) ||
+          localeName(uttuNames?.[lang]) ||
+          historical;
+        if (resolved) names[lang] = resolved;
+      }
+      return {
+        id: String(id),
+        names,
+        rarity: source.rare ?? cn?.rare ?? null,
+        glPresent: global !== undefined,
+      };
+    },
+  );
+  const psychubes = mergePsychubeSourceRecords(
+    input.previousPsychubes ?? [],
+    psychubeCandidates,
+  );
   return { characters, psychubes, warnings };
 }

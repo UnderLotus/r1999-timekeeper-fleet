@@ -50,3 +50,40 @@ export function buildSkins(entry: ArcanistEntryFull): SkinEntry[] {
 export function defaultVariantId(baseId: string): string {
   return baseId + "01";
 }
+
+/**
+ * Build ArcanistMap-shaped live2d rows from validated supplement metadata so a
+ * supplemental Variant keeps its explicit type instead of an ID-shape guess.
+ */
+export function buildArcanistVariants(
+  baseId: string,
+  variants: readonly {
+    id: string;
+    type: SkinEntry["type"];
+    name?: string | null;
+    nameEn?: string | null;
+  }[],
+): ArcanistSkinFull[] {
+  return variants.map((variant) => {
+    if (
+      variant.type === "skin" &&
+      (variant.id === `${baseId}01` || variant.id === `${baseId}02`)
+    )
+      throw new Error(
+        `Variant ${variant.id} is a skin but matches the legacy default/insight ID shape for ${baseId}`,
+      );
+    return {
+      id: variant.id,
+      name: variant.name || "",
+      nameEng: variant.nameEn || "",
+      des:
+        variant.type === "default"
+          ? INITIAL_DESCRIPTION
+          : variant.type === "insight"
+            ? INSIGHT_DESCRIPTION
+            : "",
+      characterSkin: variant.name || "",
+      characterSkinNameEng: variant.nameEn || "",
+    };
+  });
+}

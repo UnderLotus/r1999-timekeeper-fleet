@@ -2,9 +2,9 @@
   "schemaVersion": 3,
   "sourceHashes": {
     "cn/ArcanistMap.json": "3e26a2c8fcc265c36bb04622054917a46b3a5ffdefcea97083bdf577cf29024e",
-    "cn/character.json": "654e42848f0d754cb63e3959267609975b01bade42f909222cfa5fbfa42be3b8",
-    "cn/equip.json": "5473ec5fb80b5e821e46cf0fd8089c24b3f3f4073349b4ec27fd4f05300c522e",
-    "cn/skin.json": "d1260701fca17d2ada82f78e7afbfba95d5ab61967aea0a2d138b168aaedef4d",
+    "cn/character.json": "e511c42500a083874926e13c4fd8a1fbd55280b1693802571f6b367e8f713ada",
+    "cn/equip.json": "ef06fbe052d38a3e30ee1808f8b12a57926900d19731d6a6dea8d3688da617c1",
+    "cn/skin.json": "0a3caced68836d9a7119e12897e33d3999b911da2522d54d0fb0fc698e66b7a9",
     "name-fallbacks.json": "6874ce42643b67991ba51b8d23a2b69238e6c69558c84a91023227dd713de46c",
     "localized-name-overrides.json": "06fc52fc089303784795827b656400b7db0e9ca362f0b5dc241d0ab2e137dc6f",
     "catalog-policy.json": "f90b6ab244b1e507afb0131eb9f89c1d13241b43de41d13d98f95558fc69ee82",
@@ -15,7 +15,9 @@
     "gl/language_tw.json": "3bff170cb8bd713ff5cc55723399d35725c7930777cea2644707155fe0cddd31",
     "gl/language_jp.json": "cf163f50708466c9703d0d9d6562f3c96c26f743dc3b40a25c7903eb0a6e65fc",
     "gl/language_kr.json": "681f6ef47c5bbdf61ce86c2ae82961debaa180aec3631a7e09233e7050f949ec",
-    "gl/language_en.json": "d2482b385e02732c717c180ac72b692c927eb790ce7fe01638a372abe4f76eda"
+    "gl/language_en.json": "d2482b385e02732c717c180ac72b692c927eb790ce7fe01638a372abe4f76eda",
+    "uttu-supplement.json": "c7ee9c19330f3382a906f6f4f6f4b8e43773515e52ec0872ab89f82603f3e0e6",
+    "uttu-names.json": "41c771c984a6f8eac0657fa306666983ef7f9fe38c35eda434ed143238d6ffdc"
   },
   "characters": [
     {
@@ -1850,6 +1852,13 @@
         {
           "id": "305901",
           "type": "default"
+        },
+        {
+          "id": "305903",
+          "type": "skin",
+          "name": "自我之鉴",
+          "nameEn": "Reflection of the Self",
+          "glPresent": false
         }
       ]
     },
@@ -3533,6 +3542,13 @@
           "name": "意象的欢宴",
           "nameEn": "A Feast of Imagery",
           "glPresent": true
+        },
+        {
+          "id": "311304",
+          "type": "skin",
+          "name": "迷走殿堂",
+          "nameEn": "In His Palace",
+          "glPresent": false
         }
       ]
     },
@@ -4118,6 +4134,13 @@
           "name": "不熄的怀抱",
           "nameEn": "The Ever-Burning Embrace",
           "glPresent": true
+        },
+        {
+          "id": "312704",
+          "type": "skin",
+          "name": "告慰尘与惘",
+          "nameEn": "Solace for the Lost",
+          "glPresent": false
         }
       ]
     },
@@ -4206,6 +4229,13 @@
           "type": "insight",
           "name": "檐外鹭",
           "nameEn": "Breaking Free from a Burning Cage"
+        },
+        {
+          "id": "313703",
+          "type": "skin",
+          "name": "第三秒",
+          "nameEn": "The Third Second",
+          "glPresent": false
         }
       ]
     },
@@ -4267,6 +4297,13 @@
           "name": "致命银弦",
           "nameEn": "Finale in Silver",
           "glPresent": true
+        },
+        {
+          "id": "313904",
+          "type": "skin",
+          "name": "我之野兽",
+          "nameEn": "The Beast Within Me",
+          "glPresent": false
         }
       ]
     },
@@ -4477,6 +4514,13 @@
           "name": "醒时声",
           "nameEn": "Sounds that Wake Her",
           "glPresent": true
+        },
+        {
+          "id": "314404",
+          "type": "skin",
+          "name": "窗外新世界",
+          "nameEn": "A World Through the Porthole",
+          "glPresent": false
         }
       ]
     },
@@ -4616,7 +4660,7 @@
         "zh-CN": "赫多涅",
         "zh-TW": "赫多涅",
         "en-US": "Hedone",
-        "ja-JP": "Hedone",
+        "ja-JP": "ヘドネ",
         "ko-KR": "헤도네"
       },
       "rarity": 5,
@@ -4643,7 +4687,7 @@
         "zh-CN": "纳西索斯",
         "zh-TW": "納西索斯",
         "en-US": "Narcissus",
-        "ja-JP": "Narcissus",
+        "ja-JP": "ナルキッソス",
         "ko-KR": "나르키소스"
       },
       "rarity": 5,
@@ -4731,8 +4775,8 @@
         "zh-CN": "格林杜尔",
         "zh-TW": "格林杜爾",
         "en-US": "Glyndŵr",
-        "ja-JP": "Glyndŵr",
-        "ko-KR": "Glyndŵr"
+        "ja-JP": "グリンドゥル",
+        "ko-KR": "글린두르"
       },
       "rarity": 3,
       "maxInsight": 2,
@@ -4748,6 +4792,60 @@
           "type": "insight",
           "name": "当风声停滞",
           "nameEn": "Till the Wind Ceases"
+        }
+      ]
+    },
+    {
+      "id": "3159",
+      "baseId": "3159",
+      "names": {
+        "zh-CN": "佩施塔",
+        "zh-TW": "Perchta",
+        "en-US": "Perchta",
+        "ja-JP": "Perchta",
+        "ko-KR": "Perchta"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "315901",
+      "glReleased": false,
+      "skins": [
+        {
+          "id": "315901",
+          "type": "default"
+        },
+        {
+          "id": "315902",
+          "type": "insight",
+          "name": "童话出逃日",
+          "nameEn": "Once Upon a Runaway"
+        }
+      ]
+    },
+    {
+      "id": "3160",
+      "baseId": "3160",
+      "names": {
+        "zh-CN": "伊芙琳",
+        "zh-TW": "Evelyn",
+        "en-US": "Evelyn",
+        "ja-JP": "Evelyn",
+        "ko-KR": "Evelyn"
+      },
+      "rarity": 5,
+      "maxInsight": 3,
+      "defaultVariant": "316001",
+      "glReleased": false,
+      "skins": [
+        {
+          "id": "316001",
+          "type": "default"
+        },
+        {
+          "id": "316002",
+          "type": "insight",
+          "name": "疯谜题",
+          "nameEn": "Mad as a Riddle"
         }
       ]
     }
@@ -6173,10 +6271,10 @@
       "id": "1450",
       "names": {
         "zh-CN": "以饰真相",
-        "zh-TW": "Dressing Up the Truth",
+        "zh-TW": "以飾真相",
         "en-US": "Dressing Up the Truth",
-        "ja-JP": "Dressing Up the Truth",
-        "ko-KR": "Dressing Up the Truth"
+        "ja-JP": "真実を装って",
+        "ko-KR": "꾸며진 진실"
       },
       "rarity": 4,
       "glPresent": false
@@ -6185,10 +6283,10 @@
       "id": "1575",
       "names": {
         "zh-CN": "宣告以弦鸣",
-        "zh-TW": "Arrow of Verdict",
+        "zh-TW": "宣告以弦鳴",
         "en-US": "Arrow of Verdict",
-        "ja-JP": "Arrow of Verdict",
-        "ko-KR": "Arrow of Verdict"
+        "ja-JP": "弦の調べに託す宣告",
+        "ko-KR": "활시위의 선포"
       },
       "rarity": 5,
       "glPresent": false
@@ -6197,10 +6295,10 @@
       "id": "1576",
       "names": {
         "zh-CN": "拢于心潮间",
-        "zh-TW": "Tides Held Within",
+        "zh-TW": "攏於心潮間",
         "en-US": "Tides Held Within",
-        "ja-JP": "Tides Held Within",
-        "ko-KR": "Tides Held Within"
+        "ja-JP": "胸にたゆたう潮騒",
+        "ko-KR": "솟구치는 마음을 품고"
       },
       "rarity": 5,
       "glPresent": false

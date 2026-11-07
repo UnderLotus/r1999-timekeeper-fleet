@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "profilesUrl": "https://uttu.merui.net/profiles/",
+    "garmentsUrl": "https://uttu.merui.net/garments/",
+    "headiconSmallUrl": "https://assets.merui.net/headicon_small/",
+    "equipDefaultIconUrl": "https://assets.merui.net/equip_defaulticon/"
+  },
+  "characters": [
+    {
+      "baseId": "3159",
+      "name": "佩施塔",
+      "nameEng": "Perchta",
+      "names": {
+        "zh-CN": "佩施塔",
+        "en-US": "Perchta"
+      },
+      "stars": 6,
+      "defaultVariant": "315901",
+      "skins": [
+        {
+          "variantId": "315901",
+          "type": "default",
+          "name": null,
+          "nameEn": null
+        },
+        {
+          "variantId": "315902",
+          "type": "insight",
+          "name": "童话出逃日",
+          "nameEn": "Once Upon a Runaway"
+        }
+      ]
+    },
+    {
+      "baseId": "3160",
+      "name": "伊芙琳",
+      "nameEng": "Evelyn",
+      "names": {
+        "zh-CN": "伊芙琳",
+        "en-US": "Evelyn"
+      },
+      "stars": 6,
+      "defaultVariant": "316001",
+      "skins": [
+        {
+          "variantId": "316001",
+          "type": "default",
+          "name": null,
+          "nameEn": null
+        },
+        {
+          "variantId": "316002",
+          "type": "insight",
+          "name": "疯谜题",
+          "nameEn": "Mad as a Riddle"
+        }
+      ]
+    }
+  ],
+  "skins": [
+    {
+      "baseId": "3059",
+      "variantId": "305903",
+      "type": "skin",
+      "name": "自我之鉴",
+      "nameEn": "Reflection of the Self"
+    },
+    {
+      "baseId": "3113",
+      "variantId": "311304",
+      "type": "skin",
+      "name": "迷走殿堂",
+      "nameEn": "In His Palace"
+    },
+    {
+      "baseId": "3127",
+      "variantId": "312704",
+      "type": "skin",
+      "name": "告慰尘与惘",
+      "nameEn": "Solace for the Lost"
+    },
+    {
+      "baseId": "3137",
+      "variantId": "313703",
+      "type": "skin",
+      "name": "第三秒",
+      "nameEn": "The Third Second"
+    },
+    {
+      "baseId": "3139",
+      "variantId": "313904",
+      "type": "skin",
+      "name": "我之野兽",
+      "nameEn": "The Beast Within Me"
+    },
+    {
+      "baseId": "3144",
+      "variantId": "314404",
+      "type": "skin",
+      "name": "窗外新世界",
+      "nameEn": "A World Through the Porthole"
+    }
+  ]
+}

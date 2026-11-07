@@ -1422,10 +1422,10 @@ export const psychubes: PsychubeDef[] = [
     "id": "1450",
     "names": {
       "zh-CN": "以饰真相",
-      "zh-TW": "Dressing Up the Truth",
+      "zh-TW": "以飾真相",
       "en-US": "Dressing Up the Truth",
-      "ja-JP": "Dressing Up the Truth",
-      "ko-KR": "Dressing Up the Truth"
+      "ja-JP": "真実を装って",
+      "ko-KR": "꾸며진 진실"
     },
     "rarity": 4,
     "released": false
@@ -1434,10 +1434,10 @@ export const psychubes: PsychubeDef[] = [
     "id": "1575",
     "names": {
       "zh-CN": "宣告以弦鸣",
-      "zh-TW": "Arrow of Verdict",
+      "zh-TW": "宣告以弦鳴",
       "en-US": "Arrow of Verdict",
-      "ja-JP": "Arrow of Verdict",
-      "ko-KR": "Arrow of Verdict"
+      "ja-JP": "弦の調べに託す宣告",
+      "ko-KR": "활시위의 선포"
     },
     "rarity": 5,
     "released": true
@@ -1446,10 +1446,10 @@ export const psychubes: PsychubeDef[] = [
     "id": "1576",
     "names": {
       "zh-CN": "拢于心潮间",
-      "zh-TW": "Tides Held Within",
+      "zh-TW": "攏於心潮間",
       "en-US": "Tides Held Within",
-      "ja-JP": "Tides Held Within",
-      "ko-KR": "Tides Held Within"
+      "ja-JP": "胸にたゆたう潮騒",
+      "ko-KR": "솟구치는 마음을 품고"
     },
     "rarity": 5,
     "released": false
@@ -1498,6 +1498,42 @@ export const psychubes: PsychubeDef[] = [
       "en-US": "Flows in All Things Alike",
       "ja-JP": "Flows in All Things Alike",
       "ko-KR": "Flows in All Things Alike"
+    },
+    "rarity": 5,
+    "released": false
+  },
+  {
+    "id": "1452",
+    "names": {
+      "zh-CN": "完满之路",
+      "zh-TW": "The Path to Perfection",
+      "en-US": "The Path to Perfection",
+      "ja-JP": "The Path to Perfection",
+      "ko-KR": "The Path to Perfection"
+    },
+    "rarity": 4,
+    "released": false
+  },
+  {
+    "id": "1580",
+    "names": {
+      "zh-CN": "纯洁的棺床",
+      "zh-TW": "The Coffin of Purity",
+      "en-US": "The Coffin of Purity",
+      "ja-JP": "The Coffin of Purity",
+      "ko-KR": "The Coffin of Purity"
+    },
+    "rarity": 5,
+    "released": false
+  },
+  {
+    "id": "1581",
+    "names": {
+      "zh-CN": "可食用谜题",
+      "zh-TW": "An Edible Puzzle",
+      "en-US": "An Edible Puzzle",
+      "ja-JP": "An Edible Puzzle",
+      "ko-KR": "An Edible Puzzle"
     },
     "rarity": 5,
     "released": false

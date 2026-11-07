@@ -14,5 +14,8 @@ dist/
 /scripts/data/cn/
 /scripts/data/gl/
 
+# UTTU admissions wait here until their images are installed.
+/scripts/data/uttu-supplement.staging-*.json
+
 # Local agent development notes; keep outside the published project.
 /docs/development.md

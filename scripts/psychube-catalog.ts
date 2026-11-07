@@ -4,8 +4,11 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { fileURLToPath } from "node:url";
-import type { NameLang } from "./name-fallbacks";
+import type { NameLang, PartialNames } from "./name-fallbacks";
 import type { SourcePsychube } from "./catalog-source";
+import { fetchRemoteFile, isUpstreamRefreshError } from "./sync-refresh";
+import { uttuEquipIconUrl, type FetchBinary } from "./uttu-images";
+import { decodeLosslessWebpToPng } from "./webp-converter";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const PSYCHUBE_IMAGE_CACHE_DIR = path.join(
@@ -20,6 +23,8 @@ export const PSYCHUBE_IMAGE_INVENTORY_FILE = path.join(
 export interface PsychubeImageRecord {
   assetPath: string;
   sha256: string;
+  /** Set when the PNG was decoded from the UTTU supplemental mirror. */
+  source?: string;
 }
 
 export interface PsychubeImageInventory {
@@ -45,9 +50,12 @@ export function isTrustedPsychubeName(value: unknown): value is string {
   );
 }
 
-function preferredEnglish(
-  names: SourcePsychube["names"],
-): string | undefined {
+/** Incoming psychube carrying only the names its raw sources resolved. */
+export type PsychubeSourceCandidate = Omit<SourcePsychube, "names"> & {
+  names: PartialNames;
+};
+
+function preferredEnglish(names: PartialNames): string | undefined {
   const english = names["en-US"]?.trim();
   const chinese = names["zh-CN"]?.trim();
   return isTrustedPsychubeName(english) && english !== chinese
@@ -57,7 +65,7 @@ function preferredEnglish(
 
 function mergeSource(
   previous: SourcePsychube | undefined,
-  incoming: SourcePsychube,
+  incoming: PsychubeSourceCandidate,
 ): SourcePsychube {
   const names = {} as SourcePsychube["names"];
   const incomingZh = incoming.names["zh-CN"]?.trim();
@@ -74,19 +82,15 @@ function mergeSource(
     if (lang === "zh-CN") names[lang] = zh;
     else if (lang === "en-US") names[lang] = english;
     else {
+      // A locale the raw sources resolved is trusted even when it repeats
+      // English/CN; only a missing locale falls back to the previous row.
       const candidate = incoming.names[lang]?.trim();
-      const freshTranslation =
-        isTrustedPsychubeName(candidate) &&
-        candidate !== incoming.names["zh-CN"] &&
-        candidate !== incoming.names["en-US"];
       const previousTranslation = previous?.names[lang]?.trim();
-      names[lang] = freshTranslation
+      names[lang] = isTrustedPsychubeName(candidate)
         ? candidate
         : isTrustedPsychubeName(previousTranslation)
           ? previousTranslation
-          : isTrustedPsychubeName(candidate)
-            ? candidate
-            : english;
+          : english;
     }
   }
   return {
@@ -103,7 +107,7 @@ function mergeSource(
 /** Merge incoming records while retaining trusted fields through absence or partial deterioration. */
 export function mergePsychubeSourceRecords(
   previous: readonly SourcePsychube[],
-  incoming: readonly SourcePsychube[],
+  incoming: readonly PsychubeSourceCandidate[],
 ): SourcePsychube[] {
   const previousById = new Map(previous.map((entry) => [entry.id, entry]));
   const incomingIds = new Set(incoming.map((entry) => entry.id));
@@ -160,7 +164,19 @@ export function parsePsychubeImageInventory(
       !/^[a-f0-9]{64}$/.test(record.sha256)
     )
       throw new Error(`Invalid psychube image mapping for ${id}`);
-    images[id] = { assetPath: record.assetPath, sha256: record.sha256 };
+    if (
+      record.source !== undefined &&
+      (typeof record.source !== "string" ||
+        !/^https:\/\/assets\.merui\.net\/equip_defaulticon\/\d+\.webp$/.test(
+          record.source,
+        ))
+    )
+      throw new Error(`Invalid psychube image source for ${id}`);
+    images[id] = {
+      assetPath: record.assetPath,
+      sha256: record.sha256,
+      ...(record.source === undefined ? {} : { source: record.source }),
+    };
   }
   return { schemaVersion: 1, images };
 }
@@ -178,7 +194,7 @@ export function loadPsychubeImageInventory(
     const imageFile = path.join(cacheDir, `${id}.png`);
     if (!existsSync(imageFile)) continue;
     const digest = createHash("sha256").update(readFileSync(imageFile)).digest("hex");
-    if (digest === record.sha256) images[id] = record;
+    if (digest === record.sha256) images[id] = { ...record };
   }
   return { schemaVersion: 1, images };
 }
@@ -208,6 +224,7 @@ export async function persistPsychubeImageCache(
   sourceDir: string,
   cacheDir = PSYCHUBE_IMAGE_CACHE_DIR,
   inventoryFile = PSYCHUBE_IMAGE_INVENTORY_FILE,
+  sourceUrls?: ReadonlyMap<string, string>,
 ): Promise<{ updated: number; missing: string[] }> {
   await mkdir(cacheDir, { recursive: true });
   await mkdir(path.dirname(inventoryFile), { recursive: true });
@@ -248,9 +265,11 @@ export async function persistPsychubeImageCache(
       await copyFile(source, temporary);
       await validatePsychubePng(temporary);
       await rename(temporary, target);
+      const sourceUrl = sourceUrls?.get(id);
       images[id] = {
         assetPath: `singlebg/equip_defaulticon/${id}.png`,
         sha256: digest,
+        ...(sourceUrl === undefined ? {} : { source: sourceUrl }),
       };
       updated++;
     } catch (error) {
@@ -279,4 +298,65 @@ export function psychubeImageCacheFile(
 ): string {
   if (!/^\d+$/.test(id)) throw new Error(`Invalid psychube ID: ${id}`);
   return path.join(cacheDir, `${id}.png`);
+}
+
+/** Catalog psychubes whose validated icon is still missing; nothing else may borrow an icon. */
+export function supplementPsychubeIds(
+  catalogIds: readonly string[],
+  imageIds: ReadonlySet<string>,
+): string[] {
+  return [...new Set(catalogIds)].filter((id) => !imageIds.has(id)).sort();
+}
+
+/**
+ * Fill missing catalog icons from the UTTU mirror. Only images that pass the
+ * same 276×228 validation as the primary source are persisted, and each record
+ * keeps the URL it came from.
+ */
+export async function supplementPsychubeIcons(
+  ids: readonly string[],
+  stagingDir: string,
+  cacheDir = PSYCHUBE_IMAGE_CACHE_DIR,
+  inventoryFile = PSYCHUBE_IMAGE_INVENTORY_FILE,
+  fetcher: FetchBinary = (url, output) => fetchRemoteFile(url, output, 60, 2),
+): Promise<{ filled: string[]; unavailable: string[] }> {
+  const unavailable: string[] = [];
+  const decoded: string[] = [];
+  const sources = new Map<string, string>();
+  for (const id of ids) {
+    const webp = path.join(stagingDir, `${id}.webp`);
+    try {
+      fetcher(uttuEquipIconUrl(id), webp);
+    } catch (error) {
+      if (!isUpstreamRefreshError(error)) throw error;
+      unavailable.push(id);
+      continue;
+    }
+    // Local read stays outside the classification: only the downloaded bytes are
+    // judged as an unusable image.
+    const bytes = readFileSync(webp);
+    let png: Buffer;
+    try {
+      png = await decodeLosslessWebpToPng(bytes, `${id}.webp`);
+    } catch {
+      // An unusable mirror image leaves the icon missing; it never replaces a cached PNG.
+      unavailable.push(id);
+      continue;
+    }
+    writeFileSync(path.join(stagingDir, `${id}.png`), png);
+    decoded.push(id);
+    sources.set(id, uttuEquipIconUrl(id));
+  }
+  if (decoded.length === 0) return { filled: [], unavailable };
+  const persisted = await persistPsychubeImageCache(
+    decoded,
+    stagingDir,
+    cacheDir,
+    inventoryFile,
+    sources,
+  );
+  return {
+    filled: decoded.filter((id) => !persisted.missing.includes(id)),
+    unavailable: [...unavailable, ...persisted.missing],
+  };
 }

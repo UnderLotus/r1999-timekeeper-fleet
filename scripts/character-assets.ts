@@ -9,6 +9,7 @@ export interface CharacterAssetCandidate {
 export type MissingCharacterAssetAction =
   | "convert"
   | "retain"
+  | "install-supplement"
   | "skip"
   | "fatal";
 
@@ -39,14 +40,21 @@ export function collectCharacterAssetCandidates(
   return [...byId.values()];
 }
 
-/** Decide how a missing source PNG affects one catalog Variant. */
+/**
+ * Decide how a missing source PNG affects one catalog Variant. A primary PNG is
+ * the preferred source, an installed trusted WebP is never replaced by the
+ * secondary source, and a validated supplemental headicon only fills the gap
+ * the primary source leaves.
+ */
 export function classifyMissingCharacterAsset(
   candidate: Pick<CharacterAssetCandidate, "type">,
   hasSourcePng: boolean,
   hasTrustedProductionWebp: boolean,
+  hasSupplementalWebp = false,
 ): MissingCharacterAssetAction {
   if (hasSourcePng) return "convert";
   if (hasTrustedProductionWebp) return "retain";
+  if (hasSupplementalWebp) return "install-supplement";
   return candidate.type === "skin" ? "skip" : "fatal";
 }
 

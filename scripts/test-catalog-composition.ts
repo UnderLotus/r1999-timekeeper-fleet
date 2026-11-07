@@ -1,21 +1,23 @@
 import {
   composeCatalogSource,
+  type CatalogCompositionInput,
   type CatalogLanguageTables,
   type Equip,
   type PackageCharacter,
 } from "./catalog-composition";
 import type { CatalogPolicy } from "./catalog-policy";
+import type { SourceCharacter } from "./catalog-source";
 import { buildSkins, type ArcanistEntryFull } from "./skin-utils";
 
 let pass = 0;
 let fail = 0;
-function check(name: string, value: boolean): void {
+function check(name: string, value: boolean, detail = ""): void {
   if (value) {
     pass++;
     console.log(`  ✓ ${name}`);
   } else {
     fail++;
-    console.error(`  ✗ ${name}`);
+    console.error(`  ✗ ${name}${detail ? ` — ${detail}` : ""}`);
   }
 }
 
@@ -292,6 +294,232 @@ for (const [baseId, variantId] of [["3066", "30660001"], ["3088", "30880001"]]) 
       character.defaultVariant === `${baseId}01` &&
       character.skins.filter((skin) => skin.type === "default").length === 1 &&
       character.skins.some((skin) => skin.id === character.defaultVariant),
+  );
+}
+const nameHistory: SourceCharacter = {
+  id: "7001",
+  baseId: "7001",
+  names: {
+    "zh-CN": "旧简中",
+    "zh-TW": "Old English",
+    "en-US": "Old English",
+    "ja-JP": "古い訳",
+    "ko-KR": "옛 번역",
+  },
+  rarity: 4,
+  maxInsight: 2,
+  defaultVariant: "700101",
+  glReleased: false,
+  skins: [{ id: "700101", type: "default" }],
+};
+const renamed = composeCatalogSource({
+  arcanists: [arcanist(7001, "新简中", "New English", [700101])],
+  cnCharacters: [{ id: 7001, name: "新简中", nameEng: "New English", rare: 3 }],
+  globalCharacters: [
+    { id: 7001, name: "name-key", nameEng: "New English", rare: 3, isOnline: 0 },
+  ],
+  cnSkins: [{ id: 700101, characterId: 7001 }],
+  globalSkins: [],
+  cnEquips: [],
+  globalEquips: [],
+  languages: {
+    "zh-CN": { "name-key": "新简中" },
+    "zh-TW": {},
+    "en-US": { "name-key": "New English" },
+    "ja-JP": {},
+    "ko-KR": {},
+  },
+  nameFallbacks: new Map(),
+  nameOverrides: new Map(),
+  policy: {
+    excludedCharacters: [],
+    excludedPsychubes: [],
+    characterCapabilities: [],
+    preservedCharacterAssets: [],
+    ignoredCnSkinStubs: [],
+  },
+  releaseClock: new Date("2026-01-01T00:00:00.000Z"),
+  previousCharacters: [nameHistory],
+});
+const renamedOne = renamed.characters.find((entry) => entry.baseId === "7001");
+check(
+  "previous row keeps its own real localized translations through a fresh candidate",
+  renamedOne?.names["ja-JP"] === "古い訳" && renamedOne?.names["ko-KR"] === "옛 번역",
+  JSON.stringify(renamedOne?.names),
+);
+check(
+  "a previous locale equal to the previous row's own English is compared against the old English, not the renamed incoming one",
+  renamedOne?.names["zh-TW"] === "Old English" &&
+    renamedOne?.names["en-US"] === "New English",
+  JSON.stringify(renamedOne?.names),
+);
+const uttuInput: CatalogCompositionInput = {
+  arcanists: [
+    arcanist(7101, "UTTU 一", "UTTU One", [710101]),
+    arcanist(7102, "UTTU 二", "UTTU Two", [710201]),
+    arcanist(7103, "UTTU 三", "UTTU Three", [710301]),
+  ],
+  cnCharacters: [
+    { id: 7101, name: "UTTU 一", nameEng: "UTTU One", rare: 5 },
+    { id: 7102, name: "UTTU 二", nameEng: "UTTU Two", rare: 5 },
+    { id: 7103, name: "UTTU 三", nameEng: "UTTU Three", rare: 5 },
+  ],
+  globalCharacters: [
+    { id: 7102, name: "same-name-key", nameEng: "Same Name", rare: 5, isOnline: 0 },
+  ],
+  cnSkins: [710101, 710201, 710301].map((id) => ({
+    id,
+    characterId: Number(String(id).slice(0, 4)),
+  })),
+  globalSkins: [],
+  cnEquips: [
+    { id: 7201, name: "国服心相", name_en: "CN Psychube", icon: "", rare: 5 },
+  ],
+  globalEquips: [
+    { id: 7202, name: "global-cube", name_en: "Global Psychube", icon: "", rare: 5 },
+    { id: 7203, name: "same-name-key", name_en: "Same Name", icon: "", rare: 5 },
+    { id: 1000, name: "material", name_en: "Material", icon: "", rare: 5, isExpEquip: 1 },
+  ],
+  languages: {
+    "zh-CN": { "same-name-key": "同名" },
+    "zh-TW": { "same-name-key": " Same Name " },
+    "en-US": { "same-name-key": "Same Name" },
+    "ja-JP": { "same-name-key": "Same Name" },
+    "ko-KR": {},
+  },
+  nameFallbacks: new Map([
+    ["7101", { "en-US": "UTTU One", "ja-JP": " UTTU One " }],
+  ]),
+  nameOverrides: new Map([["7103", { "ko-KR": " UTTU Three " }]]),
+  uttuCharacterNames: new Map([
+    ["7101", { "zh-TW": "UTTU繁中一", "ja-JP": "UTTU日本語一" }],
+    ["7103", { "ja-JP": "UTTU日本語三", "ko-KR": "다른 번역" }],
+    ["7999", { "ja-JP": "未收錄角色" }],
+  ]),
+  uttuPsychubeNames: new Map([
+    ["7201", { "zh-TW": "國服心相繁中", "ja-JP": "国服心相日本語" }],
+    ["7202", { "zh-TW": "全球心相繁中" }],
+    ["1000", { "ja-JP": "素材" }],
+  ]),
+  previousPsychubes: [
+    {
+      id: "7201",
+      names: {
+        "zh-CN": "舊簡中",
+        "zh-TW": "舊真譯",
+        "en-US": "Old English",
+        "ja-JP": "旧日本語",
+        "ko-KR": "옛 번역",
+      },
+      rarity: 5,
+      glPresent: false,
+    },
+    {
+      id: "7203",
+      names: {
+        "zh-CN": "舊簡中",
+        "zh-TW": "舊繁中",
+        "en-US": "Old English",
+        "ja-JP": "旧日本語",
+        "ko-KR": "옛 번역",
+      },
+      rarity: 5,
+      glPresent: true,
+    },
+  ],
+  policy: {
+    excludedCharacters: [],
+    excludedPsychubes: [],
+    characterCapabilities: [],
+    preservedCharacterAssets: [],
+    ignoredCnSkinStubs: [],
+  },
+  releaseClock: new Date("2026-01-01T00:00:00.000Z"),
+};
+const uttuLayer = composeCatalogSource(uttuInput);
+const uttuOne = uttuLayer.characters.find((entry) => entry.baseId === "7101");
+const uttuSame = uttuLayer.characters.find((entry) => entry.baseId === "7102");
+const uttuThree = uttuLayer.characters.find((entry) => entry.baseId === "7103");
+check(
+  "a third-party locale repeating its own English defers to the UTTU translation",
+  uttuOne?.names["ja-JP"] === "UTTU日本語一" &&
+    uttuOne?.names["zh-TW"] === "UTTU繁中一",
+  JSON.stringify(uttuOne?.names),
+);
+check(
+  "valid Global and manual locales retain same-name priority after trimming",
+  uttuSame?.names["zh-TW"] === "Same Name" &&
+    uttuSame?.names["ja-JP"] === "Same Name" &&
+    uttuThree?.names["ko-KR"] === "UTTU Three",
+  JSON.stringify(uttuSame?.names),
+);
+check(
+  "UTTU names for IDs outside the catalog never create a character",
+  !uttuLayer.characters.some((entry) => entry.baseId === "7999") &&
+    uttuThree?.names["ja-JP"] === "UTTU日本語三",
+);
+const psychubeOne = uttuLayer.psychubes.find((entry) => entry.id === "7201");
+const psychubeTwo = uttuLayer.psychubes.find((entry) => entry.id === "7202");
+const psychubeThree = uttuLayer.psychubes.find((entry) => entry.id === "7203");
+check(
+  "a previous explicit psychube translation stays ahead of the UTTU locale",
+  psychubeOne?.names["zh-TW"] === "舊真譯" &&
+    psychubeOne?.names["ja-JP"] === "旧日本語" &&
+    psychubeOne?.names["zh-CN"] === "国服心相" &&
+    psychubeOne?.names["en-US"] === "CN Psychube",
+  JSON.stringify(psychubeOne?.names),
+);
+check(
+  "UTTU supplies a psychube locale no raw source or previous row carries",
+  psychubeTwo?.names["zh-TW"] === "全球心相繁中",
+  JSON.stringify(psychubeTwo?.names),
+);
+check(
+  "an explicit raw Global psychube locale that repeats English outranks a previous translation",
+  psychubeThree?.names["zh-TW"] === "Same Name",
+  JSON.stringify(psychubeThree?.names),
+);
+check(
+  "UTTU psychube names never add an upgrade material or an unknown ID",
+  !uttuLayer.psychubes.some((entry) => entry.id === "1000" || entry.id === "999"),
+  JSON.stringify(uttuLayer.psychubes.map((entry) => entry.id)),
+);
+for (const invalid of ["N/A", "???", "   "]) {
+  const translated = composeCatalogSource({
+    ...uttuInput,
+    languages: {
+      ...uttuInput.languages,
+      "ja-JP": { "same-name-key": invalid, "global-cube": invalid },
+    },
+    nameOverrides: new Map([["7102", { "ja-JP": invalid }]]),
+    nameFallbacks: new Map([["7102", { "ja-JP": invalid }]]),
+    previousCharacters: uttuLayer.characters.map((entry) => ({
+      ...entry, names: { ...entry.names, "ja-JP": invalid },
+    })),
+    previousPsychubes: uttuLayer.psychubes.map((entry) => ({
+      ...entry, names: { ...entry.names, "ja-JP": invalid },
+    })),
+    uttuCharacterNames: new Map([["7102", { "ja-JP": " 新訳 " }]]),
+    uttuPsychubeNames: new Map([["7202", { "ja-JP": " 新訳 " }]]),
+  });
+  check(
+    `invalid higher-priority locales ${JSON.stringify(invalid)} do not block UTTU`,
+    translated.characters.find((entry) => entry.id === "7102")?.names["ja-JP"] === "新訳" &&
+      translated.psychubes.find((entry) => entry.id === "7202")?.names["ja-JP"] === "新訳",
+  );
+  const weakFallback = composeCatalogSource({
+    ...uttuInput,
+    uttuCharacterNames: new Map([["7101", { "ja-JP": invalid }]]),
+    supplementNames: new Map([["7101", { "ja-JP": invalid }]]),
+    uttuPsychubeNames: new Map([["7202", { "ja-JP": invalid }]]),
+    previousPsychubes: uttuLayer.psychubes.map((entry) => ({
+      ...entry, names: { ...entry.names, "ja-JP": entry.names["en-US"] },
+    })),
+  });
+  check(
+    `invalid UTTU and supplemental locales ${JSON.stringify(invalid)} leave usable fallback`,
+    weakFallback.characters.find((entry) => entry.id === "7101")?.names["ja-JP"] === "UTTU One" &&
+      weakFallback.psychubes.find((entry) => entry.id === "7202")?.names["ja-JP"] === "Global Psychube",
   );
 }
 console.log(`\ncatalog composition tests: ${pass} passed, ${fail} failed`);

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -7,7 +7,6 @@ import {
   loadCatalogSource,
   type CatalogSourceSnapshot,
 } from "./catalog-source";
-import { mergePsychubeSourceRecords } from "./psychube-catalog";
 import {
   assertKnownCatalogPolicy,
   loadCatalogPolicy,
@@ -36,6 +35,17 @@ import {
   persistMappingDiff,
   reportUnmappedCnSkins,
 } from "./skin-mapping-diff";
+import {
+  loadUttuSupplementForBuild,
+  mergeSupplementPackageCharacters,
+  mergeUttuSupplement,
+  uttuSupplementBuildFile,
+} from "./uttu-supplement";
+import {
+  indexUttuNames,
+  loadUttuNames,
+  UTTU_NAMES_FILE,
+} from "./uttu-names";
 
 export { completeCatalogNames } from "./catalog-composition";
 
@@ -80,7 +90,21 @@ export function extractCatalogSource(): void {
     ),
     new Set(cnSkins.map((entry) => String(entry.id))),
   );
-  const knownCharacterIds = new Set(arcanists.map((entry) => String(entry.id)));
+  // Supplemental rows only fill CN mapping lag; the raw ArcanistMap above stays
+  // the authority for character existence, Variant ownership and policy checks.
+  const supplement = mergeUttuSupplement(
+    arcanists,
+    loadUttuSupplementForBuild(),
+  );
+  for (const diagnostic of supplement.diagnostics)
+    console.warn(`build:source warning — ${diagnostic}`);
+  if (supplement.returnedToPrimary.length)
+    console.log(
+      `  ArcanistMap now owns supplement Variants: ${supplement.returnedToPrimary.join(", ")}`,
+    );
+  const knownCharacterIds = new Set(
+    supplement.arcanists.map((entry) => String(entry.id)),
+  );
   const nameFallbacks = loadNameFallbacks(
     NAME_FALLBACK_FILE,
     knownCharacterIds,
@@ -92,21 +116,34 @@ export function extractCatalogSource(): void {
   const languages = Object.fromEntries(
     NAME_LANGS.map((lang) => [lang, loadGlLanguage(lang)]),
   ) as Record<Lang, Record<string, string>>;
+  const uttuNames = loadUttuNames();
   const { characters, psychubes, warnings } = composeCatalogSource({
-    arcanists,
-    cnCharacters,
+    arcanists: supplement.arcanists,
+    cnCharacters: mergeSupplementPackageCharacters(
+      cnCharacters,
+      supplement.characters,
+    ),
     globalCharacters,
-    cnSkins,
+    cnSkins: [...cnSkins, ...supplement.skins],
     globalSkins,
     cnEquips,
     globalEquips,
     languages,
     nameFallbacks,
     nameOverrides,
+    supplementNames: new Map(
+      supplement.supplement.characters.map((character) => [
+        character.baseId,
+        character.names,
+      ]),
+    ),
+    uttuCharacterNames: indexUttuNames(uttuNames.characters),
+    uttuPsychubeNames: indexUttuNames(uttuNames.psychubes),
     policy,
     releaseClock,
     globalUtcOffsetMinutes: GLOBAL_SERVER_UTC_OFFSET_MINUTES,
     previousCharacters: previousSource.characters,
+    previousPsychubes: previousSource.psychubes,
   });
   for (const warning of warnings) console.warn(`build:source warning — ${warning}`);
   const files = [
@@ -129,11 +166,16 @@ export function extractCatalogSource(): void {
   const sourceHashes = Object.fromEntries(
     files.map((file) => [file, sha256(path.join(__dirname, "data", file))]),
   );
+  const supplementFile = uttuSupplementBuildFile();
+  if (existsSync(supplementFile))
+    sourceHashes["uttu-supplement.json"] = sha256(supplementFile);
+  if (existsSync(UTTU_NAMES_FILE))
+    sourceHashes["uttu-names.json"] = sha256(UTTU_NAMES_FILE);
   const snapshot: CatalogSourceSnapshot = {
     schemaVersion: 3,
     sourceHashes,
     characters,
-    psychubes: mergePsychubeSourceRecords(previousSource.psychubes, psychubes),
+    psychubes,
   };
   writeFileSync(CATALOG_SOURCE_FILE, JSON.stringify(snapshot, null, 2) + "\n");
   console.log(
@@ -141,7 +183,7 @@ export function extractCatalogSource(): void {
   );
   const mappingDiff = computeUnmappedCnSkins(
     cnSkins,
-    arcanists,
+    supplement.arcanists,
     new Set(policy.ignoredCnSkinStubs.map((entry) => entry.id)),
   );
   const persisted = persistMappingDiff(mappingDiff, MAPPING_DIFF_FILE);
