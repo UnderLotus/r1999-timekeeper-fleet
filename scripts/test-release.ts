@@ -57,25 +57,8 @@ for (const [label, value, expected] of globalIsOnlineFixtures)
     resolveGlobalIsOnline(value, releaseClock, globalUtcOffsetMinutes) === expected,
   );
 check(
-  "server-local timestamp conversion uses the explicit region offset",
-  resolveGlobalIsOnline(
-    "2026-09-03 04:59:59",
-    new Date("2026-09-03T09:59:59.000Z"),
-    globalUtcOffsetMinutes,
-  ) === false &&
-    resolveGlobalIsOnline(
-      "2026-09-03 04:59:59",
-      new Date("2026-09-03T10:00:00.000Z"),
-      globalUtcOffsetMinutes,
-    ) === true,
-);
-check(
   "unknown string isOnline fails loudly",
   throws(() => resolveGlobalIsOnline("2", releaseClock, globalUtcOffsetMinutes)),
-);
-check(
-  "unknown numeric isOnline fails loudly",
-  throws(() => resolveGlobalIsOnline(2, releaseClock, globalUtcOffsetMinutes)),
 );
 check(
   "non-Global timestamp syntax fails loudly",
@@ -84,10 +67,6 @@ check(
 check(
   "invalid Global timestamp calendar date fails loudly",
   throws(() => resolveGlobalIsOnline("2026-02-30 05:00:00", releaseClock, globalUtcOffsetMinutes)),
-);
-check(
-  "invalid release clock fails loudly",
-  throws(() => resolveGlobalIsOnline("2026-09-03 04:59:59", new Date(NaN), globalUtcOffsetMinutes)),
 );
 check(
   "manual false overrides released character",

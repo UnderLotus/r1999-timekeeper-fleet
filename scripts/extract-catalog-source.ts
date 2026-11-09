@@ -47,8 +47,6 @@ import {
   UTTU_NAMES_FILE,
 } from "./uttu-names";
 
-export { completeCatalogNames } from "./catalog-composition";
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MAPPING_DIFF_FILE = mappingDiffFile();
 const POLICY_FILE = path.join(__dirname, "data/catalog-policy.json");

@@ -1,4 +1,4 @@
-/** Validate generated catalogs retain the five-locale contract and stable IDs. */
+/** Check generated catalog IDs and required/optional locale fields. */
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -31,21 +31,27 @@ function validate(
     invalidIds.length === 0,
     invalidIds.join(","),
   );
-  for (const lang of LANGS) {
-    const invalid = entries
-      .filter(
-        (entry) =>
-          typeof entry.names?.[lang] !== "string" ||
-          !(entry.names[lang] as string).trim() ||
-          (entry.names[lang] as string).includes("???"),
-      )
-      .map((entry) => String(entry.id));
-    check(
-      `${kind} ${lang} names are complete`,
-      invalid.length === 0,
-      invalid.join(","),
-    );
-  }
+  const invalidNames = entries
+    .filter((entry) => {
+      const names = entry.names;
+      if (typeof names !== "object" || names === null || Array.isArray(names))
+        return true;
+      return (
+        typeof names["zh-CN"] !== "string" ||
+        Object.entries(names).some(
+          ([lang, name]) =>
+            !LANGS.includes(lang as (typeof LANGS)[number]) ||
+            typeof name !== "string" ||
+            !name.trim(),
+        )
+      );
+    })
+    .map((entry) => String(entry.id));
+  check(
+    `${kind} rows keep canonical Chinese and valid optional locales`,
+    invalidNames.length === 0,
+    invalidNames.join(","),
+  );
 }
 const charsFile = path.join(ROOT, "src/data/characters.ts");
 const psychubesFile = path.join(ROOT, "src/data/psychubes.ts");

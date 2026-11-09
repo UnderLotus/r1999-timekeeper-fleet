@@ -10,7 +10,7 @@ import {
   resolveGlobalIsOnline,
   type GlobalClock,
 } from "./release-status";
-import type { NameLang, PartialNames } from "./name-fallbacks";
+import { NAME_LANGS, type NameLang, type PartialNames } from "./name-fallbacks";
 import {
   isTrustedPsychubeName,
   mergePsychubeSourceRecords,
@@ -79,21 +79,6 @@ export interface CatalogCompositionResult {
   warnings: string[];
 }
 
-export function completeCatalogNames(
-  zh: string,
-  en: string,
-  localized: Partial<Record<NameLang, string>>,
-): Record<NameLang, string> {
-  const fallback = en || zh;
-  return {
-    "zh-CN": zh,
-    "zh-TW": localized["zh-TW"] || fallback,
-    "en-US": fallback,
-    "ja-JP": localized["ja-JP"] || fallback,
-    "ko-KR": localized["ko-KR"] || fallback,
-  };
-}
-
 export function isPsychube(entry: Equip, excluded: ReadonlySet<string>): boolean {
   return (
     !excluded.has(String(entry.id)) &&
@@ -105,18 +90,6 @@ export function isPsychube(entry: Equip, excluded: ReadonlySet<string>): boolean
 
 function localeName(value: string | undefined): string | undefined {
   return isTrustedPsychubeName(value) ? value.trim() : undefined;
-}
-
-/** A value that only repeats its own row's English or CN is not a translation. */
-function repeatsRowLanguage(
-  value: string | undefined,
-  row: PartialNames | undefined,
-): boolean {
-  return (
-    !value ||
-    value === row?.["en-US"]?.trim() ||
-    value === row?.["zh-CN"]?.trim()
-  );
 }
 
 class CharacterCandidateError extends Error {
@@ -197,31 +170,23 @@ function buildCharacterCandidate(
     supplemental?.["zh-CN"] ||
     arc.name;
   const en =
-    globalName("en-US") ||
-    global?.nameEng ||
-    manualNames["en-US"] ||
-    fallback["en-US"] ||
-    (supplemental ? cn?.nameEng : "") ||
-    supplemental?.["en-US"] ||
-    arc.nameEng ||
-    zh;
-  const localized = (lang: NameLang): string => {
-    const globalLocale = localeName(globalName(lang));
-    if (globalLocale) return globalLocale;
-    const manual = localeName(manualNames[lang]);
-    if (manual) return manual;
-    const thirdParty = localeName(fallback[lang]);
-    if (thirdParty && !repeatsRowLanguage(thirdParty, fallback))
-      return thirdParty;
-    const historical = localeName(previous?.names[lang]);
-    if (historical && !repeatsRowLanguage(historical, previous?.names))
-      return historical;
-    return (
-      localeName(uttuNames?.[lang]) ??
-      localeName(supplemental?.[lang]) ??
-      thirdParty ?? historical ?? ""
-    );
-  };
+    localeName(globalName("en-US")) ??
+    localeName(global?.nameEng) ??
+    localeName(manualNames["en-US"]) ??
+    localeName(fallback["en-US"]) ??
+    localeName(supplemental ? cn?.nameEng : undefined) ??
+    localeName(supplemental?.["en-US"]) ??
+    localeName(arc.nameEng) ??
+    localeName(previous?.names["en-US"]);
+  // Each locale resolves only same-locale sources, in source order: a locale
+  // with no trusted value stays absent instead of borrowing another language.
+  const localized = (lang: NameLang): string | undefined =>
+    localeName(globalName(lang)) ??
+    localeName(manualNames[lang]) ??
+    localeName(fallback[lang]) ??
+    localeName(previous?.names[lang]) ??
+    localeName(uttuNames?.[lang]) ??
+    localeName(supplemental?.[lang]);
   const rarity = global?.rare ?? cn?.rare ?? null;
   const emittedSkins: SourceSkin[] = buildSkins(arc)
     .filter((skin) => cnSkinIds.has(skin.id))
@@ -252,14 +217,17 @@ function buildCharacterCandidate(
       );
     }
   }
+  const canonical: PartialNames = { "zh-CN": zh, "en-US": en };
+  const names: PartialNames = {};
+  for (const lang of NAME_LANGS) {
+    const value =
+      lang === "zh-CN" || lang === "en-US" ? canonical[lang] : localized(lang);
+    if (value?.trim()) names[lang] = value;
+  }
   const candidate: SourceCharacter = {
     id: baseId,
     baseId,
-    names: completeCatalogNames(zh, en, {
-      "zh-TW": localized("zh-TW"),
-      "ja-JP": localized("ja-JP"),
-      "ko-KR": localized("ko-KR"),
-    }),
+    names,
     rarity,
     maxInsight: rarity !== null && rarity >= 4 ? 3 : 2,
     defaultVariant,
@@ -386,14 +354,10 @@ export function composeCatalogSource(
       if (zh) names["zh-CN"] = zh;
       if (en) names["en-US"] = en;
       for (const lang of ["zh-TW", "ja-JP", "ko-KR"] as const) {
-        const globalLocale = localeName(input.languages[lang][source.name]);
-        const historical = localeName(previous?.names[lang]);
-        const resolved = globalLocale ||
-          (historical && !repeatsRowLanguage(historical, previous?.names)
-            ? historical
-            : undefined) ||
-          localeName(uttuNames?.[lang]) ||
-          historical;
+        const resolved =
+          localeName(input.languages[lang][source.name]) ??
+          localeName(previous?.names[lang]) ??
+          localeName(uttuNames?.[lang]);
         if (resolved) names[lang] = resolved;
       }
       return {

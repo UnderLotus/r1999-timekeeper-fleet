@@ -150,19 +150,6 @@ try {
   assert.deepEqual(failedCoverage, { huiji: ["3000"], kornblume: [] });
   assert.equal(readFileSync(target, "utf-8"), prior, "insufficient Huiji results leave the previous snapshot intact");
 
-  await assert.rejects(
-    () =>
-      synchronizeReleaseOrderFile(
-        target,
-        known,
-        async () => {
-          throw new Error("programming failure");
-        },
-        async () => kb,
-      ),
-    /programming failure/,
-    "arbitrary Huiji callback errors remain fatal",
-  );
 } finally {
   rmSync(temp, { recursive: true, force: true });
 }

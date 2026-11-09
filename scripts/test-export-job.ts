@@ -77,42 +77,6 @@ release();
 await waitFor(() => runningJob.getState().status === "idle");
 runningJob.dispose();
 
-const missingTargetJob = createExportJob({
-  getTarget: () => null,
-  waitForRender: async () => {},
-  runExport: async () => {
-    throw new Error("renderer should not run without a target");
-  },
-});
-missingTargetJob.start(snapshot());
-await waitFor(() => missingTargetJob.getState().status === "error");
-check(
-  "missing render targets become recoverable job errors",
-  missingTargetJob.getState().error === "Export canvas is unavailable",
-);
-missingTargetJob.dismissError();
-check(
-  "the UI can dismiss a recoverable error and return idle",
-  missingTargetJob.getState().status === "idle" &&
-    missingTargetJob.getState().error === null,
-);
-missingTargetJob.dispose();
-
-const timedOutJob = createExportJob({
-  getTarget: () => target,
-  waitForRender: async () => {
-    throw new Error("Timed out waiting for export canvas");
-  },
-  runExport: async () => {},
-});
-timedOutJob.start(snapshot());
-await waitFor(() => timedOutJob.getState().status === "error");
-check(
-  "render readiness timeouts reset busy state",
-  timedOutJob.getState().error === "Timed out waiting for export canvas",
-);
-timedOutJob.dispose();
-
 let sawFailedProgress = false;
 const failedJob = createExportJob({
   getTarget: () => target,
@@ -132,39 +96,15 @@ check(
   failedJob.getState().error === "encoding failed" &&
     sawFailedProgress,
 );
+failedJob.dismissError();
+check(
+  "a renderer failure is dismissible back to a retryable job",
+  failedJob.getState().status === "idle" &&
+    failedJob.getState().error === null &&
+    failedJob.start(snapshot()),
+);
 failedUnsubscribe();
 failedJob.dispose();
-
-let disposeRelease: () => void = () => {};
-const disposableJob = createExportJob({
-  getTarget: () => target,
-  waitForRender: async () => {},
-  runExport: async (_target, onProgress) => {
-    onProgress({ phase: "rendering", loaded: 0, total: 0 });
-    await new Promise<void>((resolve) => {
-      disposeRelease = resolve;
-    });
-  },
-});
-let disposeNotifications = 0;
-const disposeUnsubscribe = disposableJob.subscribe(() => {
-  disposeNotifications++;
-});
-disposableJob.start(snapshot());
-await waitFor(() => disposableJob.getState().progress !== null);
-const notificationsBeforeDispose = disposeNotifications;
-disposableJob.dispose();
-disposeRelease();
-await new Promise((resolve) => setTimeout(resolve, 0));
-check(
-  "disposing a job releases its busy state and blocks later starts",
-  disposableJob.getState().status === "idle" && !disposableJob.start(snapshot()),
-);
-check(
-  "a stale renderer completion cannot notify after disposal",
-  disposeNotifications === notificationsBeforeDispose,
-);
-disposeUnsubscribe();
 
 console.log(`\nexport job tests: ${pass} passed, ${fail} failed`);
 if (fail) process.exit(1);

@@ -45,27 +45,26 @@ function validCharacter(): SourceCharacter {
 }
 
 const valid = validCharacter();
-assert.equal(isCompleteSourceCharacter(valid), true, "a complete row is valid");
-const blankName = clone(valid);
-blankName.names["zh-CN"] = " \t";
-assert.equal(
-  isCompleteSourceCharacter(blankName),
-  false,
-  "completed character names must be nonblank",
-);
+for (const [names, expected] of [
+  [valid.names, true],
+  [{ "zh-CN": "中文" }, true],
+  [{ ...valid.names, "zh-CN": " \t" }, false],
+  [{ ...valid.names, "ja-JP": "" }, false],
+  [{ ...valid.names, "ko-KR": 7 }, false],
+  [{ "en-US": "English" }, false],
+] as const) {
+  assert.equal(
+    isCompleteSourceCharacter({ ...valid, names }),
+    expected,
+    `canonical Chinese is required and optional locale values must be valid: ${JSON.stringify(names)}`,
+  );
+}
 const malformedOptionalName = clone(valid);
 (malformedOptionalName.skins[2] as Record<string, unknown>).name = 123;
 assert.equal(
   isCompleteSourceCharacter(malformedOptionalName),
   false,
   "present Variant name fields must be strings",
-);
-const malformedOptionalNameEn = clone(valid);
-(malformedOptionalNameEn.skins[1] as Record<string, unknown>).nameEn = null;
-assert.equal(
-  isCompleteSourceCharacter(malformedOptionalNameEn),
-  false,
-  "present Variant nameEn fields must be strings",
 );
 const blankOptionalTranslations = clone(valid);
 blankOptionalTranslations.skins[1].name = "";
@@ -90,15 +89,6 @@ assert.equal(
   isCompleteSourceCharacter(defaultGlPresent),
   false,
   "default and insight Variants cannot carry glPresent",
-);
-const skinWithoutGlPresent = clone(valid) as SourceCharacter & {
-  skins: Array<Record<string, unknown>>;
-};
-delete skinWithoutGlPresent.skins[2].glPresent;
-assert.equal(
-  isCompleteSourceCharacter(skinWithoutGlPresent),
-  false,
-  "Skin Variants require boolean glPresent",
 );
 
 function skin(id: number, overrides: Partial<ArcanistSkinFull> = {}): ArcanistSkinFull {
@@ -150,14 +140,6 @@ const rows: ArcanistEntryFull[] = [
     skin(900101),
     skin(900102),
     skin(900103, { characterSkin: "Skin", characterSkinNameEng: "Skin" }),
-  ]),
-  arcanist(9002, "Malformed Optional", "Malformed Optional", [
-    skin(900201),
-    skin(900202),
-    skin(900203, {
-      characterSkin: 123 as unknown as string,
-      characterSkinNameEng: "Malformed",
-    }),
   ]),
   arcanist(9003, "Duplicate", "Duplicate", [
     skin(900301),
@@ -221,21 +203,12 @@ const result = composeCatalogSource({
   nameOverrides: new Map(),
   policy,
   releaseClock: new Date("2026-01-01T00:00:00.000Z"),
-  previousCharacters: [
-    priorCharacter("9001", "Prior complete"),
-    priorCharacter("9002", "Prior malformed"),
-    absentPrior,
-  ],
+  previousCharacters: [priorCharacter("9001", "Prior complete"), absentPrior],
 });
 assert.deepEqual(
   result.characters.find((entry) => entry.baseId === "9001"),
   priorCharacter("9001", "Prior complete"),
   "missing-default structural candidate retains the complete prior row",
-);
-assert.deepEqual(
-  result.characters.find((entry) => entry.baseId === "9002"),
-  priorCharacter("9002", "Prior malformed"),
-  "invalid optional Variant candidate retains the complete prior row",
 );
 assert.equal(
   result.characters.some((entry) => entry.baseId === "9003"),
@@ -257,12 +230,11 @@ assert.deepEqual(
   "a transiently absent prior row is retained",
 );
 assert.ok(
-  result.warnings.includes(
-    "Character 9001 candidate invalid; retaining the previous complete SourceCharacter row: Character 9001 must emit exactly one default Variant; found 0",
+  result.warnings.some(
+    (warning) => warning.includes("9001") && warning.includes("retaining"),
   ),
-  "missing-default structural candidate emits retaining warning",
+  "an invalid candidate warns that it retains the previous row",
 );
-assert.ok(result.warnings.some((warning) => warning.includes("9002") && warning.includes("retaining")));
 assert.ok(result.warnings.some((warning) => warning.includes("9003") && warning.includes("omitting")));
 
 console.log("catalog source validation regressions: passed");

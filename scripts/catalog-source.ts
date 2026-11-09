@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import type { PartialNames } from "./name-fallbacks";
 import type { CharacterEntry, PsychubeEntry, SkinEntry } from "./types";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -37,20 +38,38 @@ function hasOwn(value: object, key: PropertyKey): boolean {
   return Object.prototype.hasOwnProperty.call(value, key);
 }
 
+/**
+ * A stored locale name must be a non-blank string in a known locale; an
+ * untranslated locale is represented by an absent key, never a blank value.
+ */
+function hasValidCatalogNames(value: unknown): value is PartialNames {
+  return (
+    isRecord(value) &&
+    Object.entries(value).every(
+      ([lang, name]) =>
+        (NAME_LANGS as readonly string[]).includes(lang) &&
+        typeof name === "string" &&
+        name.trim().length > 0,
+    )
+  );
+}
+
 /** Validate the complete persisted shape of one SourceCharacter row. */
 export function isCompleteSourceCharacter(
   value: unknown,
 ): value is SourceCharacter {
-  if (!isRecord(value) || !isRecord(value.names)) return false;
-  const names = value.names;
+  // "Complete" means one valid row with its canonical Chinese name, not five
+  // locales: a missing translation is a missing key, not an invalid character.
+  if (
+    !isRecord(value) ||
+    !hasValidCatalogNames(value.names) ||
+    typeof value.names["zh-CN"] !== "string"
+  )
+    return false;
   if (
     typeof value.id !== "string" ||
     !NUMERIC_STRING.test(value.id) ||
     value.baseId !== value.id ||
-    !NAME_LANGS.every(
-      (lang) =>
-        typeof names[lang] === "string" && names[lang].trim().length > 0,
-    ) ||
     (value.rarity !== null &&
       (typeof value.rarity !== "number" || !Number.isFinite(value.rarity))) ||
     (value.maxInsight !== 2 && value.maxInsight !== 3) ||
@@ -106,7 +125,7 @@ export function loadCatalogSource(): CatalogSourceSnapshot {
         !isRecord(psychube) ||
         typeof psychube.id !== "string" ||
         !NUMERIC_STRING.test(psychube.id) ||
-        !isRecord(psychube.names) ||
+        !hasValidCatalogNames(psychube.names) ||
         typeof psychube.glPresent !== "boolean",
     )
   )

@@ -55,43 +55,21 @@ export type PsychubeSourceCandidate = Omit<SourcePsychube, "names"> & {
   names: PartialNames;
 };
 
-function preferredEnglish(names: PartialNames): string | undefined {
-  const english = names["en-US"]?.trim();
-  const chinese = names["zh-CN"]?.trim();
-  return isTrustedPsychubeName(english) && english !== chinese
-    ? english
-    : undefined;
+function trustedName(value: string | undefined): string | undefined {
+  return isTrustedPsychubeName(value) ? value.trim() : undefined;
 }
 
 function mergeSource(
   previous: SourcePsychube | undefined,
   incoming: PsychubeSourceCandidate,
 ): SourcePsychube {
-  const names = {} as SourcePsychube["names"];
-  const incomingZh = incoming.names["zh-CN"]?.trim();
-  const zh = isTrustedPsychubeName(incomingZh)
-    ? incomingZh
-    : previous?.names["zh-CN"] ?? "";
-  const english =
-    preferredEnglish(incoming.names) ??
-    (previous ? preferredEnglish(previous.names) : undefined) ??
-    (isTrustedPsychubeName(incoming.names["en-US"])
-      ? incoming.names["en-US"].trim()
-      : zh);
+  // Only same-locale values survive: an untranslated locale stays absent
+  // instead of borrowing English or Simplified Chinese.
+  const names: SourcePsychube["names"] = {};
   for (const lang of LANGS) {
-    if (lang === "zh-CN") names[lang] = zh;
-    else if (lang === "en-US") names[lang] = english;
-    else {
-      // A locale the raw sources resolved is trusted even when it repeats
-      // English/CN; only a missing locale falls back to the previous row.
-      const candidate = incoming.names[lang]?.trim();
-      const previousTranslation = previous?.names[lang]?.trim();
-      names[lang] = isTrustedPsychubeName(candidate)
-        ? candidate
-        : isTrustedPsychubeName(previousTranslation)
-          ? previousTranslation
-          : english;
-    }
+    const resolved =
+      trustedName(incoming.names[lang]) ?? trustedName(previous?.names[lang]);
+    if (resolved) names[lang] = resolved;
   }
   return {
     id: incoming.id,

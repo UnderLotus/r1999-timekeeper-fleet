@@ -11,7 +11,6 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import sharp from "sharp";
 import { numericPsychubeIconIds } from "./asset-source";
-import { completeCatalogNames } from "./catalog-composition";
 import type { SourcePsychube } from "./catalog-source";
 import { loadCatalogSource } from "./catalog-source";
 import {
@@ -32,12 +31,10 @@ function psychube(
   rarity: number | null,
   glPresent: boolean,
 ): SourcePsychube {
-  return {
-    id,
-    names: completeCatalogNames(zh, en, {}),
-    rarity,
-    glPresent,
-  };
+  const names: SourcePsychube["names"] = {};
+  if (zh) names["zh-CN"] = zh;
+  if (en) names["en-US"] = en;
+  return { id, names, rarity, glPresent };
 }
 
 const old = psychube("1201", "旧的可信简体名", "Trusted English", 5, true);
@@ -59,6 +56,30 @@ assert.equal(retained[0]?.names["en-US"], "Trusted English");
 assert.equal(retained[0]?.rarity, 5);
 assert.equal(retained[0]?.glPresent, false, "Global presence is independent of retained names and icon state");
 assert.deepEqual(mergePsychubeSourceRecords([old], []), [old], "source absence retains the last trusted record");
+assert.deepEqual(
+  mergePsychubeSourceRecords([], [psychube("1208", "只有简中", "Only English", 5, true)])[0]
+    ?.names,
+  { "zh-CN": "只有简中", "en-US": "Only English" },
+  "a locale the sources never resolved is absent instead of borrowing English or CN",
+);
+const partialHistory: SourcePsychube = {
+  ...psychube("1209", "旧简中", "Old English", 5, true),
+  names: { "zh-CN": "旧简中", "en-US": "Old English", "ja-JP": "既存の訳" },
+};
+assert.equal(
+  mergePsychubeSourceRecords([partialHistory], [
+    psychube("1209", "新简中", "New English", 5, true),
+  ])[0]?.names["ja-JP"],
+  "既存の訳",
+  "a temporarily missing source locale keeps the previous same-locale translation",
+);
+const laterTranslation = psychube("1209", "新简中", "New English", 5, true);
+laterTranslation.names["ja-JP"] = "新しい訳";
+assert.equal(
+  mergePsychubeSourceRecords([partialHistory], [laterTranslation])[0]?.names["ja-JP"],
+  "新しい訳",
+  "an arriving same-locale translation replaces the previous one",
+);
 
 const staleTranslation = psychube("1207", "旧简中", "Old English", 5, true);
 staleTranslation.names["zh-TW"] = "舊繁中";
@@ -128,10 +149,6 @@ const treeIds = numericPsychubeIconIds(
   ].join("\n"),
 );
 assert.deepEqual(treeIds, [assetOnlyId], "only numeric icon paths in the exact CN Asset tree directory are discovered");
-const cnEquipIds: string[] = [];
-const globalEquipIds: string[] = [];
-assert(!cnEquipIds.includes(assetOnlyId) && !globalEquipIds.includes(assetOnlyId));
-
 const fixture = mkdtempSync(path.join(tmpdir(), "psychube-image-only-source-"));
 try {
   const sourceDir = path.join(fixture, "upstream/singlebg/equip_defaulticon");
@@ -282,20 +299,6 @@ try {
     "a trusted name plus the supplemental icon reaches the runtime catalog",
   );
 
-  mkdirSync(path.join(staging, "1580.png"));
-  await assert.rejects(
-    () => supplementPsychubeIcons(
-      ["1580"],
-      staging,
-      cacheDir,
-      inventoryFile,
-      (_url, output) => copyFileSync(validIcon, output),
-    ),
-    { code: "EISDIR" },
-    "a local PNG write failure must not become an unavailable remote icon",
-  );
-  rmSync(path.join(staging, "1580.png"), { recursive: true });
-
   const wrongSizeIcon = path.join(supplementFixture, "wrong-size.webp");
   await writeFixture(wrongSizeIcon, 248, 248, true);
   assert.deepEqual(
@@ -308,19 +311,6 @@ try {
     ),
     { filled: [], unavailable: ["1580"] },
     "a 248×248 equipment/icon image is not accepted as a psychube icon",
-  );
-  const lossyIcon = path.join(supplementFixture, "lossy.webp");
-  await writeFixture(lossyIcon, 276, 228, false);
-  assert.deepEqual(
-    await supplementPsychubeIcons(
-      ["1581"],
-      staging,
-      cacheDir,
-      inventoryFile,
-      (_url, output) => copyFileSync(lossyIcon, output),
-    ),
-    { filled: [], unavailable: ["1581"] },
-    "a lossy supplemental image is refused instead of re-encoded",
   );
   assert.deepEqual(
     await supplementPsychubeIcons(

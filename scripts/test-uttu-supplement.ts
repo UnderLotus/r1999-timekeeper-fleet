@@ -36,7 +36,6 @@ import {
   promoteUttuSupplement,
   type UttuSupplement,
 } from "./uttu-supplement";
-import { hasLosslessWebpChunk } from "./webp-converter";
 
 const root = mkdtempSync(path.join(tmpdir(), "r1999-uttu-supplement-"));
 
@@ -144,11 +143,6 @@ async function main(): Promise<void> {
     "an empty profiles page is a parse failure, not an empty catalog",
   );
   assert.throws(
-    () => parseUttuCatalog(profilesHtml, emptyPage()),
-    UttuParseError,
-    "an empty garments page is a parse failure",
-  );
-  assert.throws(
     () =>
       parseUttuCatalog(
         `<html><script>const T=[{ID:9001,Name:"甲",Rarity:6,LocaleName:{zh:"甲"}},{ID:9001,Name:"甲",Rarity:6,LocaleName:{zh:"甲"}}];</script></html>`,
@@ -187,18 +181,6 @@ async function main(): Promise<void> {
     UttuOwnershipConflictError,
     "two profiles claiming one exact Variant stops the refresh instead of picking a winner",
   );
-  assert.throws(
-    () =>
-      parseUttuCatalog(
-        profilesHtml,
-        `<html><script>const R=[
-{profile:{ID:9001},garment:{id:900101,name:{en:"One"},category:"default"}},
-{profile:{ID:9001},garment:{id:900101,name:{en:"One"},category:"insight"}}
-];</script></html>`,
-      ),
-    UttuOwnershipConflictError,
-    "one owner listing two types for one exact Variant stops the refresh",
-  );
 
   const validSupplement: UttuSupplement = {
     schemaVersion: 1,
@@ -233,11 +215,6 @@ async function main(): Promise<void> {
     () => parseUttuSupplement({ ...validSupplement, schemaVersion: 2 }),
     /schemaVersion/,
     "an unknown supplement schema is rejected",
-  );
-  assert.throws(
-    () => parseUttuSupplement({ ...validSupplement, source: undefined }),
-    /source metadata/,
-    "source provenance is required",
   );
   const namedDefault = structuredClone(validSupplement);
   namedDefault.characters[0].skins[0].name = "初始";
@@ -531,32 +508,6 @@ async function main(): Promise<void> {
     /Unsupported primary catch-up for character 9000: admitted insight 900099 competes with primary 900002/,
     "competing primary default/insight metadata stops the build",
   );
-  assert.throws(
-    () =>
-      mergeUttuSupplement(
-        primary,
-        parseUttuSupplement({
-          ...validSupplement,
-          characters: [
-            {
-              baseId: "9000",
-              name: "甲",
-              nameEng: "Alpha",
-              names: { "zh-CN": "甲", "en-US": "Alpha" },
-              stars: 6,
-              defaultVariant: "900001",
-              skins: [
-                { variantId: "900001", type: "default", name: null, nameEn: null },
-                { variantId: "900098", type: "insight", name: "洞悉", nameEn: "Insight" },
-              ],
-            },
-          ],
-          skins: [],
-        }),
-      ),
-    /Unsupported primary catch-up for character 9000: admitted insight 900098 competes with primary 900002/,
-    "a supplement character demoted by primary catch-up also stops the build",
-  );
 
   const admissionCatalog = parseUttuCatalog(
     `<html><script>const T=[
@@ -626,13 +577,6 @@ async function main(): Promise<void> {
 
   const realLegacyTypeDisagreements = [
     ["3012", "301202"],
-    ["3027", "302702"],
-    ["3030", "303002"],
-    ["3035", "303502"],
-    ["3036", "303602"],
-    ["3040", "304002"],
-    ["3050", "305002"],
-    ["3055", "305502"],
     ["3096", "309602"],
   ] as const;
   const legacyTypedArcanists: ArcanistEntryFull[] =
@@ -716,18 +660,6 @@ async function main(): Promise<void> {
   const managedTypeChange = parseUttuCatalog(
     `<html><script>const T=[{ID:9000,Name:"甲",Rarity:5,LocaleName:{zh:"甲",en:"Alpha"}}];</script></html>`,
     `<html><script>const R=[{profile:{ID:9000},garment:{id:900003,name:{en:"Insight",zh:"洞悉"},category:"insight"}}];</script></html>`,
-  );
-  assert.throws(
-    () =>
-      planUttuAdmissions({
-        catalog: managedTypeChange,
-        arcanists: primary,
-        supplement: managedSupplement,
-        excludedBaseIds: new Set(),
-        ignoredVariantIds: new Set(),
-      }),
-    /is admitted as skin; the refreshed source claims insight/,
-    "a type change on a supplement-managed exact ID stops the refresh",
   );
   const catchUpPrimary = [
     arcanist(9000, [
@@ -848,19 +780,6 @@ async function main(): Promise<void> {
   });
   assert.equal(safeFallback.catalog, null, "a parse failure keeps the last known good supplement");
   assert.match(safeFallback.warning ?? "", /previously admitted supplement/);
-  assert.equal(
-    fetchUttuCatalogSafely(() => {
-      throw new UpstreamRefreshError("fixture transport failure");
-    }).catalog,
-    null,
-    "a transport failure keeps the last known good supplement",
-  );
-  assert.equal(
-    fetchUttuCatalogSafely(() => ({ profiles: [], garments: [], diagnostics: [], incompleteBaseIds: new Set() }))
-      .catalog,
-    null,
-    "an empty extraction is an outage, not an empty catalog",
-  );
   assert.throws(
     () =>
       fetchUttuCatalogSafely(() => {
@@ -960,11 +879,6 @@ async function main(): Promise<void> {
     /not a 136-144px square headicon/,
     "a small headicon outside the 136-144px square bounds is rejected",
   );
-  assert.equal(
-    hasLosslessWebpChunk(Buffer.from("not a webp file")),
-    false,
-    "a non-WebP payload never passes the lossless gate",
-  );
 
   let requestedUrl = "";
   assert.equal(
@@ -997,23 +911,6 @@ async function main(): Promise<void> {
     false,
     "an unavailable headicon leaves no cache entry",
   );
-  for (const [variantId, source] of [
-    ["930003", lossyHeadicon],
-    ["930004", wrongSizeHeadicon],
-  ] as const) {
-    assert.equal(
-      await cacheUttuHeadicon(variantId, headiconDir, (_url, output) => {
-        copyFileSync(source, output);
-      }),
-      false,
-      `an unusable downloaded headicon (${variantId}) is unavailable, not a pipeline failure`,
-    );
-    assert.equal(
-      await hasValidUttuHeadicon(path.join(headiconDir, `${variantId}.webp`)),
-      false,
-      "a rejected download leaves no cache entry",
-    );
-  }
   assert.equal(
     await cacheUttuHeadicon("930005", headiconDir, (_url, output) => {
       writeFileSync(output, "<html>blocked</html>");

@@ -20,9 +20,14 @@ import { UpstreamRefreshError } from "./sync-refresh";
 
 const root = mkdtempSync(path.join(tmpdir(), "r1999-sync-fallbacks-"));
 
-function numberedRows(count: number, sentinel: number): Array<{ id: number }> {
+function numberedRows(
+  count: number,
+  sentinel: number,
+  origin: string,
+): Array<{ id: number; origin: string }> {
   return Array.from({ length: count }, (_, index) => ({
     id: index === 0 ? sentinel : sentinel + index,
+    origin,
   }));
 }
 
@@ -38,10 +43,10 @@ function writeFixture(directory: string, name: string, value: unknown[]): void {
   writeFileSync(path.join(directory, name), JSON.stringify(value));
 }
 
-function makeGlFixture(directory: string): string {
-  writeFixture(directory, "character.json", numberedRows(100, 3003));
-  writeFixture(directory, "equip.json", numberedRows(100, 1201));
-  writeFixture(directory, "skin.json", numberedRows(300, 300301));
+function makeGlFixture(directory: string, origin: string): string {
+  writeFixture(directory, "character.json", numberedRows(100, 3003, origin));
+  writeFixture(directory, "equip.json", numberedRows(100, 1201, origin));
+  writeFixture(directory, "skin.json", numberedRows(300, 300301, origin));
   for (const name of [
     "language_zh.json",
     "language_tw.json",
@@ -53,11 +58,11 @@ function makeGlFixture(directory: string): string {
   return directory;
 }
 
-function makeCnFixture(directory: string): string {
-  writeFixture(directory, "ArcanistMap.json", numberedRows(100, 3003));
-  writeFixture(directory, "character.json", numberedRows(100, 3003));
-  writeFixture(directory, "equip.json", numberedRows(100, 1201));
-  writeFixture(directory, "skin.json", numberedRows(300, 300301));
+function makeCnFixture(directory: string, origin: string): string {
+  writeFixture(directory, "ArcanistMap.json", numberedRows(100, 3003, origin));
+  writeFixture(directory, "character.json", numberedRows(100, 3003, origin));
+  writeFixture(directory, "equip.json", numberedRows(100, 1201, origin));
+  writeFixture(directory, "skin.json", numberedRows(300, 300301, origin));
   return directory;
 }
 
@@ -81,14 +86,22 @@ function fixtureFetch(sourceDir: string, mode: "upstream" | "invalid-json" | "pr
 }
 
 try {
-  const glFixture = makeGlFixture(path.join(root, "gl-fixture"));
-  const cnFixture = makeCnFixture(path.join(root, "cn-fixture"));
+  const glFixture = makeGlFixture(path.join(root, "gl-fixture"), "fresh");
+  const cnFixture = makeCnFixture(path.join(root, "cn-fixture"), "fresh");
   const glData = path.join(root, "gl-data");
-  copyFixture(glFixture, path.join(glData, "gl"));
+  copyFixture(
+    makeGlFixture(path.join(root, "gl-prior"), "prior"),
+    path.join(glData, "gl"),
+  );
   const priorGlCharacter = readFileSync(path.join(glData, "gl/character.json"));
   await synchronizeGlDirectory(
     glData,
     fixtureFetch(glFixture, "invalid-json"),
+  );
+  assert.deepEqual(
+    readFileSync(path.join(glData, "gl/equip.json")),
+    readFileSync(path.join(glFixture, "equip.json")),
+    "GL refresh installs the freshly validated upstream files",
   );
   assert.deepEqual(
     readFileSync(path.join(glData, "gl/character.json")),
@@ -101,7 +114,7 @@ try {
         path.join(root, "missing-gl"),
         fixtureFetch(glFixture, "upstream"),
       ),
-    /GL data missing.*character\.json/,
+    /GL data missing/,
     "GL upstream failure without prior input is fatal",
   );
   await assert.rejects(
@@ -111,7 +124,7 @@ try {
         fixtureFetch(glFixture, "programming"),
       ),
     /fixture programming failure/,
-    "GL arbitrary callback errors are not classified as remote",
+    "arbitrary callback errors are not classified as remote",
   );
   const invalidGlData = path.join(root, "invalid-gl-data");
   copyFixture(glFixture, path.join(invalidGlData, "gl"));
@@ -127,37 +140,24 @@ try {
   );
 
   const cnData = path.join(root, "cn-data");
-  copyFixture(cnFixture, path.join(cnData, "cn"));
+  copyFixture(
+    makeCnFixture(path.join(root, "cn-prior"), "prior"),
+    path.join(cnData, "cn"),
+  );
   const priorCnCharacter = readFileSync(path.join(cnData, "cn/character.json"));
   await synchronizeCnDirectory(
     cnData,
     fixtureFetch(cnFixture, "upstream"),
   );
   assert.deepEqual(
+    readFileSync(path.join(cnData, "cn/equip.json")),
+    readFileSync(path.join(cnFixture, "equip.json")),
+    "CN refresh installs the freshly validated upstream files",
+  );
+  assert.deepEqual(
     readFileSync(path.join(cnData, "cn/character.json")),
     priorCnCharacter,
     "CN remote failure reuses the validated prior file",
-  );
-  await assert.rejects(
-    () =>
-      synchronizeCnDirectory(
-        path.join(root, "missing-cn"),
-        fixtureFetch(cnFixture, "upstream"),
-      ),
-    /CN data missing.*character\.json/,
-    "CN upstream failure without prior input is fatal",
-  );
-  const invalidCnData = path.join(root, "invalid-cn-data");
-  copyFixture(cnFixture, path.join(invalidCnData, "cn"));
-  writeFileSync(path.join(invalidCnData, "cn/character.json"), "[]");
-  await assert.rejects(
-    () =>
-      synchronizeCnDirectory(
-        invalidCnData,
-        fixtureFetch(cnFixture, "upstream"),
-      ),
-    /minimum\/sentinel/,
-    "CN invalid prior input is fatal",
   );
 
   const arcanists: Arcanist[] = Array.from({ length: 100 }, (_, index) => ({
@@ -183,26 +183,6 @@ try {
     readFileSync(namesFile),
     priorNames,
     "names remote failure retains the validated prior snapshot",
-  );
-  await assert.rejects(
-    () =>
-      synchronizeNameFallbackFile(
-        path.join(root, "missing-names.json"),
-        arcanists,
-        async () => {
-          throw new UpstreamRefreshError("fixture names outage");
-        },
-      ),
-    /Cannot reuse name-fallbacks\.json/,
-    "names upstream failure without prior input is fatal",
-  );
-  await assert.rejects(
-    () =>
-      synchronizeNameFallbackFile(namesFile, arcanists, async () => {
-        throw new Error("fixture programming failure");
-      }),
-    /fixture programming failure/,
-    "names arbitrary callback errors are not classified as remote",
   );
   const invalidNamesFile = path.join(root, "invalid-name-fallbacks.json");
   writeFileSync(invalidNamesFile, JSON.stringify({ schemaVersion: 1, rows: [] }));

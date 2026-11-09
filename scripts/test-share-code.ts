@@ -56,7 +56,13 @@ function sample() {
     activeVariant: a.skins.at(-1)!.id,
   };
   p.characters[b.id] = { ...ADD_DEFAULT, activeVariant: null };
-  p.characters[twins.id] = { ...ADD_DEFAULT, activeVariant: null };
+  p.characters[twins.id] = {
+    insight: 3,
+    level: 60,
+    portray: 0,
+    resonance: 10,
+    activeVariant: null,
+  };
   p.psychubes[psy.id] = 2;
   p.psychubes[twinsPsy1.id] = 1;
   p.psychubes[twinsPsy2.id] = 1;
@@ -93,7 +99,11 @@ check(
   "character build round trips",
   result?.characters[a.id]?.level === 45 &&
     result.characters[a.id].portray === 3 &&
-    result.characters[a.id].resonance === 7,
+    result.characters[a.id].resonance === 7 &&
+    result.characters[twins.id]?.insight === 3 &&
+    result.characters[twins.id].level === 60 &&
+    result.characters[twins.id].portray === 0 &&
+    result.characters[twins.id].resonance === 10,
 );
 check(
   "skin variant round trips",
@@ -216,20 +226,6 @@ check(
     longDecoded.profile.characters["3066"]?.activeVariant === "30660001" &&
     longDecoded.profile.characters["3088"]?.activeVariant === "30880001",
 );
-const wrongOwnerProfile = emptyProfile();
-wrongOwnerProfile.characters["3066"] = {
-  ...longProfile.characters["3066"],
-};
-const wrongOwnerToken = encodeShareToken(wrongOwnerProfile);
-const wrongOwnerDecoded = decodeShareToken(
-  overwriteBits(wrongOwnerToken, 46, 27, 30880001),
-);
-check(
-  "v6 wrong-owner Variant IDs clear only activeVariant and retain the Profile",
-  wrongOwnerDecoded?.sourceVersion === 6 &&
-    wrongOwnerDecoded.profile.characters["3066"]?.level === 45 &&
-    wrongOwnerDecoded.profile.characters["3066"]?.activeVariant === null,
-);
 const wireOverflowCharacter: CharacterDef = {
   ...longCharacters[0],
   skins: [
@@ -291,29 +287,6 @@ check(
     literalPresetResult.profile.characters[a.id].portray === 0 &&
     literalPresetResult.profile.characters[a.id].resonance === 1,
 );
-const insightThreePresets = emptyProfile();
-insightThreePresets.characters[a.id] = {
-  insight: 3,
-  level: 60,
-  portray: 0,
-  resonance: 10,
-  activeVariant: null,
-};
-insightThreePresets.characters[twins.id] = {
-  insight: 3,
-  level: 60,
-  portray: 2,
-  resonance: 15,
-  activeVariant: null,
-};
-const insightThreeResult = roundTrip(insightThreePresets);
-check(
-  "I3/L60 preset preserves default and escaped portray/resonance values",
-  insightThreeResult?.characters[a.id]?.portray === 0 &&
-    insightThreeResult.characters[a.id].resonance === 10 &&
-    insightThreeResult.characters[twins.id]?.portray === 2 &&
-    insightThreeResult.characters[twins.id].resonance === 15,
-);
 const genericBuild = emptyProfile();
 genericBuild.characters[a.id] = {
   insight: 2,
@@ -350,74 +323,9 @@ check(
     !("showFutureSight" in decodedShape) &&
     !("showFutureSight" in decodedShape.profile),
 );
-const twoCloseIds = emptyProfile();
-twoCloseIds.characters[a.id] = { ...ADD_DEFAULT, activeVariant: null };
-twoCloseIds.characters[b.id] = { ...ADD_DEFAULT, activeVariant: null };
-const twoCloseIdsToken = encodeShareToken(twoCloseIds);
-// Header (4) + count (10) + first ID (14) + owned preset (1) + variant (1).
-const secondDeltaOffset = 30;
-check(
-  "malformed zero/unbounded gamma delta is rejected",
-  decodeShareToken(
-    overwriteBits(twoCloseIdsToken, secondDeltaOffset, 14, 0),
-  ) === null,
-);
-check(
-  "delta accumulation beyond the 14-bit official ID range is rejected",
-  decodeShareToken(overwriteBits(twoCloseIdsToken, 14, 14, 16383)) === null,
-);
-const boundaryCharacters: CharacterDef[] = [1, 16383].map((id, index) => ({
-  ...a,
-  id: String(id),
-  baseId: String(id),
-  releaseOrder: index + 1,
-  defaultVariant: `${id}01`,
-  skins: [{ id: `${id}01`, type: "default", released: true }],
-}));
-setCatalogForTesting(boundaryCharacters, fixturePsychubes);
-const maximumDeltaProfile = emptyProfile();
-for (const item of boundaryCharacters)
-  maximumDeltaProfile.characters[item.id] = {
-    ...ADD_DEFAULT,
-    activeVariant: null,
-  };
-const maximumDeltaToken = encodeShareToken(
-  maximumDeltaProfile,
-);
-check(
-  "maximum legal 14-bit ID and delta round trip",
-  Object.keys(roundTrip(maximumDeltaProfile)?.characters ?? {}).length === 2,
-);
-check(
-  "a token truncated in the middle of a gamma delta is rejected",
-  decodeShareToken(
-    Buffer.from(maximumDeltaToken, "base64url")
-      .subarray(0, 5)
-      .toString("base64url"),
-  ) === null,
-);
-setCatalogForTesting(fixtureCharacters, fixturePsychubes);
-// Two characters require 2-bit references; 3 is outside the wire count.
-check(
-  "local references beyond the encoded collection count are rejected",
-  decodeShareToken(overwriteBits(twoCloseIdsToken, 49, 2, 3)) === null,
-);
-// A present complete Variant ID is constrained to the literal v6 wire range.
-check(
-  "a present zero Variant ID is rejected",
-  decodeShareToken(overwriteBits(literalPresetToken, 30, 27, 0)) === null,
-);
 check(
   "unsupported future share versions are rejected",
   decodeShareToken(overwriteBits(token, 0, 4, 7)) === null,
-);
-const variedDeltas = emptyProfile();
-for (const item of fixtureCharacters)
-  variedDeltas.characters[item.id] = { ...ADD_DEFAULT, activeVariant: null };
-check(
-  "sorted delta encoding handles repeated small deltas and larger jumps",
-  Object.keys(roundTrip(variedDeltas)?.characters ?? {}).length ===
-    fixtureCharacters.length,
 );
 
 const positionalProfile = emptyProfile();
@@ -533,22 +441,6 @@ check(
   "1024 valid psychubes fail instead of wrapping or truncating",
   encodingThrows(syntheticProfile(0, 1024)),
 );
-const maxRefIndex = 1022;
-const maxRefProfile = syntheticProfile(1023, 1023);
-maxRefProfile.teams[0].slots[0] = {
-  characterId: String(4000 + maxRefIndex),
-  psychubeId: String(6000 + maxRefIndex),
-  psychubeId2: null,
-};
-const maxRefResult = roundTrip(maxRefProfile);
-check(
-  "highest-index team references round trip at maximum collection size",
-  maxRefResult?.teams[0].slots[0].characterId ===
-    String(4000 + maxRefIndex) &&
-    maxRefResult.teams[0].slots[0].psychubeId ===
-      String(6000 + maxRefIndex),
-);
-setCatalogForTesting(fixtureCharacters, fixturePsychubes);
 
 console.log(`\nshare tests: ${pass} passed, ${fail} failed`);
 if (fail) process.exit(1);

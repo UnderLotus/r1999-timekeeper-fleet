@@ -1,6 +1,7 @@
 import type { LangCode } from "../i18n/ui";
 import { getUiText } from "../i18n/ui";
 import type { CharacterDef, SkinVariant } from "../types/catalog";
+import { characterName } from "../utils/catalog";
 import type { AnchorRect } from "../utils/design";
 import { cx } from "../utils/design";
 import { ResponsivePopover } from "./ResponsivePopover";
@@ -36,7 +37,7 @@ export function SkinPicker({
   );
   return (
     <ResponsivePopover
-      title={`${t("skin")} · ${def.names[lang]}`}
+      title={`${t("skin")} · ${characterName(def, lang)}`}
       closeLabel={t("close")}
       onClose={onClose}
       anchor={anchor}

@@ -193,9 +193,7 @@ check(
 );
 check(
   "a retained character two-star filter does not empty the psychube pool",
-  psychubePoolWithHiddenTwoStarFilter.includes(
-    syntheticThreeStarPsychube.names["en-US"],
-  ),
+  psychubePoolWithHiddenTwoStarFilter.includes("Necessary Records"),
 );
 function openingButtonTag(markup: string, label: string): string {
   const labelIndex = markup.indexOf(label);
@@ -259,7 +257,7 @@ check(
   "Pool export omits unreleased owned records while Future Sight is off",
   !hiddenExport.includes("Future Character") &&
     !hiddenExport.includes("Future Psychube") &&
-    hiddenExport.includes(character.names["en-US"]),
+    hiddenExport.includes("Mistletoe"),
 );
 check(
   "export reveals future records only when Future Sight is on",
@@ -322,7 +320,7 @@ check(
 const psychubeOnlyExport = renderExport(psychubeOnly, "pool");
 check(
   "owned psychubes count as Pool content even without characters",
-  psychubeOnlyExport.includes(releasedPsychube.names["en-US"]) &&
+  psychubeOnlyExport.includes("Necessary Records") &&
     !psychubeOnlyExport.includes(getUiText("en-US", "exportNothingTitle")),
 );
 check(
@@ -469,18 +467,18 @@ check(
 
 const partialCharacter = {
   ...character,
-  names: {
+  names: Object.freeze({
     "en-US": "English fallback",
     "zh-CN": "中文後備",
-  } as typeof character.names,
+  }),
 };
 const chineseOnlyPsychube = {
   ...releasedPsychube,
-  names: { "zh-CN": "中文心相" } as typeof releasedPsychube.names,
+  names: Object.freeze({ "zh-CN": "中文心相" }),
 };
 const unrelatedLocalePsychube = {
   ...releasedPsychube,
-  names: { "ja-JP": "日本語だけ" } as typeof releasedPsychube.names,
+  names: Object.freeze({ "ja-JP": "日本語だけ" }),
 };
 check(
   "runtime names fall back requested to English to Simplified Chinese to canonical",

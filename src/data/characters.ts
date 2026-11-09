@@ -7,10 +7,7 @@ export const characters: CharacterDef[] = [
     "baseId": "3159",
     "names": {
       "zh-CN": "佩施塔",
-      "zh-TW": "Perchta",
-      "en-US": "Perchta",
-      "ja-JP": "Perchta",
-      "ko-KR": "Perchta"
+      "en-US": "Perchta"
     },
     "rarity": 5,
     "maxInsight": 3,
@@ -37,10 +34,7 @@ export const characters: CharacterDef[] = [
     "baseId": "3160",
     "names": {
       "zh-CN": "伊芙琳",
-      "zh-TW": "Evelyn",
-      "en-US": "Evelyn",
-      "ja-JP": "Evelyn",
-      "ko-KR": "Evelyn"
+      "en-US": "Evelyn"
     },
     "rarity": 5,
     "maxInsight": 3,
@@ -68,9 +62,7 @@ export const characters: CharacterDef[] = [
     "names": {
       "zh-CN": "德雷克",
       "zh-TW": "德雷克",
-      "en-US": "Drake",
-      "ja-JP": "Drake",
-      "ko-KR": "Drake"
+      "en-US": "Drake"
     },
     "rarity": 5,
     "maxInsight": 3,
@@ -158,9 +150,7 @@ export const characters: CharacterDef[] = [
     "names": {
       "zh-CN": "狩勋女巫红弩箭",
       "zh-TW": "狩勛女巫紅弩箭",
-      "en-US": "Huntsworn Lilya",
-      "ja-JP": "Huntsworn Lilya",
-      "ko-KR": "Huntsworn Lilya"
+      "en-US": "Huntsworn Lilya"
     },
     "rarity": 5,
     "maxInsight": 3,

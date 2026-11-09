@@ -88,10 +88,6 @@ async function main(): Promise<void> {
     "all mapped CN psychube source PNGs fully decode at 276×228",
     sourcePngsValid,
   );
-  check(
-    "runtime psychubes have trusted Simplified Chinese names",
-    psychubes.every((entry) => entry.names["zh-CN"].trim().length > 0),
-  );
 
   const charFiles = readdirSync(charDir).filter((f) => f.endsWith(".webp"));
   const psyFiles = readdirSync(psyDir).filter((f) => f.endsWith(".webp"));

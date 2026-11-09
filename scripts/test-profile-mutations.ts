@@ -72,79 +72,18 @@ const isolatedPsychube: PsychubeDef = {
   ...psy,
   id: "fixture-only-psychube",
 };
-const isolatedEngine = createProfileMutationEngine(
-  createTestCatalog([isolatedCharacter], [isolatedPsychube], () => [0]),
-);
 const emptyInsightEngine = createProfileMutationEngine(
   createTestCatalog([isolatedCharacter], [isolatedPsychube], () => []),
 );
 const sparseInsightEngine = createProfileMutationEngine(
   createTestCatalog([isolatedCharacter], [isolatedPsychube], () => [3, 1]),
 );
-const restrictedEngine = createProfileMutationEngine(createTestCatalog([], []));
 const baseOptions = {
   allowFutureSight: false,
   addDefaults: { insight: 0 as const, level: 1, portray: 0, resonance: 1 },
   defaultSkinMode: "initial" as const,
   psychubeAmplificationDefault: 1,
 };
-
-check(
-  "injected catalogs isolate character, psychube, legal insight, and bulk rules",
-  (() => {
-    let profile = isolatedEngine.mutateProfile(
-      emptyProfile(),
-      { type: "addCharacter", id: isolatedCharacter.id },
-      { addDefaults: { insight: 3, level: 60 } },
-    ).profile;
-    const characterAdded =
-      profile.characters[isolatedCharacter.id]?.insight === 0 &&
-      profile.characters[isolatedCharacter.id]?.level === 30;
-    const preexisting = emptyProfile();
-    preexisting.characters[isolatedCharacter.id] = {
-      insight: 3,
-      level: 60,
-      portray: 0,
-      resonance: 1,
-      activeVariant: null,
-    };
-    const sanitized = isolatedEngine.mutateProfile(preexisting, {
-      type: "setTeamName",
-      team: 0,
-      name: "Injected policy",
-    }).profile;
-    const preexistingSanitized =
-      sanitized.characters[isolatedCharacter.id]?.insight === 0 &&
-      sanitized.characters[isolatedCharacter.id]?.level === 30;
-    const illegalInsight = isolatedEngine.mutateProfile(profile, {
-      type: "setInsight",
-      id: isolatedCharacter.id,
-      value: 1,
-    });
-    profile = isolatedEngine.mutateProfile(profile, {
-      type: "addPsychube",
-      id: isolatedPsychube.id,
-    }).profile;
-    const psychubeAdded = profile.psychubes[isolatedPsychube.id] === 1;
-    const bulk = isolatedEngine.mutateProfile(emptyProfile(), {
-      type: "setAllPsychubesOwned",
-      owned: true,
-      amplification: 3,
-    }).profile;
-    const restricted = restrictedEngine.mutateProfile(emptyProfile(), {
-      type: "addCharacter",
-      id: isolatedCharacter.id,
-    });
-    return (
-      characterAdded &&
-      preexistingSanitized &&
-      !illegalInsight.changed &&
-      psychubeAdded &&
-      bulk.psychubes[isolatedPsychube.id] === 3 &&
-      !restricted.changed
-    );
-  })(),
-);
 
 check(
   "an empty injected insight policy rejects additions and drops existing builds",

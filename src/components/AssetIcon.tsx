@@ -15,7 +15,12 @@ export function AssetIcon(props: {
   loading?: "eager" | "lazy";
 }): React.JSX.Element {
   const { kind, id, alt, className, rounded, loading = "lazy" } = props;
-  const [failed, setFailed] = useState(false);
+  const identity = `${kind}:${id}`;
+  const [failure, setFailure] = useState({ identity, failed: false });
+  // A different [kind, id] drops the old failure, so returning to a former
+  // asset retries it once while the same identity never retries in a loop.
+  if (failure.identity !== identity) setFailure({ identity, failed: false });
+  const failed = failure.identity === identity && failure.failed;
   const src = useMemo(
     () =>
       assetSrc(
@@ -52,7 +57,7 @@ export function AssetIcon(props: {
       alt={alt}
       loading={loading}
       decoding="async"
-      onError={() => setFailed(true)}
+      onError={() => setFailure({ identity, failed: true })}
       style={{ width: "100%", height: "100%", objectFit: "cover" }}
     />
   );

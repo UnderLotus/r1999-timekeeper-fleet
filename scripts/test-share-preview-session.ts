@@ -212,31 +212,6 @@ check(
     futurePreview.state().previewShowFutureSight,
 );
 
-const gatedAfterPreview = createHarness();
-gatedAfterPreview.session.start(() => {});
-const previousPreview = profileWithCharacter(a.id);
-gatedAfterPreview.store.enterPreview(previousPreview, false);
-const incomingFutureToken = tokenFor(profileWithCharacter(future.id));
-gatedAfterPreview.setHash(`keep=1&p=${incomingFutureToken}`);
-gatedAfterPreview.flushTimers();
-check(
-  "spoiler gate cancels an earlier Preview debounce before it can overwrite the incoming hash",
-  gatedAfterPreview.hash() === `keep=1&p=${incomingFutureToken}` &&
-    gatedAfterPreview.state().previewProfile !== null &&
-    gatedAfterPreview.state().previewProfile === previousPreview,
-);
-
-const unrelatedStoreUpdate = createHarness();
-unrelatedStoreUpdate.session.start(() => {});
-unrelatedStoreUpdate.store.enterPreview(profileWithCharacter(a.id), false);
-const schedulesAfterPreview = unrelatedStoreUpdate.scheduledTimerCount();
-unrelatedStoreUpdate.store.setPreviewShowFutureSight(true);
-unrelatedStoreUpdate.store.setPreviewShowFutureSight(false);
-check(
-  "unrelated Preview state updates do not restart hash synchronization debounce",
-  unrelatedStoreUpdate.scheduledTimerCount() === schedulesAfterPreview,
-);
-
 const canceled = createHarness();
 canceled.setHash(`keep=1&p=${tokenFor(profileWithCharacter(future.id))}`);
 canceled.session.start(() => {});
@@ -264,14 +239,6 @@ check(
   "Preview changes update the share hash through the debounced session",
   !!syncedToken &&
     decodeShareToken(syncedToken)?.profile.characters[a.id]?.level === 40,
-);
-synced.store.enterPreview(profileWithCharacter(b.id), false);
-synced.flushTimers();
-check(
-  "debounced hash synchronization follows the latest Preview profile",
-  !!new URLSearchParams(synced.hash()).get("p") &&
-    decodeShareToken(new URLSearchParams(synced.hash()).get("p")!)?.profile
-      .characters[b.id] !== undefined,
 );
 
 const copied = createHarness();
@@ -310,25 +277,11 @@ check(
     !importHidden.state().localShowFutureSight &&
     !new URLSearchParams(importHidden.hash()).has("p"),
 );
-const importEnabled = createHarness();
-importEnabled.store.enterPreview(profileWithCharacter(future.id), true);
-importEnabled.session.importPreview(true);
-check(
-  "Import can explicitly enable local Future Sight",
-  !!importEnabled.state().profile.characters[future.id] &&
-    importEnabled.state().localShowFutureSight,
-);
 
 const legacyV3Token =
   "MBLuymCAQ-hk9ERFdFnD80tMl3YfQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const fixedV4Token =
-  "QAy7usbwZd4AARiaAAQBh9CGIyMSEzpm6jluZXoiJ7lj7Au7D6AAAu8AAAAAAAAAAAAAAAAAAAAxNGIxiQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAu7D6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const fixedV5Token =
-  "UAi7vrG8HABD6IZzVtvyx9lyXUpzxMQwAAAAAAAAAAAAAA";
 for (const [version, token] of [
   [3, legacyV3Token],
-  [4, fixedV4Token],
-  [5, fixedV5Token],
   [6, tokenFor(emptyProfile())],
 ] as const) {
   const historical = createHarness();

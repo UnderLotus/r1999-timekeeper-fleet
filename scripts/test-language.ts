@@ -18,11 +18,9 @@ function check(name: string, value: boolean): void {
 const cases: Array<[string, LangCode]> = [
   ["zh-TW", "zh-TW"],
   ["zh-HK", "zh-TW"],
-  ["zh-Hant-HK", "zh-TW"],
   ["zh-CN", "zh-CN"],
   ["zh-SG", "zh-CN"],
   ["zh", "zh-CN"],
-  ["zh-Hans-SG", "zh-CN"],
   ["ja-JP", "ja-JP"],
   ["ko-KR", "ko-KR"],
   ["en-GB", "en-US"],

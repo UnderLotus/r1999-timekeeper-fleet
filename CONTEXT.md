@@ -53,7 +53,7 @@ _Avoid_: Future-content deletion
 ## Catalog
 
 **Catalog**:
-The known characters, Skins, psychubes, localized names, and release classification available to the planner.
+The known characters, Skins, psychubes, localized names, and release classification available to the planner. A locale without a trusted name is absent from the Catalog rather than borrowed from another language; display falls back at render time.
 _Avoid_: Profile, Pool
 
 **Variant ID**:

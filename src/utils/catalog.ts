@@ -137,7 +137,7 @@ export function characterName(def: CharacterDef, lang: string): string {
 export function psychubeName(def: PsychubeDef, lang: string): string {
   return localizedName(def.names, lang, def.id);
 }
-export function searchableNames(names: Record<LangCode, string>): string {
+export function searchableNames(names: Partial<Record<LangCode, string>>): string {
   return Object.values(names).join("\n").toLocaleLowerCase();
 }
 

@@ -1,4 +1,5 @@
 /** 管線共用型別（mirror src/types/catalog.ts + 管線專用欄位） */
+import type { PartialNames } from "./name-fallbacks";
 
 export interface SkinEntry {
   id: string;
@@ -11,7 +12,7 @@ export interface SkinEntry {
 export interface CharacterEntry {
   id: string;
   baseId: string;
-  names: Record<"zh-CN" | "zh-TW" | "en-US" | "ja-JP" | "ko-KR", string>;
+  names: PartialNames;
   rarity: number | null;
   maxInsight: number;
   releaseOrder: number;
@@ -24,7 +25,7 @@ export interface CharacterEntry {
 
 export interface PsychubeEntry {
   id: string;
-  names: Record<"zh-CN" | "zh-TW" | "en-US" | "ja-JP" | "ko-KR", string>;
+  names: PartialNames;
   rarity: number | null;
   released: boolean;
 }

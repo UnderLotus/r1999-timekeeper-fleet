@@ -17,11 +17,14 @@ export interface SkinVariant {
 
 export type LangCode = "zh-CN" | "zh-TW" | "en-US" | "ja-JP" | "ko-KR";
 
+/** 已收錄的語系名稱；沒有可信同語系名稱時省略該 key，不以別語系或空字串補位。 */
+export type CatalogNames = Partial<Record<LangCode, string>>;
+
 export interface CharacterDef {
   /** 5 位角色 id，如 3003（ArcanistMap 頂層 id） */
   id: string;
   baseId: string;
-  names: Record<LangCode, string>;
+  names: CatalogNames;
   /** 2-4★ = 2，5★/6★ = 3；無可信 rarity 時保守給 2 */
   maxInsight: InsightIndex;
   rarity: number | null;
@@ -39,8 +42,7 @@ export interface CharacterDef {
 export interface PsychubeDef {
   /** 4 位 id，如 1000 */
   id: string;
-  /** 5 語系名稱 */
-  names: Record<LangCode, string>;
+  names: CatalogNames;
   rarity: number | null;
   released: boolean;
 }

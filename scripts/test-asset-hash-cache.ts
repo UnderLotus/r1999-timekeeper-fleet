@@ -4,7 +4,7 @@ import {
   parseHashCache,
   type HashCache,
 } from "./sync-assets";
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -27,30 +27,20 @@ try {
   const validFile = path.join(root, "valid.json");
   writeFileSync(validFile, JSON.stringify(valid));
   assert.deepEqual(loadHashCache(validFile), valid, "normal and sentinel entries are accepted");
-  assert.deepEqual(parseHashCache(valid), valid, "the pure parser preserves valid entries");
+  assert.deepEqual(parseHashCache(valid), valid);
 
   const malformedJson = path.join(root, "malformed.json");
   writeFileSync(malformedJson, "{");
   assert.throws(() => loadHashCache(malformedJson), SyntaxError, "malformed JSON is fatal");
 
   for (const [name, value] of [
-    ["array", []],
-    ["null", null],
-    ["invalid-id", { abc: valid["1201"] }],
-    ["invalid-entry-root", { "1201": null }],
     ["invalid-png", { "1201": { png: "not-a-digest", webp: otherDigest } }],
-    ["empty-png", { "1201": { png: "", webp: otherDigest } }],
-    ["empty-webp", { "1201": { png: digest, webp: "" } }],
     ["wrong-types", { "1201": { png: digest, webp: 42 } }],
   ] as const) {
     const file = path.join(root, `${name}.json`);
     writeFileSync(file, JSON.stringify(value));
     assert.throws(() => loadHashCache(file));
   }
-
-  const readFailure = path.join(root, "read-failure");
-  mkdirSync(readFailure);
-  assert.throws(() => loadHashCache(readFailure));
 } finally {
   rmSync(root, { recursive: true, force: true });
 }

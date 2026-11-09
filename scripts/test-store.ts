@@ -124,36 +124,26 @@ check(
     );
   })(),
 );
-check(
-  "import preview replaces local and keeps Future Sight hidden by default",
-  (() => {
-    fresh();
-    useBoxStore.getState().addCharacter(a.id);
-    const incoming = emptyProfile();
-    incoming.characters[future.id] = { ...ADD_DEFAULT, activeVariant: null };
-    useBoxStore.getState().enterPreview(incoming, true);
-    useBoxStore.getState().importPreview(false);
-    const state = useBoxStore.getState();
-    return (
-      state.previewProfile === null &&
-      !state.profile.characters[a.id] &&
-      !!state.profile.characters[future.id] &&
-      !state.preferences.showFutureSight
-    );
-  })(),
-);
-check(
-  "import preview can explicitly enable local Future Sight",
-  (() => {
-    fresh();
-    const incoming = emptyProfile();
-    incoming.characters[future.id] = { ...ADD_DEFAULT, activeVariant: null };
-    useBoxStore.getState().enterPreview(incoming, true);
-    useBoxStore.getState().importPreview(true);
-    const state = useBoxStore.getState();
-    return !!state.profile.characters[future.id] && state.preferences.showFutureSight;
-  })(),
-);
+for (const enableFutureSight of [false, true]) {
+  check(
+    `import preview replaces local and applies Future Sight option ${enableFutureSight}`,
+    (() => {
+      fresh();
+      useBoxStore.getState().addCharacter(a.id);
+      const incoming = emptyProfile();
+      incoming.characters[future.id] = { ...ADD_DEFAULT, activeVariant: null };
+      useBoxStore.getState().enterPreview(incoming, true);
+      useBoxStore.getState().importPreview(enableFutureSight);
+      const state = useBoxStore.getState();
+      return (
+        state.previewProfile === null &&
+        !state.profile.characters[a.id] &&
+        !!state.profile.characters[future.id] &&
+        state.preferences.showFutureSight === enableFutureSight
+      );
+    })(),
+  );
+}
 check(
   "persisted state migration returns sanitized profile and preferences",
   (() => {
@@ -186,19 +176,6 @@ check(
       !partial.previewProfile &&
       !partial.ui
     );
-  })(),
-);
-check(
-  "Future Sight preference is persisted independently of preview state",
-  (() => {
-    fresh();
-    useBoxStore.getState().setShowFutureSight(true);
-    const partial = useBoxStore.persist
-      .getOptions()
-      .partialize?.(useBoxStore.getState()) as {
-      preferences?: { showFutureSight?: boolean };
-    };
-    return partial.preferences?.showFutureSight === true;
   })(),
 );
 

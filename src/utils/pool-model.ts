@@ -1,4 +1,4 @@
-import type { CharacterDef, PsychubeDef } from "../types/catalog";
+import type { CharacterDef, LangCode, PsychubeDef } from "../types/catalog";
 import type { CharacterBuild, DefaultSkinMode, Profile } from "../types/profile";
 import {
   allCharacters,
@@ -144,7 +144,7 @@ function matchesOwnership(owned: boolean, filterMode: FilterMode): boolean {
 }
 
 function matchesSearch(
-  names: Record<"zh-CN" | "zh-TW" | "en-US" | "ja-JP" | "ko-KR", string>,
+  names: Partial<Record<LangCode, string>>,
   query: string,
 ): boolean {
   return !query || searchableNames(names).includes(query);

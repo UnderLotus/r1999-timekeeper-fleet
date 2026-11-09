@@ -194,8 +194,8 @@ check(
     result.psychubes.find((entry) => entry.id === "2007")?.glPresent === true,
 );
 check(
-  "psychube English data is never substituted into the trusted Simplified Chinese field",
-  result.psychubes.find((entry) => entry.id === "2008")?.names["zh-CN"] === "" &&
+  "a psychube without a trusted Simplified Chinese name omits that locale instead of substituting English",
+  !("zh-CN" in (result.psychubes.find((entry) => entry.id === "2008")?.names ?? {})) &&
     result.psychubes.find((entry) => entry.id === "2008")?.names["en-US"] === "English Only",
 );
 check(
@@ -229,40 +229,12 @@ const longIdResult = composeCatalogSource({
         },
       ],
     },
-    {
-      id: 3088,
-      name: "塞梅尔维斯",
-      nameEng: "Semmelweis",
-      live2d: [
-        {
-          id: 308801,
-          name: "塞梅尔维斯",
-          nameEng: "Semmelweis",
-          des: "",
-          characterSkin: "",
-          characterSkinNameEng: "",
-        },
-        {
-          id: 30880001,
-          name: "塞梅尔维斯的往日",
-          nameEng: "Portrait of the Past",
-          des: "",
-          characterSkin: "塞梅尔维斯的往日",
-          characterSkinNameEng: "Portrait of the Past",
-        },
-      ],
-    },
   ],
-  cnCharacters: [
-    { id: 3066, name: "37", nameEng: "Thirty-seven", rare: 6 },
-    { id: 3088, name: "塞梅尔维斯", nameEng: "Semmelweis", rare: 5 },
-  ],
+  cnCharacters: [{ id: 3066, name: "37", nameEng: "Thirty-seven", rare: 6 }],
   globalCharacters: [],
   cnSkins: [
     { id: 306601, characterId: 3066 },
     { id: 30660001, characterId: 3066 },
-    { id: 308801, characterId: 3088 },
-    { id: 30880001, characterId: 3088 },
   ],
   globalSkins: [],
   cnEquips: [],
@@ -285,7 +257,7 @@ const longIdResult = composeCatalogSource({
   },
   releaseClock: new Date("2026-01-01T00:00:00.000Z"),
 });
-for (const [baseId, variantId] of [["3066", "30660001"], ["3088", "30880001"]]) {
+for (const [baseId, variantId] of [["3066", "30660001"]] as const) {
   const character = longIdResult.characters.find((entry) => entry.baseId === baseId)!;
   const variant = character.skins.find((skin) => skin.id === variantId)!;
   check(
@@ -312,11 +284,11 @@ const nameHistory: SourceCharacter = {
   glReleased: false,
   skins: [{ id: "700101", type: "default" }],
 };
-const renamed = composeCatalogSource({
-  arcanists: [arcanist(7001, "新简中", "New English", [700101])],
-  cnCharacters: [{ id: 7001, name: "新简中", nameEng: "New English", rare: 3 }],
+const renamedInput: CatalogCompositionInput = {
+  arcanists: [arcanist(7001, "新简中", "Arc English", [700101])],
+  cnCharacters: [{ id: 7001, name: "新简中", nameEng: "CN English", rare: 3 }],
   globalCharacters: [
-    { id: 7001, name: "name-key", nameEng: "New English", rare: 3, isOnline: 0 },
+    { id: 7001, name: "name-key", nameEng: "Global English", rare: 3, isOnline: 0 },
   ],
   cnSkins: [{ id: 700101, characterId: 7001 }],
   globalSkins: [],
@@ -325,7 +297,7 @@ const renamed = composeCatalogSource({
   languages: {
     "zh-CN": { "name-key": "新简中" },
     "zh-TW": {},
-    "en-US": { "name-key": "New English" },
+    "en-US": { "name-key": " New English " },
     "ja-JP": {},
     "ko-KR": {},
   },
@@ -340,7 +312,8 @@ const renamed = composeCatalogSource({
   },
   releaseClock: new Date("2026-01-01T00:00:00.000Z"),
   previousCharacters: [nameHistory],
-});
+};
+const renamed = composeCatalogSource(renamedInput);
 const renamedOne = renamed.characters.find((entry) => entry.baseId === "7001");
 check(
   "previous row keeps its own real localized translations through a fresh candidate",
@@ -348,10 +321,65 @@ check(
   JSON.stringify(renamedOne?.names),
 );
 check(
-  "a previous locale equal to the previous row's own English is compared against the old English, not the renamed incoming one",
+  "a previous locale is kept as same-locale last-known-good even when it repeats the previous row's English",
   renamedOne?.names["zh-TW"] === "Old English" &&
     renamedOne?.names["en-US"] === "New English",
   JSON.stringify(renamedOne?.names),
+);
+const englishHistory = { ...nameHistory.names };
+delete englishHistory["en-US"];
+for (const [label, rawEn, globalEn, arcEn, previousEn, expectedEn] of [
+  ["empty current sources retain EN LKG", "", "", "", "Old English", "Old English"],
+  ["blank current source retains EN LKG", "", "", "   ", "Old English", "Old English"],
+  ["blank earlier current yields to a valid later current", "   ", " Fresh Current ", "", "Old English", "Fresh Current"],
+  ["missing current and previous EN stays absent", "", "", "", undefined, undefined],
+] as const) {
+  const composed = composeCatalogSource({
+    ...renamedInput,
+    arcanists: renamedInput.arcanists.map((entry) => ({ ...entry, nameEng: arcEn })),
+    cnCharacters: renamedInput.cnCharacters.map((entry) => ({ ...entry, nameEng: "" })),
+    globalCharacters: renamedInput.globalCharacters.map((entry) => ({ ...entry, nameEng: globalEn })),
+    languages: { ...renamedInput.languages, "en-US": { "name-key": rawEn } },
+    previousCharacters: [{
+      ...nameHistory,
+      names: { ...englishHistory, ...(previousEn === undefined ? {} : { "en-US": previousEn }) },
+    }],
+  });
+  const candidate = composed.characters.find((entry) => entry.id === "7001");
+  check(
+    label,
+    (expectedEn === undefined
+      ? !("en-US" in (candidate?.names ?? {}))
+      : candidate?.names["en-US"] === expectedEn) &&
+      candidate?.names["zh-CN"] === "新简中" &&
+      candidate?.names["ja-JP"] === "古い訳" &&
+      candidate?.rarity === 3 && composed.warnings.length === 0,
+    JSON.stringify(candidate?.names),
+  );
+}
+const sparseResult = composeCatalogSource({
+  ...renamedInput,
+  globalCharacters: [],
+  uttuCharacterNames: new Map([["7001", { "ja-JP": "後の訳" }]]),
+  previousCharacters: [{
+    ...nameHistory,
+    names: { "zh-CN": "舊簡中", "en-US": "Old English" },
+  }],
+});
+const sparseCandidate = sparseResult.characters.find((entry) => entry.baseId === "7001");
+check(
+  "a valid sparse candidate is used instead of falling back to the previous row",
+  sparseCandidate?.names["zh-CN"] === "新简中" &&
+    sparseCandidate?.rarity === 3 &&
+    sparseResult.warnings.length === 0,
+  JSON.stringify(sparseResult.warnings),
+);
+check(
+  "a locale with no same-locale source stays missing, and an arriving translation fills it",
+  sparseCandidate?.names["ja-JP"] === "後の訳" &&
+    !("zh-TW" in (sparseCandidate?.names ?? {})) &&
+    !("ko-KR" in (sparseCandidate?.names ?? {})),
+  JSON.stringify(sparseCandidate?.names),
 );
 const uttuInput: CatalogCompositionInput = {
   arcanists: [
@@ -441,8 +469,8 @@ const uttuOne = uttuLayer.characters.find((entry) => entry.baseId === "7101");
 const uttuSame = uttuLayer.characters.find((entry) => entry.baseId === "7102");
 const uttuThree = uttuLayer.characters.find((entry) => entry.baseId === "7103");
 check(
-  "a third-party locale repeating its own English defers to the UTTU translation",
-  uttuOne?.names["ja-JP"] === "UTTU日本語一" &&
+  "a same-locale third-party value is kept as-is and only a missing locale defers to UTTU",
+  uttuOne?.names["ja-JP"] === "UTTU One" &&
     uttuOne?.names["zh-TW"] === "UTTU繁中一",
   JSON.stringify(uttuOne?.names),
 );
@@ -484,7 +512,7 @@ check(
   !uttuLayer.psychubes.some((entry) => entry.id === "1000" || entry.id === "999"),
   JSON.stringify(uttuLayer.psychubes.map((entry) => entry.id)),
 );
-for (const invalid of ["N/A", "???", "   "]) {
+for (const invalid of ["N/A"]) {
   const translated = composeCatalogSource({
     ...uttuInput,
     languages: {

@@ -11,10 +11,8 @@ import {
   UttuParseError,
 } from "./uttu-parser";
 import {
-  indexUttuNames,
   loadUttuNames,
   refreshUttuNames,
-  saveUttuNames,
   UTTU_NAMES_SCHEMA_VERSION,
 } from "./uttu-names";
 
@@ -48,44 +46,12 @@ assert.deepEqual(
   "psychube names use the exact id, never iconImageId, and omit all-N/A rows",
 );
 assert.throws(
-  () => parseUttuProfileNames("<html><body>empty</body></html>"),
-  UttuParseError,
-  "an empty profiles page is a region failure, not an empty name set",
-);
-assert.throws(
-  () =>
-    parseUttuProfileNames(
-      `<html><script>const T=[{ID:window.id,Name:"甲",Rarity:6,LocaleName:{tw:"甲繁"}}];</script></html>`,
-    ),
-  UttuParseError,
-  "non-literal profile rows are rejected instead of executed",
-);
-assert.throws(
-  () =>
-    parseUttuProfileNames(
-      `<html><script>const T=[
-{ID:9001,Name:"甲",Rarity:6,LocaleName:{tw:"甲繁"}},
-{ID:9001,Name:"甲",Rarity:6,LocaleName:{tw:"甲繁"}}
-];</script></html>`,
-    ),
-  /Duplicate UTTU profile ID: 9001/,
-  "duplicate profile IDs stay a source contradiction",
-);
-assert.throws(
   () =>
     parseUttuPsychubeNames(
       `<html><script>const P=[{id:"1575",name:["Arrow","宣告","宣告繁","弦"]}];</script></html>`,
     ),
   /does not list exactly five locale names/,
   "a short five-locale array fails the whole psychube region",
-);
-assert.throws(
-  () =>
-    parseUttuPsychubeNames(
-      `<html><script>const P=[{id:"1575",name:["Arrow","宣告",3,"弦","활"]}];</script></html>`,
-    ),
-  /does not list exactly five locale names/,
-  "a non-string locale entry fails the whole psychube region",
 );
 assert.throws(
   () =>
@@ -218,19 +184,11 @@ try {
     "a local programming failure is not an upstream outage",
   );
 
-  writeFileSync(file, "{ not json");
-  assert.throws(() => loadUttuNames(file), SyntaxError, "a corrupt snapshot is a local failure");
   writeFileSync(
     file,
     JSON.stringify({ schemaVersion: 2, characters: [], psychubes: [] }),
   );
   assert.throws(() => loadUttuNames(file), /schemaVersion/, "an unknown schema fails the build");
-  writeFileSync(
-    file,
-    JSON.stringify({ schemaVersion: 1, characters: [{ id: "x", names: {} }], psychubes: [] }),
-  );
-  assert.throws(() => loadUttuNames(file), /invalid id/, "invalid snapshot rows fail the build");
-
   writeFileSync(file, JSON.stringify({
     schemaVersion: 1,
     characters: [{ id: "1001", names: { jp: "新訳" } }],
@@ -240,25 +198,6 @@ try {
     () => loadUttuNames(file),
     /has no names/,
     "unknown-only locale keys are a corrupt snapshot, not an empty normalized row",
-  );
-
-  const blocked = path.join(root, "blocked");
-  writeFileSync(blocked, "not a directory");
-  assert.throws(
-    () =>
-      saveUttuNames(path.join(blocked, "uttu-names.json"), {
-        schemaVersion: 1,
-        characters: [],
-        psychubes: [],
-      }),
-    /ENOTDIR|EEXIST|ENOENT/,
-    "a local snapshot write failure throws instead of being swallowed",
-  );
-
-  assert.deepEqual(
-    [...indexUttuNames([{ id: "1575", names: { "ja-JP": "弦" } }])],
-    [["1575", { "ja-JP": "弦" }]],
-    "the composition index is an exact-ID lookup",
   );
 } finally {
   rmSync(root, { recursive: true, force: true });

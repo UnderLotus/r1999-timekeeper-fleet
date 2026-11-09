@@ -1458,10 +1458,7 @@ export const psychubes: PsychubeDef[] = [
     "id": "1451",
     "names": {
       "zh-CN": "当下之喜",
-      "zh-TW": "Living in the Moment",
-      "en-US": "Living in the Moment",
-      "ja-JP": "Living in the Moment",
-      "ko-KR": "Living in the Moment"
+      "en-US": "Living in the Moment"
     },
     "rarity": 4,
     "released": false
@@ -1470,10 +1467,7 @@ export const psychubes: PsychubeDef[] = [
     "id": "1577",
     "names": {
       "zh-CN": "立于风暴脊",
-      "zh-TW": "Atop the Tempest",
-      "en-US": "Atop the Tempest",
-      "ja-JP": "Atop the Tempest",
-      "ko-KR": "Atop the Tempest"
+      "en-US": "Atop the Tempest"
     },
     "rarity": 5,
     "released": false
@@ -1482,10 +1476,7 @@ export const psychubes: PsychubeDef[] = [
     "id": "1578",
     "names": {
       "zh-CN": "宿命之向背",
-      "zh-TW": "To Choose Against Fate",
-      "en-US": "To Choose Against Fate",
-      "ja-JP": "To Choose Against Fate",
-      "ko-KR": "To Choose Against Fate"
+      "en-US": "To Choose Against Fate"
     },
     "rarity": 5,
     "released": false
@@ -1494,10 +1485,7 @@ export const psychubes: PsychubeDef[] = [
     "id": "1579",
     "names": {
       "zh-CN": "灵知当齐一",
-      "zh-TW": "Flows in All Things Alike",
-      "en-US": "Flows in All Things Alike",
-      "ja-JP": "Flows in All Things Alike",
-      "ko-KR": "Flows in All Things Alike"
+      "en-US": "Flows in All Things Alike"
     },
     "rarity": 5,
     "released": false
@@ -1506,10 +1494,7 @@ export const psychubes: PsychubeDef[] = [
     "id": "1452",
     "names": {
       "zh-CN": "完满之路",
-      "zh-TW": "The Path to Perfection",
-      "en-US": "The Path to Perfection",
-      "ja-JP": "The Path to Perfection",
-      "ko-KR": "The Path to Perfection"
+      "en-US": "The Path to Perfection"
     },
     "rarity": 4,
     "released": false
@@ -1518,10 +1503,7 @@ export const psychubes: PsychubeDef[] = [
     "id": "1580",
     "names": {
       "zh-CN": "纯洁的棺床",
-      "zh-TW": "The Coffin of Purity",
-      "en-US": "The Coffin of Purity",
-      "ja-JP": "The Coffin of Purity",
-      "ko-KR": "The Coffin of Purity"
+      "en-US": "The Coffin of Purity"
     },
     "rarity": 5,
     "released": false
@@ -1530,10 +1512,7 @@ export const psychubes: PsychubeDef[] = [
     "id": "1581",
     "names": {
       "zh-CN": "可食用谜题",
-      "zh-TW": "An Edible Puzzle",
-      "en-US": "An Edible Puzzle",
-      "ja-JP": "An Edible Puzzle",
-      "ko-KR": "An Edible Puzzle"
+      "en-US": "An Edible Puzzle"
     },
     "rarity": 5,
     "released": false
