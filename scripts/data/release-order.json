@@ -1,6 +1,8 @@
 {
   "source": "direct Huiji Chrome-fingerprint list; legacy Huiji tail; Kornblume fallback; CN-only newest tier",
   "huiji": [
+    "3160",
+    "3159",
     "3158",
     "3157",
     "3156",
@@ -105,6 +107,7 @@
     "3016",
     "3011",
     "3010",
+    "3999",
     "3163",
     "3151",
     "3138",

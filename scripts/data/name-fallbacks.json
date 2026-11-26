@@ -1339,11 +1339,37 @@
       }
     },
     {
+      "baseId": "3159",
+      "names": {
+        "zh-CN": "佩施塔",
+        "zh-TW": "佩施塔",
+        "en-US": "Perchta"
+      }
+    },
+    {
+      "baseId": "3160",
+      "names": {
+        "zh-CN": "伊芙琳",
+        "zh-TW": "伊芙琳",
+        "en-US": "Evelyn"
+      }
+    },
+    {
       "baseId": "3163",
       "names": {
         "zh-CN": "格林杜尔",
         "zh-TW": "格林杜爾",
         "en-US": "Glyndŵr"
+      }
+    },
+    {
+      "baseId": "3999",
+      "names": {
+        "zh-CN": "APPLe",
+        "zh-TW": "APPLe",
+        "en-US": "APPLe",
+        "ja-JP": "APPLe",
+        "ko-KR": "APPLe"
       }
     }
   ]

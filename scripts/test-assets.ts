@@ -3,6 +3,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
+import { loadCatalogSource } from "./catalog-source";
 import { loadGeneratedCatalog } from "./generated-catalog";
 import { loadPsychubeImageInventory } from "./psychube-catalog";
 import type { PsychubeDef } from "../src/types/catalog";
@@ -144,15 +145,22 @@ async function main(): Promise<void> {
     "missing: " + missingPsy.slice(0, 10).join(","),
   );
 
-  // 無孤兒：assets 沒有 catalog 之外的檔
-  const orphanChar = charFiles.filter(
-    (f) => !expectedChar.has(f.replace(/\.webp$/, "")),
+  const installedCharIds = new Set(charFiles.map((file) => file.slice(0, -5)));
+  const pendingAssets = new Set(
+    loadCatalogSource().characters
+      .filter((row) => row.skins.some(
+        (skin) => skin.type !== "skin" && !installedCharIds.has(skin.id),
+      ))
+      .flatMap((row) => row.skins.map((skin) => skin.id)),
+  );
+  const orphanChar = [...installedCharIds].filter(
+    (id) => !expectedChar.has(id) && !pendingAssets.has(id),
   );
   const orphanPsy = psyFiles.filter(
     (f) => !expectedPsy.has(f.replace(/\.webp$/, "")),
   );
   check(
-    "no orphan character assets",
+    "all character assets match a runtime Variant or a pending character",
     orphanChar.length === 0,
     "orphan: " + orphanChar.slice(0, 5).join(","),
   );

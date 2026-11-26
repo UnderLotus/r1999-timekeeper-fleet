@@ -3,42 +3,16 @@ import type { CharacterDef } from "../types/catalog";
 
 export const characters: CharacterDef[] = [
   {
-    "id": "3159",
-    "baseId": "3159",
-    "names": {
-      "zh-CN": "佩施塔",
-      "en-US": "Perchta"
-    },
-    "rarity": 5,
-    "maxInsight": 3,
-    "releaseOrder": 1,
-    "released": false,
-    "skins": [
-      {
-        "id": "315901",
-        "type": "default",
-        "released": true
-      },
-      {
-        "id": "315902",
-        "type": "insight",
-        "name": "童话出逃日",
-        "nameEn": "Once Upon a Runaway",
-        "released": true
-      }
-    ],
-    "defaultVariant": "315901"
-  },
-  {
     "id": "3160",
     "baseId": "3160",
     "names": {
       "zh-CN": "伊芙琳",
+      "zh-TW": "伊芙琳",
       "en-US": "Evelyn"
     },
     "rarity": 5,
     "maxInsight": 3,
-    "releaseOrder": 2,
+    "releaseOrder": 1,
     "released": false,
     "skins": [
       {
@@ -55,6 +29,34 @@ export const characters: CharacterDef[] = [
       }
     ],
     "defaultVariant": "316001"
+  },
+  {
+    "id": "3159",
+    "baseId": "3159",
+    "names": {
+      "zh-CN": "佩施塔",
+      "zh-TW": "佩施塔",
+      "en-US": "Perchta"
+    },
+    "rarity": 5,
+    "maxInsight": 3,
+    "releaseOrder": 2,
+    "released": false,
+    "skins": [
+      {
+        "id": "315901",
+        "type": "default",
+        "released": true
+      },
+      {
+        "id": "315902",
+        "type": "insight",
+        "name": "童话出逃日",
+        "nameEn": "Once Upon a Runaway",
+        "released": true
+      }
+    ],
+    "defaultVariant": "315901"
   },
   {
     "id": "3158",
@@ -89,7 +91,7 @@ export const characters: CharacterDef[] = [
     "baseId": "3157",
     "names": {
       "zh-CN": "纳西索斯",
-      "zh-TW": "納西索斯",
+      "zh-TW": "納西瑟斯",
       "en-US": "Narcissus",
       "ja-JP": "ナルキッソス",
       "ko-KR": "나르키소스"
@@ -97,7 +99,7 @@ export const characters: CharacterDef[] = [
     "rarity": 5,
     "maxInsight": 3,
     "releaseOrder": 4,
-    "released": false,
+    "released": true,
     "skins": [
       {
         "id": "315701",
@@ -4926,7 +4928,7 @@ export const characters: CharacterDef[] = [
         "type": "skin",
         "name": "体育快讯",
         "nameEn": "Front Page Exclusive",
-        "released": false
+        "released": true
       }
     ],
     "defaultVariant": "305401"

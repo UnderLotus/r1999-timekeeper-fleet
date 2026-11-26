@@ -33,6 +33,11 @@
       "note": "CN artbook-exclusive garment; unavailable on Global"
     },
     {
+      "variantId": "308005",
+      "isReleased": false,
+      "note": "CN KFC collaboration garment; unavailable on Global"
+    },
+    {
       "variantId": "313503",
       "isReleased": true,
       "note": "User-confirmed released on Global"

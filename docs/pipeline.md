@@ -100,6 +100,7 @@ Future Sight 只控制顯示與選擇，不刪已保存的未實裝內容或隊�
 production 圖片為 lossless WebP，分別放在 `public/assets/characters/` 與 `public/assets/psychubes/`。
 
 - primary 角色來源：`singlebg/headicon_small/{variantId}.png`，按 catalog 精確 ID 取圖，不能掃目錄就把 NPC／劇情圖當角色。PNG 缺席時優先保留已安裝可信 WebP，再讀已驗證 UTTU cache；新補給取 `https://assets.merui.net/headicon_small/{variantId}.webp`，須完整解碼、136–144 正方形、lossless 且非全透明，允許不帶 alpha 的不透明圖。
+- 沒有主來源圖、可信舊圖或已驗證補給圖時，發出警告，其他資料繼續更新。衣著缺圖只暫不顯示該衣著；初始／洞悉圖未齊則整名角色暫不進網站 catalog，但保留來源角色資料與已驗證的圖片。每輪仍依來源 ID 找圖，補齊後自動進入網站，不用重加角色或衣著。上游 Git tree 有圖但本機未檢出，仍是錯誤，不當成上游缺圖。
 - primary 心相來源：`singlebg/equip_defaulticon/{id}.png`，尺寸 276×228，獨立發現與驗證保存；合法 catalog ID 仍缺圖時取 `https://assets.merui.net/equip_defaulticon/{id}.webp`，不是不同尺寸的 `equipment/icon`。無損解碼回 PNG 接既有 inventory，記錄實際來源。
 - 遠端候選圖回傳 HTML、lossy、錯尺寸或全透明時只視為 unavailable，保留既有資料；本機讀寫／搬移失敗仍中止。既有可信圖不被次來源覆蓋；未變更圖重用 hash cache，新產圖檢查格式、尺寸與可見像素。
 

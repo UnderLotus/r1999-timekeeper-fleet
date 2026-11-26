@@ -299,8 +299,7 @@
     },
     "1452": {
       "assetPath": "singlebg/equip_defaulticon/1452.png",
-      "sha256": "2e7cb32a397d8c48c894bb31b8c127509987985bacf47c1844afaeaa28b6a5fb",
-      "source": "https://assets.merui.net/equip_defaulticon/1452.webp"
+      "sha256": "f595c293d62f306dbf6209d48d2c971033af9b8c33bf130102b3bacc0b9a5982"
     },
     "1501": {
       "assetPath": "singlebg/equip_defaulticon/1501.png",
@@ -600,13 +599,11 @@
     },
     "1580": {
       "assetPath": "singlebg/equip_defaulticon/1580.png",
-      "sha256": "f19bc8e89488569bf1fa3f27482cdbe64b7603dd067d5136f3073c35aa6c3f36",
-      "source": "https://assets.merui.net/equip_defaulticon/1580.webp"
+      "sha256": "cf769711560b26a327915511281e3fca263b6d915e70c57f512ee5b2af74aaa4"
     },
     "1581": {
       "assetPath": "singlebg/equip_defaulticon/1581.png",
-      "sha256": "016bf1bb403b3965c66da7620859f61a4d215bacbf56641e2bcaa692bfa39822",
-      "source": "https://assets.merui.net/equip_defaulticon/1581.webp"
+      "sha256": "83d8fe1ff1adfb361172de88a46906de99d7c6cdf17d349f5fb99fa6bf4edd89"
     },
     "4101": {
       "assetPath": "singlebg/equip_defaulticon/4101.png",

@@ -31,7 +31,6 @@ import {
 import { convertPngToLosslessWebp } from "./webp-converter";
 import { withPipelineLock } from "./sync-lock";
 import {
-  cachedHeadiconIds,
   hasValidUttuHeadicon,
   uttuImageCacheFile,
 } from "./uttu-images";
@@ -84,63 +83,11 @@ function setExactSparse(paths: readonly string[]): void {
     stdio: ["pipe", "pipe", "pipe"],
   });
 }
-function assertRequestedAssets(
-  exactPaths: readonly string[],
-  characterCandidates: readonly CharacterAssetCandidate[],
-  psychubeIds: readonly string[],
-  supplementalCharacterIds: ReadonlySet<string>,
-): void {
-  const optionalCharacterPaths = characterCandidates
-    .filter(
-      (candidate) =>
-        candidate.type === "skin" ||
-        supplementalCharacterIds.has(candidate.id),
-    )
-    .map((candidate) => `singlebg/headicon_small/${candidate.id}.png`);
-  const optionalPsychubePaths = psychubeIds.map(
-    (id) => `singlebg/equip_defaulticon/${id}.png`,
-  );
-  assertExactAssetWorktree(SOURCE_ROOT, exactPaths, [
-    ...optionalCharacterPaths,
-    ...optionalPsychubePaths,
-  ]);
-}
-
-function listPsychubeIconIdsFromTree(): string[] {
-  const output = run(
-    "git",
-    ["ls-tree", "-r", "--name-only", "HEAD", "--", "singlebg/equip_defaulticon"],
-    SOURCE_ROOT,
-  );
-  const ids = numericPsychubeIconIds(output);
-  if (!ids.length)
-    throw new Error("CN Asset Git tree has no numeric equip_defaulticon PNG paths");
-  return ids;
-}
-
-function pathsForAssetIds(
-  needed: {
-    characters: readonly CharacterAssetCandidate[];
-    psychubes: readonly string[];
-  },
-  treeIconIds: readonly string[],
-): string[] {
-  const requestedPaths = exactAssetPaths(
-    needed.characters.map((candidate) => candidate.id),
-    needed.psychubes,
-  );
-  const treeIconPaths = treeIconIds.map(
-    (id) => `singlebg/equip_defaulticon/${id}.png`,
-  );
-  return [...new Set([...requestedPaths, ...treeIconPaths])].sort();
-}
-
 function refreshAssetRepo(
   needed: {
     characters: readonly CharacterAssetCandidate[];
     psychubes: readonly string[];
   },
-  supplementalCharacterIds: ReadonlySet<string>,
 ): string[] {
   const requestedPaths = exactAssetPaths(
     needed.characters.map((candidate) => candidate.id),
@@ -171,16 +118,28 @@ function refreshAssetRepo(
     run("git", ["sparse-checkout", "init", "--no-cone"], SOURCE_ROOT);
   }
 
-  // ls-tree reads path metadata only; sparse checkout hydrates just this one icon directory.
-  const treeIconIds = listPsychubeIconIdsFromTree();
-  const exactPaths = pathsForAssetIds(needed, treeIconIds);
+  const treeOutput = run(
+    "git",
+    [
+      "ls-tree", "-r", "--name-only", "HEAD", "--",
+      "singlebg/headicon_small", "singlebg/equip_defaulticon",
+    ],
+    SOURCE_ROOT,
+  );
+  const treePaths = new Set(treeOutput.split(/\r?\n/));
+  const treeIconIds = numericPsychubeIconIds(treeOutput);
+  if (!treeIconIds.length)
+    throw new Error("CN Asset Git tree has no numeric equip_defaulticon PNG paths");
+  const exactPaths = [
+    ...new Set([...requestedPaths, ...exactAssetPaths([], treeIconIds)]),
+  ].sort();
   setExactSparse(exactPaths);
   if (!reusedClone) run("git", ["checkout"], SOURCE_ROOT);
-  assertRequestedAssets(
+  // Accept upstream gaps, not missing files that the checkout should have materialized.
+  assertExactAssetWorktree(
+    SOURCE_ROOT,
     exactPaths,
-    needed.characters,
-    needed.psychubes,
-    supplementalCharacterIds,
+    exactPaths.filter((asset) => !treePaths.has(asset)),
   );
   console.log(
     `  ✓ exact-ID ${reusedClone ? "incremental pull" : "fresh partial clone"} (${exactPaths.length} files; ${treeIconIds.length} numeric equip icons)`,
@@ -319,7 +278,6 @@ async function stageKind(
       }
       const supplementalFile = uttuImageCacheFile(id);
       const action = classifyMissingCharacterAsset(
-        candidate!,
         false,
         Boolean(trustedPrior),
         await hasValidUttuHeadicon(supplementalFile),
@@ -350,16 +308,11 @@ async function stageKind(
         reused++;
         continue;
       }
-      if (action === "skip") {
-        console.warn(
-          `  warning: skipping Skin Variant ${id} for Character ${candidate!.baseId}: no small source PNG, no supplemental headicon and no trusted prior production WebP`,
-        );
-        skipped.push(id);
-        continue;
-      }
-      throw new Error(
-        `Unexpected missing ${candidate!.type} Variant image: ${id}`,
+      console.warn(
+        `  warning: missing ${candidate!.type} image ${id} for Character ${candidate!.baseId}: no small source PNG, no supplemental headicon and no trusted prior production WebP`,
       );
+      skipped.push(id);
+      continue;
     }
     const pngHash = sha256(source);
     if (
@@ -461,10 +414,7 @@ async function main(): Promise<void> {
   const preservedCharacterAssets = new Set(
     policy.preservedCharacterAssets.map((entry) => entry.id),
   );
-  const treeIconIds = refreshAssetRepo(
-    candidates,
-    new Set(cachedHeadiconIds()),
-  );
+  const treeIconIds = refreshAssetRepo(candidates);
   const imageCandidateIds = [...new Set([...candidates.psychubes, ...treeIconIds])];
   const iconResult = await persistPsychubeImageCache(
     imageCandidateIds,

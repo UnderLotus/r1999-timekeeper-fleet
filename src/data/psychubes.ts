@@ -1428,7 +1428,7 @@ export const psychubes: PsychubeDef[] = [
       "ko-KR": "꾸며진 진실"
     },
     "rarity": 4,
-    "released": false
+    "released": true
   },
   {
     "id": "1575",
@@ -1452,7 +1452,7 @@ export const psychubes: PsychubeDef[] = [
       "ko-KR": "솟구치는 마음을 품고"
     },
     "rarity": 5,
-    "released": false
+    "released": true
   },
   {
     "id": "1451",

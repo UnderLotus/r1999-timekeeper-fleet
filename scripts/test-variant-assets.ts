@@ -70,42 +70,35 @@ assert.deepEqual(
 );
 
 assert.equal(
-  classifyMissingCharacterAsset({ type: "skin" }, false, false),
-  "skip",
-  "source-only Skin is optional",
-);
-assert.equal(
-  classifyMissingCharacterAsset({ type: "default" }, false, false, true),
+  classifyMissingCharacterAsset(false, false, true),
   "install-supplement",
   "a validated supplemental headicon fills a missing required Variant",
 );
 assert.equal(
-  classifyMissingCharacterAsset({ type: "skin" }, false, false, true),
+  classifyMissingCharacterAsset(false, false, true),
   "install-supplement",
   "a validated supplemental headicon fills a missing Skin",
 );
 assert.equal(
-  classifyMissingCharacterAsset({ type: "default" }, true, false, true),
+  classifyMissingCharacterAsset(true, false, true),
   "convert",
   "a primary PNG stays the preferred source over the supplemental headicon",
 );
 assert.equal(
-  classifyMissingCharacterAsset({ type: "default" }, false, true, true),
+  classifyMissingCharacterAsset(false, true, true),
   "retain",
   "an installed trusted WebP is never replaced by the supplemental headicon",
 );
 assert.equal(
-  classifyMissingCharacterAsset({ type: "skin" }, false, true),
+  classifyMissingCharacterAsset(false, true),
   "retain",
   "a trusted prior Skin WebP is retained",
 );
-for (const type of ["default", "insight"] as const) {
-  assert.equal(
-    classifyMissingCharacterAsset({ type }, false, false),
-    "fatal",
-    `missing ${type} remains fatal without a prior WebP`,
-  );
-}
+assert.equal(
+  classifyMissingCharacterAsset(false, false),
+  "skip",
+  "an unavailable core image does not abort an otherwise valid sync",
+);
 
 const installedBeforeSkin = new Set(["991201", "991202"]);
 const runtimeBeforeSkin = filterRuntimeCharacterSkins(
@@ -113,7 +106,7 @@ const runtimeBeforeSkin = filterRuntimeCharacterSkins(
   installedBeforeSkin,
 );
 assert.deepEqual(
-  runtimeBeforeSkin.map((skin) => skin.id),
+  runtimeBeforeSkin?.map((skin) => skin.id),
   ["991201", "991202"],
   "runtime omits a Skin without an installed WebP",
 );
@@ -122,15 +115,17 @@ const runtimeAfterSkin = filterRuntimeCharacterSkins(
   new Set([...installedBeforeSkin, "991234567"]),
 );
 assert.deepEqual(
-  runtimeAfterSkin.map((skin) => skin.id),
+  runtimeAfterSkin?.map((skin) => skin.id),
   ["991201", "991202", "991234567"],
   "a later source PNG makes the Skin effective automatically",
 );
-assert.throws(
-  () => filterRuntimeCharacterSkins(sourceCharacter.skins, new Set(["991201"])),
-  /Required character Variant asset missing: 991202/,
-  "missing default/insight assets are not silently omitted",
-);
+for (const installed of [["991201"], ["991202"]]) {
+  assert.equal(
+    filterRuntimeCharacterSkins(sourceCharacter.skins, new Set(installed)),
+    null,
+    "the whole character stays out of runtime until its core assets are installed",
+  );
+}
 
 const catalog = loadCatalogSource();
 const catalogCandidates = collectCharacterAssetCandidates(catalog.characters);

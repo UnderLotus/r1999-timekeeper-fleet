@@ -10,8 +10,7 @@ export type MissingCharacterAssetAction =
   | "convert"
   | "retain"
   | "install-supplement"
-  | "skip"
-  | "fatal";
+  | "skip";
 
 /** Discover every Variant asset from the compact catalog source, including skins that are not runtime-effective yet. */
 export function collectCharacterAssetCandidates(
@@ -47,7 +46,6 @@ export function collectCharacterAssetCandidates(
  * the primary source leaves.
  */
 export function classifyMissingCharacterAsset(
-  candidate: Pick<CharacterAssetCandidate, "type">,
   hasSourcePng: boolean,
   hasTrustedProductionWebp: boolean,
   hasSupplementalWebp = false,
@@ -55,25 +53,15 @@ export function classifyMissingCharacterAsset(
   if (hasSourcePng) return "convert";
   if (hasTrustedProductionWebp) return "retain";
   if (hasSupplementalWebp) return "install-supplement";
-  return candidate.type === "skin" ? "skip" : "fatal";
+  return "skip";
 }
 
-/** Keep only Variants with installed assets while refusing to hide a required default or insight asset failure. */
+/** Return no runtime row until all of its initial and insight images are installed. */
 export function filterRuntimeCharacterSkins(
   skins: readonly SourceSkin[],
   installedAssetIds: ReadonlySet<string>,
-): SourceSkin[] {
-  const missingRequired = skins.filter(
-    (skin) => skin.type !== "skin" && !installedAssetIds.has(skin.id),
-  );
-  if (missingRequired.length) {
-    throw new Error(
-      `Required character Variant asset missing: ${missingRequired
-        .map((skin) => skin.id)
-        .join(", ")}`,
-    );
-  }
-  return skins.filter(
-    (skin) => skin.type !== "skin" || installedAssetIds.has(skin.id),
-  );
+): SourceSkin[] | null {
+  if (skins.some((skin) => skin.type !== "skin" && !installedAssetIds.has(skin.id)))
+    return null;
+  return skins.filter((skin) => installedAssetIds.has(skin.id));
 }

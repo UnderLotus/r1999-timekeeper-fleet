@@ -59,13 +59,17 @@ export function buildCharacters(
     ),
     psychubes: new Set(source.psychubes.map((entry) => entry.id)),
   });
-  const entries: CharacterEntry[] = source.characters.map(
+  const entries: CharacterEntry[] = source.characters.flatMap(
     ({ glReleased, skins, defaultVariant, ...entry }) => {
       const runtimeSkins = filterRuntimeCharacterSkins(
         skins,
         installedAssetIds,
       );
-      return {
+      if (!runtimeSkins) {
+        console.warn(`  warning: Character ${entry.baseId} stays out of runtime until its initial/insight images are installed`);
+        return [];
+      }
+      return [{
         ...entry,
         releaseOrder: 0,
         released: resolveCharacterRelease(
@@ -95,7 +99,7 @@ export function buildCharacters(
                 .exclusivePsychubeIds,
             }
           : {}),
-      };
+      }];
     },
   );
   const ordered = recalculateReleaseOrder(

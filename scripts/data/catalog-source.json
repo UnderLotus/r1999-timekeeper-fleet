@@ -1,22 +1,22 @@
 {
   "schemaVersion": 3,
   "sourceHashes": {
-    "cn/ArcanistMap.json": "3e26a2c8fcc265c36bb04622054917a46b3a5ffdefcea97083bdf577cf29024e",
-    "cn/character.json": "e511c42500a083874926e13c4fd8a1fbd55280b1693802571f6b367e8f713ada",
-    "cn/equip.json": "ef06fbe052d38a3e30ee1808f8b12a57926900d19731d6a6dea8d3688da617c1",
+    "cn/ArcanistMap.json": "96187b0945de61c8ee4cbc927e24d92a7c4c9e3fcab760f9f5c9d9d31e85b767",
+    "cn/character.json": "405d96fa6ad3e699f1d99059d4c1f61a3ebf014af756dbc23ca571f87ce58c79",
+    "cn/equip.json": "7e85721d62831cdb04dbe17fc37a6f8620769339a74b0fdbcb00e8f4f1ae6bf6",
     "cn/skin.json": "0a3caced68836d9a7119e12897e33d3999b911da2522d54d0fb0fc698e66b7a9",
-    "name-fallbacks.json": "6874ce42643b67991ba51b8d23a2b69238e6c69558c84a91023227dd713de46c",
+    "name-fallbacks.json": "89aac2a38b7a2e0466f95c12c7277be96c34ffe6b3c894351d42c1bf0308c0bc",
     "localized-name-overrides.json": "06fc52fc089303784795827b656400b7db0e9ca362f0b5dc241d0ab2e137dc6f",
     "catalog-policy.json": "f90b6ab244b1e507afb0131eb9f89c1d13241b43de41d13d98f95558fc69ee82",
-    "gl/character.json": "787dc9f07341a144ff4db26c4490d4861903877213b03d1133c3130147d1a337",
-    "gl/equip.json": "684db6fc0b7f25acff075198344ccbb01a86d2f9afa957869e06600c72a6bf8f",
-    "gl/skin.json": "71230bb53f668f8aabab5651d26ff621e3ca2c63ecb8a23ce3d5f23f74d93ce4",
-    "gl/language_zh.json": "7c62352aa3a603d977d06a0c08526e3f86c98b00744317b865bc4f5c527c5f52",
-    "gl/language_tw.json": "3bff170cb8bd713ff5cc55723399d35725c7930777cea2644707155fe0cddd31",
-    "gl/language_jp.json": "cf163f50708466c9703d0d9d6562f3c96c26f743dc3b40a25c7903eb0a6e65fc",
-    "gl/language_kr.json": "681f6ef47c5bbdf61ce86c2ae82961debaa180aec3631a7e09233e7050f949ec",
-    "gl/language_en.json": "d2482b385e02732c717c180ac72b692c927eb790ce7fe01638a372abe4f76eda",
-    "uttu-supplement.json": "c7ee9c19330f3382a906f6f4f6f4b8e43773515e52ec0872ab89f82603f3e0e6",
+    "gl/character.json": "a96f939ac6c42f27a23ca1c02aaf9c7bdaf8fbd8003c4d5da1e4ca094d08cd32",
+    "gl/equip.json": "8c01b996307df6bc1f89599fcf3b7aeb525f521c33193a5752a4bb5351a8d16d",
+    "gl/skin.json": "35e0a1cbf5627393a0419e6e3430ae74840a32d9f6ed5aac56eb0b124cdb8210",
+    "gl/language_zh.json": "d00e2e2245e030a109d6a523ca27413e0cf3920b61e147ac719402c098c4c944",
+    "gl/language_tw.json": "cd35cea5b0a527ce2c9ba7c0967050a67fd7cd74964bbd43dc11680b66a92094",
+    "gl/language_jp.json": "a5ea381d1e41497baa1cdf584ce348a75be7d28d9067fb7252d07fc46df9b91a",
+    "gl/language_kr.json": "9525b7e4928248378c8afde6ab4169023564fc021726e30467c4fce2fe73b0aa",
+    "gl/language_en.json": "6b280e3f7740d972fce776c27c7c79a931966c9a3c8308ec9e7109f6986f3b97",
+    "uttu-supplement.json": "fed57c8e2531420b7dfaf2c25f2dfc4b5f23551101d474647e4894ed7b8cf803",
     "uttu-names.json": "41c771c984a6f8eac0657fa306666983ef7f9fe38c35eda434ed143238d6ffdc"
   },
   "characters": [
@@ -1694,7 +1694,7 @@
           "type": "skin",
           "name": "体育快讯",
           "nameEn": "Front Page Exclusive",
-          "glPresent": false
+          "glPresent": true
         }
       ]
     },
@@ -2813,7 +2813,7 @@
           "type": "skin",
           "name": "镜中上校",
           "nameEn": "The Gourmet Counselor",
-          "glPresent": false
+          "glPresent": true
         }
       ]
     },
@@ -3807,7 +3807,7 @@
           "type": "skin",
           "name": "玫瑰午睡时",
           "nameEn": "Repose Amidst the Roses",
-          "glPresent": false
+          "glPresent": true
         }
       ]
     },
@@ -4099,7 +4099,7 @@
           "type": "skin",
           "name": "海盐急速",
           "nameEn": "Full Quack Ahead",
-          "glPresent": false
+          "glPresent": true
         }
       ]
     },
@@ -4391,7 +4391,7 @@
           "type": "skin",
           "name": "泅与问",
           "nameEn": "To Fathom the Depths",
-          "glPresent": false
+          "glPresent": true
         }
       ]
     },
@@ -4452,7 +4452,7 @@
           "type": "skin",
           "name": "沉影探戈",
           "nameEn": "Waltz of the Depths",
-          "glPresent": false
+          "glPresent": true
         }
       ]
     },
@@ -4666,7 +4666,7 @@
       "rarity": 5,
       "maxInsight": 3,
       "defaultVariant": "315601",
-      "glReleased": false,
+      "glReleased": true,
       "skins": [
         {
           "id": "315601",
@@ -4685,7 +4685,7 @@
       "baseId": "3157",
       "names": {
         "zh-CN": "纳西索斯",
-        "zh-TW": "納西索斯",
+        "zh-TW": "納西瑟斯",
         "en-US": "Narcissus",
         "ja-JP": "ナルキッソス",
         "ko-KR": "나르키소스"
@@ -4693,7 +4693,7 @@
       "rarity": 5,
       "maxInsight": 3,
       "defaultVariant": "315701",
-      "glReleased": false,
+      "glReleased": true,
       "skins": [
         {
           "id": "315701",
@@ -4792,10 +4792,38 @@
       ]
     },
     {
+      "id": "3999",
+      "baseId": "3999",
+      "names": {
+        "zh-CN": "APPLe",
+        "zh-TW": "APPLe",
+        "en-US": "APPLe",
+        "ja-JP": "APPLe",
+        "ko-KR": "APPLe"
+      },
+      "rarity": 3,
+      "maxInsight": 2,
+      "defaultVariant": "399901",
+      "glReleased": false,
+      "skins": [
+        {
+          "id": "399901",
+          "type": "default"
+        },
+        {
+          "id": "399902",
+          "type": "insight",
+          "name": "博学而多汁",
+          "nameEn": "Erudite and Juicy"
+        }
+      ]
+    },
+    {
       "id": "3159",
       "baseId": "3159",
       "names": {
         "zh-CN": "佩施塔",
+        "zh-TW": "佩施塔",
         "en-US": "Perchta"
       },
       "rarity": 5,
@@ -4820,6 +4848,7 @@
       "baseId": "3160",
       "names": {
         "zh-CN": "伊芙琳",
+        "zh-TW": "伊芙琳",
         "en-US": "Evelyn"
       },
       "rarity": 5,
@@ -6267,7 +6296,7 @@
         "ko-KR": "꾸며진 진실"
       },
       "rarity": 4,
-      "glPresent": false
+      "glPresent": true
     },
     {
       "id": "1575",
@@ -6279,7 +6308,7 @@
         "ko-KR": "활시위의 선포"
       },
       "rarity": 5,
-      "glPresent": false
+      "glPresent": true
     },
     {
       "id": "1576",
@@ -6291,7 +6320,7 @@
         "ko-KR": "솟구치는 마음을 품고"
       },
       "rarity": 5,
-      "glPresent": false
+      "glPresent": true
     },
     {
       "id": "1451",

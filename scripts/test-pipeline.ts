@@ -84,8 +84,8 @@ check(
   first.every((entry, index) => entry.releaseOrder === index + 1),
 );
 check(
-  "Huiji snapshot IDs exist in current catalog",
-  sources.huiji.every((id) => characters.some((entry) => entry.baseId === id)),
+  "Huiji snapshot IDs belong to the source catalog",
+  sources.huiji.every((id) => sourceCharacterNames.has(id)),
 );
 
 const compactSkins = catalogSource.characters.flatMap(
