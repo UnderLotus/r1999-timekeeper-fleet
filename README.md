@@ -44,8 +44,6 @@ Click an empty character slot to select a character, and click a psychube slot t
 
 ## How Share URLs Work
 
-This is the most important feature update in this release.
-
 When you open the site through a share URL, you enter "Preview Mode." If the link is one you saved yourself, you can choose to import it and overwrite your data.
 
 If you are helping someone else with team-building advice, you can:
@@ -68,7 +66,7 @@ Because each server progresses at a different pace, the site displays the overse
 
 ## Export Images
 
-Image export now supports three formats:
+Image export supports three formats:
 
 - Export teams only
 - Export the character pool only

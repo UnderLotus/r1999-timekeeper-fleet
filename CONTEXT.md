@@ -53,19 +53,19 @@ _Avoid_: Future-content deletion
 ## Catalog
 
 **Catalog**:
-The known characters, Skins, psychubes, localized names, and release classification available to the planner. A locale without a trusted name is absent from the Catalog rather than borrowed from another language; display falls back at render time.
+The compiled characters, Skins, psychubes, localized names, and release status available to the planner. Untranslated locales are omitted and fall back at display time.
 _Avoid_: Profile, Pool
 
 **Variant ID**:
-An opaque catalog identifier for one Character Variant; ownership comes from that Character's `ArcanistMap.live2d` entry or from an admitted Supplement entry, not from ID width or digit prefixes.
+An opaque catalog identifier for one Character Variant, explicitly owned by one Character through primary mapping or an admitted Supplement.
 _Avoid_: Skin number, inferred owner
 
 **Supplement**:
-Validated Variant metadata and images admitted from a secondary build-time source while the primary mapping lags. A Supplement entry fills a gap the primary mapping leaves; primary metadata always wins, and nothing is admitted without its validated image.
+Validated Variant metadata and images admitted at build time from a secondary source when the primary mapping lags; primary metadata takes precedence.
 _Avoid_: Fallback source, mirror import
 
 **Locale name supply**:
-Translations for characters and psychubes already in the Catalog, keyed by exact ID, that only fill a missing locale. It never creates, removes, or reclassifies an entry, and it never outranks an explicit Global, manual, or already-recorded translation.
+Exact-ID translations that fill missing locales for existing Catalog entries without adding, removing, or overriding primary entries.
 _Avoid_: Rename source, official translation
 
 **Future content**:
